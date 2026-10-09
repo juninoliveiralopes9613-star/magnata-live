@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAGNATA Live Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#100D16; --surface:#19141F; --raised:#221B2C; --line:#2E2539;
+  --neon:#B14BFF; --neon-2:#6D28D9; --neon-soft:rgba(177,75,255,.16);
+  --text:#EDE7F6; --dim:#968CA8; --faint:#5E5570;
+  --live:#FF3D8B; --ok:#3EE6A0; --warn:#FFB547; --err:#FF5C6C;
+  --r-s:8px; --r-m:14px;
+  --display:'Unbounded',system-ui,sans-serif;
+  --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font:15px/1.5 var(--ui);overflow:hidden;
+  -webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--neon);outline-offset:2px;border-radius:6px}
+.hidden{display:none!important}
+
+/* ── 3D ── */
+.stage{position:absolute;inset:0;overflow:hidden}
+.stage canvas{display:block;width:100%;height:100%}
+.stage .fallback{position:absolute;left:50%;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;
+  background:radial-gradient(circle,rgba(177,75,255,.55),rgba(109,40,217,.15) 45%,transparent 70%);
+  animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.08);opacity:.8}}
+
+/* ── botões / campos ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;
+  border-radius:var(--r-s);font-weight:700;letter-spacing:.01em;transition:background .15s,box-shadow .2s,opacity .15s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.btn-neon{background:var(--neon);color:#16051F;box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 8px 28px -6px rgba(177,75,255,.65)}
+.btn-neon:hover:not([disabled]){background:#C26BFF;box-shadow:0 0 0 1px rgba(255,255,255,.15) inset,0 10px 36px -4px rgba(177,75,255,.85)}
+.btn-ghost{background:var(--raised);border:1px solid var(--line)}
+.btn-ghost:hover:not([disabled]){border-color:#463a58;background:#2a2236}
+.btn-danger{background:transparent;color:var(--err);border:1px solid rgba(255,92,108,.35)}
+.btn-danger:hover:not([disabled]){background:rgba(255,92,108,.1)}
+.btn-sm{height:32px;padding:0 12px;font-size:13px;border-radius:7px}
+.field{height:44px;width:100%;padding:0 14px;border-radius:var(--r-s);background:rgba(16,13,22,.75);
+  border:1px solid var(--line);transition:border-color .15s,box-shadow .15s}
+.field::placeholder{color:var(--faint)}
+.field:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px var(--neon-soft)}
+select.field{appearance:none;padding-right:34px;background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 19px,calc(100% - 13px) 19px;background-size:5px 5px;background-repeat:no-repeat}
+
+/* ── LOGIN ── */
+#login{position:fixed;inset:0;display:grid;place-items:center}
+#login .stage{z-index:0}
+.login-box{position:relative;z-index:1;width:min(420px,calc(100% - 32px));margin-top:330px;text-align:center}
+.brand{text-shadow:0 2px 24px rgba(16,13,22,.9)}
+.brand{font-family:var(--display);font-weight:900;font-size:44px;line-height:1;letter-spacing:-.02em}
+.brand small{display:block;font-weight:500;font-size:16px;letter-spacing:.02em;color:var(--neon);margin-top:10px}
+.login-box form{margin-top:30px;display:grid;gap:12px;text-align:left}
+.key-input{font-family:var(--mono);font-size:17px;letter-spacing:.06em;text-align:center;height:52px}
+.check{display:flex;align-items:center;gap:8px;color:var(--dim);font-size:14px;cursor:pointer;user-select:none}
+.check input{accent-color:var(--neon);width:16px;height:16px}
+.login-err{min-height:22px;color:var(--err);font-size:14px;text-align:center}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── APP ── */
+#app{display:grid;grid-template-columns:232px 1fr;height:100%}
+.side{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px}
+.side .logo{font-family:var(--display);font-weight:900;font-size:20px;padding:0 10px 26px;letter-spacing:-.01em}
+.side .logo span{color:var(--neon)}
+.nav{display:grid;gap:4px}
+.nav button{display:flex;align-items:center;gap:12px;height:42px;padding:0 12px;border-radius:9px;color:var(--dim);font-weight:600;text-align:left}
+.nav button svg{width:18px;height:18px;flex:none}
+.nav button:hover{color:var(--text);background:var(--raised)}
+.nav button.on{color:var(--text);background:var(--neon-soft);box-shadow:inset 3px 0 0 var(--neon)}
+.nav .sep{height:1px;background:var(--line);margin:12px 6px}
+.nav .group{font-size:12px;color:var(--faint);padding:2px 12px 6px}
+.me{margin-top:auto;border-top:1px solid var(--line);padding:16px 8px 0;display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:14px;
+  background:linear-gradient(135deg,var(--neon),var(--neon-2));color:#fff;flex:none}
+.me .who{min-width:0;flex:1}
+.me .who b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me .who span{font-size:12px;color:var(--dim)}
+.me button{color:var(--faint);padding:6px;border-radius:6px}
+.me button:hover{color:var(--err)}
+
+main{overflow-y:auto;position:relative}
+.view{min-height:100%}
+.pad{padding:28px 32px 40px}
+h2{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-.01em}
+.sub{color:var(--dim);margin-top:4px;max-width:62ch}
+
+/* hero da live */
+.hero{position:relative;height:340px;border-bottom:1px solid var(--line);
+  background:radial-gradient(120% 90% at 78% 50%,rgba(109,40,217,.22),transparent 60%)}
+.hero .stage{left:40%}
+.hero-copy{position:relative;z-index:1;padding:34px 32px 0;max-width:620px}
+.hero-copy h1{font-family:var(--display);font-weight:900;font-size:34px;line-height:1.05;letter-spacing:-.02em}
+.launch{display:flex;gap:10px;margin-top:22px}
+.launch .field{height:52px;font-size:15px;background:rgba(16,13,22,.85)}
+.launch .btn{height:52px;padding:0 24px;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;border-radius:99px;font-size:13px;color:var(--dim);
+  background:rgba(34,27,44,.8);border:1px solid var(--line)}
+.chip b{color:var(--text);font-weight:700}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none}
+.dot.live{background:var(--live);box-shadow:0 0 10px var(--live);animation:pulse 1.6s infinite}
+.dot.ok{background:var(--ok)} .dot.busy{background:var(--warn)} .dot.off{background:var(--faint)}
+@keyframes pulse{50%{opacity:.45}}
+.counter{position:absolute;z-index:1;right:calc(30% - 70px);top:50%;transform:translateY(-50%);text-align:center;pointer-events:none;width:140px}
+.counter b{display:block;font-family:var(--display);font-weight:900;font-size:64px;line-height:1;text-shadow:0 0 30px rgba(177,75,255,.9)}
+.counter span{font-size:13px;color:#CFC4E0;text-shadow:0 1px 8px #000,0 0 2px #000}
+.live-url{margin-top:12px;font-size:13px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.live-url a{color:var(--neon);text-decoration:none}
+
+.split{display:grid;grid-template-columns:1fr 340px;gap:28px;padding:26px 32px 40px}
+.panel-title{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.panel-title h3{font-size:16px;font-weight:700}
+.panel-title span{font-size:13px;color:var(--faint)}
+
+/* linhas de conta */
+.rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line);
+  position:relative;overflow:hidden}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--faint)}
+.row.s-live::before{background:var(--live)} .row.s-ok::before{background:var(--ok)}
+.row.s-busy::before{background:var(--warn)} .row.s-off::before{background:var(--faint)}
+.row.s-live{border-color:rgba(255,61,139,.35);background:linear-gradient(90deg,rgba(255,61,139,.07),var(--surface) 60%)}
+.row .nm{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .st{font-size:13px;color:var(--dim)}
+.row .grow{flex:1;min-width:0}
+.empty{padding:36px;border:1px dashed var(--line);border-radius:12px;color:var(--dim);text-align:center}
+
+/* log */
+.log{background:var(--surface);border:1px solid var(--line);border-radius:12px;height:420px;overflow-y:auto;padding:10px 4px 10px 14px;font-size:13px}
+.log p{display:flex;gap:10px;padding:5px 0;border-bottom:1px solid rgba(46,37,57,.5)}
+.log p:last-child{border:0}
+.log time{color:var(--faint);font-variant-numeric:tabular-nums;flex:none}
+.log .ok{color:var(--ok)} .log .err{color:var(--err)} .log .warn{color:var(--warn)}
+
+/* tabelas admin */
+.toolbar{display:flex;gap:10px;margin:22px 0 18px;flex-wrap:wrap}
+.toolbar .field{width:auto;flex:1;min-width:180px}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;align-items:center;gap:16px;padding:14px 16px;border-radius:12px;
+  background:var(--surface);border:1px solid var(--line)}
+.item .nm{font-weight:700;display:flex;align-items:center;gap:8px;min-width:0}
+.item .nm span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .meta{font-size:13px;color:var(--dim);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.badge{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--neon-soft);color:#D6A6FF;flex:none}
+.badge.gray{background:var(--raised);color:var(--dim)}
+.badge.red{background:rgba(255,92,108,.14);color:var(--err)}
+.item.blocked{opacity:.55}
+.feed{display:grid;gap:2px}
+.feed div{display:grid;grid-template-columns:140px 1fr;gap:16px;padding:11px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.feed time{color:var(--faint);font-variant-numeric:tabular-nums}
+.feed b{font-weight:700}
+.feed i{font-style:normal;color:var(--dim);word-break:break-all}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:rgba(8,6,12,.72);backdrop-filter:blur(6px)}
+.modal .box{width:min(460px,calc(100% - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.7),0 0 0 1px rgba(177,75,255,.08);animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.96);opacity:0}}
+.modal h3{font-family:var(--display);font-size:19px;font-weight:700}
+.modal p{color:var(--dim);margin-top:10px}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+.modal ol{color:var(--dim);margin:12px 0 0 20px;display:grid;gap:6px}
+.keybox{margin-top:16px;font-family:var(--mono);font-size:20px;letter-spacing:.06em;text-align:center;padding:18px;border-radius:12px;
+  background:var(--bg);border:1px solid var(--neon);color:#E3C4FF;box-shadow:0 0 30px -10px var(--neon);user-select:all}
+.modal .note{font-size:13px;margin-top:12px;color:var(--warn)}
+
+/* toast */
+#toasts{position:fixed;right:20px;bottom:20px;z-index:60;display:grid;gap:8px}
+.toast{min-width:260px;max-width:380px;padding:12px 16px;border-radius:10px;background:var(--raised);border:1px solid var(--line);font-size:14px;
+  box-shadow:0 12px 30px -10px rgba(0,0,0,.6);animation:pop .18s ease-out}
+.toast.err{border-color:rgba(255,92,108,.5)} .toast.ok{border-color:rgba(62,230,160,.45)}
+
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(22,5,31,.3);border-top-color:#16051F;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+@media (max-width:1060px){.split{grid-template-columns:1fr}.log{height:260px}}
+@media (max-width:820px){#app{grid-template-columns:1fr}.side{display:none}.hero .stage{left:0;opacity:.45}.counter{right:24px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login">
+  <div class="stage" id="stage-login"></div>
+  <div class="login-box">
+    <div class="brand">MAGNATA<small>Live Manager</small></div>
+    <form id="login-form" autocomplete="off">
+      <input class="field key-input" id="key" placeholder="MAG-XXXXX-XXXXX-XXXXX-XXXXX" spellcheck="false" aria-label="Chave de acesso">
+      <label class="check"><input type="checkbox" id="remember" checked> Lembrar neste PC</label>
+      <button class="btn btn-neon" id="login-btn" type="submit">Entrar</button>
+      <div class="login-err" id="login-err" role="alert"></div>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app" class="hidden">
+  <aside class="side">
+    <div class="logo">MAGNATA<span>.</span></div>
+    <nav class="nav" id="nav">
+      <button data-view="live" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4M3.5 3.5a12 12 0 0 0 0 17M20.5 3.5a12 12 0 0 1 0 17"/></svg>Live</button>
+      <div class="admin-only sep"></div>
+      <div class="admin-only group">Admin</div>
+      <button class="admin-only" data-view="contas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg>Contas do TikTok</button>
+      <button class="admin-only" data-view="usuarios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/></svg>Acessos</button>
+      <button class="admin-only" data-view="atividade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Histórico</button>
+    </nav>
+    <div class="me">
+      <div class="avatar" id="me-av">M</div>
+      <div class="who"><b id="me-name">—</b><span id="me-role">—</span></div>
+      <button id="logout" title="Sair"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3"/></svg></button>
+    </div>
+  </aside>
+
+  <main id="main">
+    <!-- LIVE -->
+    <div class="view" id="v-live">
+      <div class="hero">
+        <div class="stage" id="stage-hero"></div>
+        <div class="counter"><b id="count">0</b><span id="count-lbl">na live</span></div>
+        <div class="hero-copy">
+          <h1>Mande as contas pra live</h1>
+          <p class="sub">Cola o link da live do TikTok. As contas entram uma por uma e saem sozinhas quando a live acabar.</p>
+          <form class="launch" id="launch-form">
+            <input class="field" id="url" placeholder="https://www.tiktok.com/@perfil/live" spellcheck="false" aria-label="Link da live">
+            <button class="btn btn-neon" id="go" type="submit">Lançar na live</button>
+            <button class="btn btn-danger hidden" id="stop" type="button">Parar</button>
+          </form>
+          <div class="live-url hidden" id="live-url"></div>
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
+      <div class="split">
+        <section>
+          <div class="panel-title"><h3>Contas</h3><span id="acc-sum"></span></div>
+          <div class="rows" id="acc-rows"></div>
+        </section>
+        <section>
+          <div class="panel-title"><h3>O que tá rolando</h3><span id="browser-name"></span></div>
+          <div class="log" id="log" aria-live="polite"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- CONTAS (admin) -->
+    <div class="view pad hidden" id="v-contas">
+      <h2>Contas do TikTok</h2>
+      <p class="sub">Só você vê essa tela. Adicione a conta, clique em "Fazer login" e entre nela no navegador que abrir. O login fica salvo pra todo mundo usar.</p>
+      <form class="toolbar" id="add-acc">
+        <input class="field" id="acc-name" placeholder="Nome da conta (ex: @lojinha_02)" required>
+        <input class="field" id="acc-gmail" placeholder="Gmail da conta" type="email">
+        <button class="btn btn-neon" type="submit">Adicionar conta</button>
+      </form>
+      <div class="list" id="acc-list"></div>
+    </div>
+
+    <!-- USUÁRIOS (admin) -->
+    <div class="view pad hidden" id="v-usuarios">
+      <h2>Acessos</h2>
+      <p class="sub">Crie uma chave pra cada amigo. Com ela ele só consegue lançar as contas na live — não vê os Gmails nem mexe nas contas.</p>
+      <form class="toolbar" id="add-user">
+        <input class="field" id="user-name" placeholder="Nome do amigo" required>
+        <select class="field" id="user-role" style="flex:0 0 170px" aria-label="Tipo de acesso">
+          <option value="user">Pode lançar</option>
+          <option value="admin">Admin completo</option>
+        </select>
+        <button class="btn btn-neon" type="submit">Criar acesso</button>
+      </form>
+      <div class="list" id="user-list"></div>
+    </div>
+
+    <!-- HISTÓRICO (admin) -->
+    <div class="view pad hidden" id="v-atividade">
+      <h2>Histórico</h2>
+      <p class="sub">Quem entrou, quem lançou em qual live e o que mudou nas contas.</p>
+      <div class="feed" id="feed" style="margin-top:22px"></div>
+    </div>
+  </main>
+</section>
+
+<div id="modal-root"></div>
+<div id="toasts"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+"use strict";
+const TOKEN = "__TOKEN__";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+async function api(action, payload = {}) {
+  try {
+    const r = await fetch("/api/" + action, {method: "POST", headers: {"Content-Type": "application/json", "X-Token": TOKEN}, body: JSON.stringify(payload)});
+    return await r.json();
+  } catch (e) {
+    return {ok: false, error: "O app fechou ou travou. Abra de novo."};
+  }
+}
+
+function toast(msg, kind = "") {
+  const t = document.createElement("div");
+  t.className = "toast " + kind; t.textContent = msg;
+  $("#toasts").appendChild(t);
+  setTimeout(() => t.remove(), 4200);
+}
+
+function modal(html) {
+  const root = $("#modal-root");
+  root.innerHTML = `<div class="modal"><div class="box" role="dialog" aria-modal="true">${html}</div></div>`;
+  const close = () => { root.innerHTML = ""; };
+  root.querySelector(".modal").addEventListener("mousedown", e => { if (e.target.classList.contains("modal") && !root.dataset.lock) close(); });
+  return {box: root.querySelector(".box"), close};
+}
+
+function confirmBox(title, text, okLabel, danger = true) {
+  return new Promise(res => {
+    const m = modal(`<h3>${esc(title)}</h3><p>${esc(text)}</p><div class="acts">
+      <button class="btn btn-ghost" data-a="no">Cancelar</button>
+      <button class="btn ${danger ? "btn-danger" : "btn-neon"}" data-a="yes">${esc(okLabel)}</button></div>`);
+    m.box.querySelector('[data-a="no"]').onclick = () => { m.close(); res(false); };
+    m.box.querySelector('[data-a="yes"]').onclick = () => { m.close(); res(true); };
+  });
+}
+
+function showKey(name, key, isNew) {
+  const m = modal(`<h3>${isNew ? "Acesso criado" : "Nova chave gerada"}</h3>
+    <p>Manda essa chave pro <b>${esc(name)}</b>. Ele cola ela na tela de entrada do app.</p>
+    <div class="keybox">${esc(key)}</div>
+    <p class="note">Ela só aparece agora. Se perder, é só gerar uma nova.</p>
+    <div class="acts"><button class="btn btn-ghost" data-a="close">Fechar</button><button class="btn btn-neon" data-a="copy">Copiar chave</button></div>`);
+  m.box.querySelector('[data-a="close"]').onclick = m.close;
+  m.box.querySelector('[data-a="copy"]').onclick = async e => {
+    try { await navigator.clipboard.writeText(key); e.target.textContent = "Copiada"; } catch { toast("Selecione e copie manualmente", "err"); }
+  };
+}
+
+function ago(iso) {
+  if (!iso) return "nunca";
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (s < 60) return "agora";
+  if (s < 3600) return `há ${Math.floor(s / 60)} min`;
+  if (s < 86400) return `há ${Math.floor(s / 3600)} h`;
+  return new Date(iso).toLocaleDateString("pt-BR");
+}
+
+/* ═══════════ 3D: núcleo + satélites (1 por conta na live) ═══════════ */
+function makeCore(container, opts = {}) {
+  if (!window.THREE) { container.innerHTML = '<div class="fallback"></div>'; return {set(){}, pulse(){}}; }
+  const T = THREE;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const renderer = new T.WebGLRenderer({antialias: true, alpha: true, powerPreference: "low-power"});
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
+  container.appendChild(renderer.domElement);
+  const scene = new T.Scene();
+  scene.position.y = opts.y || 0;
+  const cam = new T.PerspectiveCamera(42, 1, .1, 100);
+  cam.position.set(0, 0, opts.dist || 9);
+
+  const glowTex = (() => {
+    const c = document.createElement("canvas"); c.width = c.height = 128;
+    const g = c.getContext("2d"), gr = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(.2, "rgba(214,160,255,.9)");
+    gr.addColorStop(.5, "rgba(177,75,255,.35)"); gr.addColorStop(1, "rgba(177,75,255,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+    return new T.CanvasTexture(c);
+  })();
+  const sprite = (size, color = 0xffffff, op = 1) => {
+    const s = new T.Sprite(new T.SpriteMaterial({map: glowTex, color, transparent: true, opacity: op, blending: T.AdditiveBlending, depthWrite: false}));
+    s.scale.set(size, size, 1); return s;
+  };
+
+  const core = new T.Group(); scene.add(core);
+  const shell = new T.Mesh(new T.IcosahedronGeometry(1.55, 1), new T.MeshBasicMaterial({color: 0xB14BFF, wireframe: true, transparent: true, opacity: .55}));
+  const inner = new T.Mesh(new T.IcosahedronGeometry(1.05, 0), new T.MeshBasicMaterial({color: 0x6D28D9, wireframe: true, transparent: true, opacity: .8}));
+  core.add(shell, inner, sprite(4.6, 0xB14BFF, .75), sprite(1.6, 0xffffff, .9));
+
+  const rings = [];
+  [[2.6, .35, 0x8B5CF6], [3.25, -.55, 0xB14BFF], [3.9, .9, 0x6D28D9]].forEach(([r, tilt, col], i) => {
+    const ring = new T.Mesh(new T.TorusGeometry(r, .008, 6, 160), new T.MeshBasicMaterial({color: col, transparent: true, opacity: .35}));
+    ring.rotation.x = Math.PI / 2 + tilt; ring.rotation.y = i * .7;
+    scene.add(ring); rings.push(ring);
+  });
+
+  // poeira
+  const N = 260, pos = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const r = 3 + Math.random() * 6, a = Math.random() * Math.PI * 2, y = (Math.random() - .5) * 6;
+    pos.set([Math.cos(a) * r, y, Math.sin(a) * r], i * 3);
+  }
+  const dustGeo = new T.BufferGeometry(); dustGeo.setAttribute("position", new T.BufferAttribute(pos, 3));
+  const dust = new T.Points(dustGeo, new T.PointsMaterial({color: 0xC9A2FF, size: .035, transparent: true, opacity: .55}));
+  scene.add(dust);
+
+  // satélites
+  const sats = [];
+  function addSat() {
+    const i = sats.length, ring = rings[i % 3];
+    const g = new T.Group(); g.add(sprite(.75, 0xFF3D8B, 1), sprite(.25, 0xffffff, 1));
+    const sat = {g, ring, r: ring.geometry.parameters.radius, phase: (i * 2.399) % (Math.PI * 2), speed: .35 + (i % 5) * .06, born: performance.now()};
+    scene.add(g); sats.push(sat);
+  }
+  function removeSat() { const s = sats.pop(); if (s) scene.remove(s.g); }
+
+  let pulseUntil = 0, visible = true, last = 0, raf;
+  const io = new IntersectionObserver(es => { visible = es[0].isIntersecting; });
+  io.observe(container);
+  const size = () => {
+    const w = container.clientWidth || 1, h = container.clientHeight || 1;
+    renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+  };
+  new ResizeObserver(size).observe(container); size();
+
+  const tmp = new T.Vector3();
+  function frame(t) {
+    raf = requestAnimationFrame(frame);
+    if (!visible || document.hidden || t - last < 33) return;
+    const dt = Math.min((t - last) / 1000, .1); last = t;
+    const sp = reduce ? .15 : 1;
+    const boost = t < pulseUntil ? 1 + Math.sin((pulseUntil - t) / 90) * .08 : 1;
+    shell.rotation.y += dt * .25 * sp; shell.rotation.x += dt * .1 * sp;
+    inner.rotation.y -= dt * .4 * sp; inner.rotation.z += dt * .15 * sp;
+    core.scale.setScalar(boost * (1 + Math.sin(t / 900) * .02));
+    rings.forEach((r, i) => r.rotation.z += dt * (.05 + i * .03) * sp);
+    dust.rotation.y += dt * .02 * sp;
+    sats.forEach(s => {
+      s.phase += dt * s.speed * sp;
+      tmp.set(Math.cos(s.phase) * s.r, Math.sin(s.phase) * s.r, 0);
+      tmp.applyEuler(s.ring.rotation);
+      s.g.position.copy(tmp);
+      const k = Math.min((t - s.born) / 600, 1); s.g.scale.setScalar(k);
+    });
+    renderer.render(scene, cam);
+  }
+  raf = requestAnimationFrame(frame);
+
+  return {
+    set(n) { n = Math.min(n, 60); while (sats.length < n) addSat(); while (sats.length > n) removeSat(); },
+    pulse(ms = 1200) { pulseUntil = performance.now() + ms; },
+  };
+}
+
+/* ═══════════ estado ═══════════ */
+const S = {user: null, view: "live", accounts: [], watching: [], claimed: [], launching: false, logSince: 0, loginFor: null};
+let heroCore = null, loginCore = null;
+
+/* login */
+loginCore = makeCore($("#stage-login"), {dist: 11, y: 2});
+const keyEl = $("#key");
+keyEl.addEventListener("input", () => {
+  const raw = keyEl.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const body = raw.startsWith("MAG") ? raw.slice(3) : raw;
+  const parts = body.slice(0, 20).match(/.{1,5}/g) || [];
+  keyEl.value = body ? "MAG-" + parts.join("-") : raw;
+});
+$("#login-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("#login-btn"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  const r = await api("login", {key: keyEl.value, remember: $("#remember").checked});
+  btn.disabled = false; btn.textContent = "Entrar";
+  if (!r.ok) {
+    $("#login-err").textContent = r.error;
+    const f = $("#login-form"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
+    return;
+  }
+  enterApp(r.user);
+});
+
+function enterApp(user) {
+  S.user = user;
+  $("#login").classList.add("hidden");
+  $("#app").classList.remove("hidden");
+  $("#me-name").textContent = user.name;
+  $("#me-role").textContent = user.role === "admin" ? "Admin" : "Pode lançar";
+  $("#me-av").textContent = (user.name || "?").trim()[0].toUpperCase();
+  document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", user.role !== "admin"));
+  if (!heroCore) heroCore = makeCore($("#stage-hero"), {dist: 10});
+  go("live");
+  loadAccounts();
+}
+
+function backToLogin(msg) {
+  S.user = null;
+  $("#app").classList.add("hidden");
+  $("#login").classList.remove("hidden");
+  $("#login-err").textContent = msg || "";
+  keyEl.value = ""; keyEl.focus();
+}
+
+$("#logout").onclick = async () => {
+  if (S.watching.length && !(await confirmBox("Sair do app?", "As contas que estão na live vão sair.", "Sair"))) return;
+  await api("logout"); backToLogin("");
+};
+
+/* navegação */
+document.querySelectorAll("#nav button").forEach(b => b.onclick = () => go(b.dataset.view));
+function go(view) {
+  S.view = view;
+  document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("on", b.dataset.view === view));
+  ["live", "contas", "usuarios", "atividade"].forEach(v => $("#v-" + v).classList.toggle("hidden", v !== view));
+  $("#main").scrollTop = 0;
+  if (view === "live" || view === "contas") loadAccounts();
+  if (view === "usuarios") loadUsers();
+  if (view === "atividade") loadActivity();
+}
+
+/* contas */
+async function loadAccounts() {
+  if (!S.user) return;
+  const r = await api("accounts");
+  if (!r.ok) { if (r.code === "BLOQUEADO" || r.code === "CHAVE_INVALIDA") return backToLogin("Seu acesso foi bloqueado pelo admin."); return; }
+  S.accounts = r.accounts || [];
+  renderAccounts();
+}
+
+function accState(a) {
+  if (S.watching.includes(a.id)) return ["live", "Na live"];
+  if (S.claimed.includes(a.id) || a.mine) return ["live", S.launching ? "Entrando..." : "Na live"];
+  if (a.busy_by) return ["busy", `Em uso por ${a.busy_by}`];
+  if (!a.logged) return ["off", "Sem login"];
+  return ["ok", "Pronta"];
+}
+
+function renderAccounts() {
+  const A = S.accounts;
+  const ready = A.filter(a => accState(a)[0] === "ok").length;
+  const busy = A.filter(a => a.busy_by).length;
+  const nolog = A.filter(a => !a.logged).length;
+  $("#acc-sum").textContent = A.length ? `${A.length} no total` : "";
+  $("#acc-rows").innerHTML = A.length ? A.map(a => {
+    const [k, txt] = accState(a);
+    return `<div class="row s-${k}"><span class="dot ${k}"></span><div class="grow"><div class="nm">${esc(a.name)}</div><div class="st">${esc(txt)}</div></div></div>`;
+  }).join("") : `<div class="empty">${S.user?.role === "admin" ? "Nenhuma conta ainda. Vá em <b>Contas do TikTok</b> e adicione a primeira." : "O admin ainda não cadastrou contas."}</div>`;
+
+  const chips = [];
+  chips.push(`<span class="chip"><span class="dot ok"></span><b>${ready}</b> prontas</span>`);
+  if (busy) chips.push(`<span class="chip"><span class="dot busy"></span><b>${busy}</b> em uso por outra pessoa</span>`);
+  if (nolog) chips.push(`<span class="chip"><span class="dot off"></span><b>${nolog}</b> sem login</span>`);
+  $("#chips").innerHTML = chips.join("");
+
+  if (S.view === "contas") renderAccList();
+}
+
+function renderAccList() {
+  const A = S.accounts;
+  $("#acc-list").innerHTML = A.length ? A.map(a => {
+    const [k, txt] = accState(a);
+    const loginLbl = a.logged ? "Refazer login" : "Fazer login";
+    return `<div class="item"><div class="nm"><span class="dot ${k}"></span><span>${esc(a.name)}</span>${a.logged ? "" : '<span class="badge gray">sem login</span>'}</div>
+      <div class="meta">${esc(a.gmail || "sem Gmail")} ${a.logged ? `<br>${esc(txt)}, logada ${esc(ago(a.login_at))}` : ""}</div>
+      <div class="acts">
+        ${a.busy_by ? `<button class="btn btn-ghost btn-sm" data-free="${a.id}">Liberar</button>` : ""}
+        <button class="btn ${a.logged ? "btn-ghost" : "btn-neon"} btn-sm" data-login="${a.id}">${loginLbl}</button>
+        <button class="btn btn-danger btn-sm" data-rm="${a.id}">Remover</button>
+      </div></div>`;
+  }).join("") : `<div class="empty">Nenhuma conta ainda. Coloque o nome e o Gmail ali em cima.</div>`;
+}
+
+$("#acc-list").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const id = b.dataset.login || b.dataset.rm || b.dataset.free;
+  const a = S.accounts.find(x => x.id === id); if (!a) return;
+  if (b.dataset.rm) {
+    if (!(await confirmBox(`Remover ${a.name}?`, "A conta some do app pra todo mundo. O login salvo é apagado.", "Remover"))) return;
+    const r = await api("admin_remove_account", {id}); r.ok ? toast("Conta removida", "ok") : toast(r.error, "err");
+    loadAccounts();
+  } else if (b.dataset.free) {
+    const r = await api("admin_free_account", {id}); r.ok ? toast("Conta liberada", "ok") : toast(r.error, "err");
+    loadAccounts();
+  } else if (b.dataset.login) {
+    doLogin(a);
+  }
+});
+
+async function doLogin(a) {
+  const m = modal(`<h3>Login: ${esc(a.name)}</h3><p>Abrindo o navegador...</p>`);
+  $("#modal-root").dataset.lock = "1";
+  const r = await api("admin_login_open", {id: a.id, name: a.name});
+  if (!r.ok) { delete $("#modal-root").dataset.lock; m.close(); return toast(r.error, "err"); }
+  m.box.innerHTML = `<h3>Login: ${esc(a.name)}</h3>
+    <ol><li>Abriu uma janela do TikTok.</li><li>Entre na conta <b>${esc(a.gmail || a.name)}</b> (resolva o captcha se pedir).</li><li>Quando aparecer o feed, volte aqui e clique em <b>Já loguei</b>.</li></ol>
+    <p class="note hidden" id="lg-note">Ainda não achei o login. Termine de entrar na conta e clique de novo.</p>
+    <div class="acts"><button class="btn btn-ghost" data-a="cancel">Cancelar</button><button class="btn btn-neon" data-a="ok">Já loguei</button></div>`;
+  const done = () => { delete $("#modal-root").dataset.lock; m.close(); loadAccounts(); };
+  m.box.querySelector('[data-a="cancel"]').onclick = async () => { await api("admin_login_cancel"); done(); };
+  m.box.querySelector('[data-a="ok"]').onclick = async e => {
+    e.target.disabled = true; e.target.innerHTML = '<span class="spin"></span>';
+    const r = await api("admin_login_confirm", {name: a.name});
+    e.target.disabled = false; e.target.textContent = "Já loguei";
+    if (!r.ok) return toast(r.error, "err");
+    if (!r.saved) { m.box.querySelector("#lg-note").classList.remove("hidden"); return; }
+    toast(`Login salvo: ${a.name}`, "ok"); done();
+  };
+}
+
+$("#add-acc").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("#acc-name").value.trim(); if (!name) return;
+  const r = await api("admin_add_account", {name, gmail: $("#acc-gmail").value.trim()});
+  if (!r.ok) return toast(r.error, "err");
+  $("#acc-name").value = ""; $("#acc-gmail").value = "";
+  toast("Conta adicionada. Agora faça o login dela.", "ok");
+  loadAccounts();
+});
+
+/* lançar */
+$("#launch-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const url = $("#url").value.trim();
+  if (!url) { $("#url").focus(); return toast("Cola o link da live primeiro", "err"); }
+  const btn = $("#go"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Lançando';
+  const r = await api("launch", {url});
+  btn.disabled = false; btn.textContent = "Lançar na live";
+  if (!r.ok) return toast(r.error, "err");
+  heroCore && heroCore.pulse(1600);
+  toast(`Lançando ${r.count} conta(s)`, "ok");
+  poll(); setTimeout(loadAccounts, 800);
+});
+$("#stop").onclick = async () => {
+  if (!(await confirmBox("Parar a live?", "Todas as contas saem da live agora.", "Parar"))) return;
+  $("#stop").disabled = true;
+  await api("stop");
+  $("#stop").disabled = false;
+  poll(); loadAccounts();
+};
+
+/* usuários */
+async function loadUsers() {
+  const r = await api("admin_users"); if (!r.ok) return toast(r.error, "err");
+  const U = r.users || [];
+  $("#user-list").innerHTML = U.map(u => {
+    const me = u.id === S.user.id;
+    return `<div class="item ${u.active ? "" : "blocked"}"><div class="nm"><span>${esc(u.name)}</span>
+        <span class="badge ${u.role === "admin" ? "" : "gray"}">${u.role === "admin" ? "Admin" : "Pode lançar"}</span>
+        ${u.active ? "" : '<span class="badge red">Bloqueado</span>'}${me ? '<span class="badge gray">você</span>' : ""}</div>
+      <div class="meta">Último acesso ${esc(ago(u.last_seen))}${u.in_live ? ` · ${u.in_live} conta(s) na live agora` : ""}</div>
+      <div class="acts">${me ? "" : `
+        <button class="btn btn-ghost btn-sm" data-key="${u.id}" data-n="${esc(u.name)}">Nova chave</button>
+        <button class="btn btn-ghost btn-sm" data-act="${u.id}" data-on="${u.active ? 0 : 1}">${u.active ? "Bloquear" : "Desbloquear"}</button>
+        <button class="btn btn-danger btn-sm" data-del="${u.id}" data-n="${esc(u.name)}">Apagar</button>`}</div></div>`;
+  }).join("");
+}
+$("#user-list").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.key) {
+    if (!(await confirmBox(`Gerar nova chave pro ${b.dataset.n}?`, "A chave antiga para de funcionar na hora.", "Gerar nova chave", false))) return;
+    const r = await api("admin_reset_key", {id: b.dataset.key}); r.ok ? showKey(b.dataset.n, r.key, false) : toast(r.error, "err");
+  } else if (b.dataset.act) {
+    const r = await api("admin_set_active", {id: b.dataset.act, active: b.dataset.on === "1"});
+    r.ok ? toast(b.dataset.on === "1" ? "Desbloqueado" : "Bloqueado — as contas dele saem da live", "ok") : toast(r.error, "err");
+  } else if (b.dataset.del) {
+    if (!(await confirmBox(`Apagar ${b.dataset.n}?`, "Ele perde o acesso pra sempre.", "Apagar"))) return;
+    const r = await api("admin_delete_user", {id: b.dataset.del}); r.ok ? toast("Acesso apagado", "ok") : toast(r.error, "err");
+  }
+  loadUsers();
+});
+$("#add-user").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("#user-name").value.trim(); if (!name) return;
+  const r = await api("admin_create_user", {name, role: $("#user-role").value});
+  if (!r.ok) return toast(r.error, "err");
+  $("#user-name").value = "";
+  showKey(name, r.key, true); loadUsers();
+});
+
+/* histórico */
+const ACOES = {"login": "entrou no app", "live": "lançou na live", "conta+": "adicionou a conta", "conta-": "removeu a conta",
+  "login conta": "fez login na conta", "usuário+": "criou acesso pra", "usuário-": "apagou o acesso de", "nova chave": "gerou nova chave pra",
+  "bloqueou": "bloqueou", "desbloqueou": "desbloqueou", "download": "abriu a página de download"};
+async function loadActivity() {
+  const r = await api("admin_activity"); if (!r.ok) return toast(r.error, "err");
+  const I = r.items || [];
+  $("#feed").innerHTML = I.length ? I.map(i => `<div><time>${new Date(i.at).toLocaleString("pt-BR", {day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"})}</time>
+    <span><b>${esc(i.user_name || "?")}</b> ${esc(ACOES[i.action] || i.action)} <i>${esc(i.detail || "")}</i></span></div>`).join("")
+    : `<div class="empty">Nada por aqui ainda.</div>`;
+}
+
+/* status (a cada 1,2s) */
+let polling = false;
+async function poll() {
+  if (polling) return; polling = true;
+  const r = await api("status", {since: S.logSince});
+  polling = false;
+  if (!r.ok) return;
+  if (r.kicked && S.user) return backToLogin("Seu acesso foi bloqueado pelo admin.");
+  const before = S.watching.length;
+  S.watching = r.watching || []; S.claimed = r.claimed || []; S.launching = r.launching;
+  const n = S.watching.length;
+  $("#count").textContent = n;
+  $("#count-lbl").textContent = n === 1 ? "conta na live" : "contas na live";
+  heroCore && heroCore.set(n);
+  const live = n > 0 || r.launching;
+  $("#go").classList.toggle("hidden", live);
+  $("#stop").classList.toggle("hidden", !live);
+  $("#url").disabled = live;
+  const lu = $("#live-url");
+  lu.classList.toggle("hidden", !r.live_url);
+  if (r.live_url) lu.innerHTML = `<span class="dot live" style="display:inline-block;margin-right:8px"></span>Ao vivo em ${esc(r.live_url)}`;
+  $("#browser-name").textContent = r.browser ? `via ${r.browser === "msedge" ? "Edge" : r.browser === "chrome" ? "Chrome" : "Chromium"}` : "";
+  if (before !== n) renderAccounts();
+  if (r.logs && r.logs.length) {
+    const box = $("#log"), atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
+    box.insertAdjacentHTML("beforeend", r.logs.map(l => `<p><time>${l.t}</time><span class="${l.kind}">${esc(l.msg)}</span></p>`).join(""));
+    S.logSince = r.logs[r.logs.length - 1].id;
+    while (box.children.length > 300) box.firstChild.remove();
+    if (atBottom) box.scrollTop = box.scrollHeight;
+  }
+}
+setInterval(() => { if (S.user) poll(); }, 1200);
+setInterval(() => { if (S.user && (S.view === "live" || S.view === "contas") && !$("#modal-root").innerHTML) loadAccounts(); }, 8000);
+
+/* fechou a janela → avisa o app pra tirar as contas e encerrar (no Mac o Chrome não fecha sozinho) */
+function sayBye() {
+  const u = "/api/bye?t=" + encodeURIComponent(TOKEN);
+  try { navigator.sendBeacon(u); } catch (_) {}
+  try { fetch(u, {method: "POST", keepalive: true}); } catch (_) {}
+}
+addEventListener("pagehide", sayBye);
+addEventListener("beforeunload", sayBye);
+
+/* boot */
+(async () => {
+  const r = await api("boot");
+  if (r.ok && r.user) enterApp(r.user);
+  else { if (r.error) $("#login-err").textContent = r.error; keyEl.focus(); }
+  poll();
+})();
+</script>
+</body>
+</html>

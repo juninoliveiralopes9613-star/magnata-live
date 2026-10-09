@@ -1,0 +1,6 @@
+dist/
+build/
+*.spec
+tiktok_data/
+erro_log.txt
+__pycache__/

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>MAGNATA Live Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#100D16; --band:#140F1B; --surface:#19141F; --line:#2E2539;
+  --neon:#B14BFF; --neon-2:#6D28D9; --text:#EDE7F6; --dim:#A399B6; --faint:#6E6580;
+  --live:#FF3D8B; --err:#FF5C6C; --warn:#FFB547; --ok:#3EE6A0;
+  --display:'Unbounded',system-ui,sans-serif; --ui:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:17px/1.6 var(--ui);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:#D6A6FF}
+:focus-visible{outline:2px solid var(--neon);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+.hidden{display:none!important}
+#gate,#page{overflow-x:clip}
+
+/* ── núcleo 3D (CSS) ── */
+@keyframes spin-y{to{transform:rotateY(360deg)}}
+@keyframes spin-z{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{transform:scale(1.06);opacity:.85}}
+.orb{position:relative;width:440px;height:440px;perspective:1100px;transform-style:preserve-3d;flex:none}
+.orb .glow{position:absolute;left:50%;top:50%;width:360px;height:360px;margin:-180px 0 0 -180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.9) 0,rgba(214,160,255,.75) 9%,rgba(177,75,255,.38) 30%,rgba(109,40,217,.12) 52%,rgba(109,40,217,0) 70%);
+  animation:breathe 5s ease-in-out infinite}
+.orb .globe{position:absolute;left:50%;top:50%;width:190px;height:190px;margin:-95px 0 0 -95px;transform-style:preserve-3d;animation:spin-y 16s linear infinite}
+.orb .mer{position:absolute;inset:0;border:1.5px solid rgba(200,140,255,.75);border-radius:50%}
+.orb .tilt{position:absolute;left:50%;top:50%;transform-style:preserve-3d}
+.orb .ring{position:absolute;inset:0;border:1px solid rgba(177,75,255,.45);border-radius:50%}
+.orb .sat{position:absolute;top:-7px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--live);box-shadow:0 0 18px 5px rgba(255,61,139,.75)}
+.orb .sat.b{top:auto;bottom:-7px}
+.orb.small{width:300px;height:300px;transform:scale(.68);margin:-70px 0}
+
+/* ── trava ── */
+#gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 16px;text-align:center}
+.brand{font-family:var(--display);font-weight:900;font-size:44px;line-height:1;letter-spacing:-.02em;margin-top:8px}
+.brand small{display:block;font-weight:500;font-size:16px;color:var(--neon);margin-top:10px;letter-spacing:.02em}
+#gate p.lead{color:var(--dim);margin-top:18px;max-width:38ch}
+#gate form{width:min(420px,100%);margin-top:26px;display:grid;gap:12px}
+.field{height:54px;width:100%;padding:0 14px;border-radius:10px;background:rgba(16,13,22,.8);border:1px solid var(--line);color:var(--text);
+  font:17px var(--mono);letter-spacing:.06em;text-align:center;transition:border-color .15s,box-shadow .15s}
+.field::placeholder{color:var(--faint)}
+.field:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(177,75,255,.18)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 26px;border-radius:10px;border:0;cursor:pointer;
+  font:700 16px var(--ui);text-decoration:none;transition:background .15s,box-shadow .2s,transform .1s}
+.btn:active{transform:translateY(1px)}
+.btn-neon{background:var(--neon);color:#16051F;box-shadow:0 10px 36px -8px rgba(177,75,255,.75)}
+.btn-neon:hover{background:#C26BFF;color:#16051F}
+.btn[disabled]{opacity:.5;cursor:wait}
+.btn-ghost{background:#221B2C;color:var(--text);border:1px solid var(--line);box-shadow:none}
+.btn-ghost:hover{border-color:#4a3d5e;color:var(--text)}
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:12px;background:var(--surface);border:1px solid var(--line);margin-top:22px}
+.seg button{height:40px;padding:0 18px;border-radius:9px;border:0;background:none;color:var(--dim);font:700 15px var(--ui);cursor:pointer}
+.seg button[aria-pressed="true"]{background:rgba(177,75,255,.18);color:var(--text);box-shadow:inset 0 0 0 1px rgba(177,75,255,.45)}
+.term{display:block;margin-top:10px;padding:12px 14px;border-radius:9px;background:var(--bg);border:1px solid var(--line);font:500 14px var(--mono);color:#E3C4FF;word-break:break-all;user-select:all}
+.err{min-height:24px;color:var(--err);font-size:15px}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(22,5,31,.3);border-top-color:#16051F;animation:spin-z .7s linear infinite}
+
+/* ── página liberada ── */
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:28px;padding-bottom:28px}
+.logo{font-family:var(--display);font-weight:900;font-size:20px}
+.logo span{color:var(--neon)}
+.hello{font-size:15px;color:var(--dim)}
+.hello b{color:var(--text)}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:center;padding-top:40px;padding-bottom:96px}
+.hero .kicker{font-weight:600;color:var(--neon);margin-bottom:18px}
+h1{font-family:var(--display);font-weight:900;font-size:64px;line-height:1.02;letter-spacing:-.03em}
+.hero p.sub{margin-top:26px;max-width:34ch;font-size:19px;color:#B7ADC9}
+.dl-row{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.dl-row .meta{font-size:15px;color:var(--faint)}
+.orb-cap{text-align:center;font-size:14px;color:var(--dim);margin-top:-6px}
+section.band{border-top:1px solid var(--line);background:var(--band)}
+h2{font-family:var(--display);font-weight:700;font-size:36px;letter-spacing:-.02em}
+.steps{margin-top:44px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:36px}
+.step .n{font-family:var(--display);font-weight:900;font-size:56px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--neon)}
+.step h3{margin-top:12px;font-size:20px;font-weight:700}
+.step p{margin-top:8px;color:var(--dim)}
+.step code{font:500 14px var(--mono);color:#E3C4FF;background:var(--surface);padding:2px 6px;border-radius:5px}
+.warn-box{margin-top:44px;padding:20px 22px;border-radius:12px;border:1px solid rgba(255,181,71,.35);background:rgba(255,181,71,.06);color:#F3DDB6;max-width:72ch}
+.warn-box b{color:var(--warn)}
+.feats{margin-top:40px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px}
+.feats div{padding:24px 0;border-top:1px solid var(--line)}
+.feats h3{font-size:20px;font-weight:700}
+.feats p{margin-top:6px;color:var(--dim)}
+footer{border-top:1px solid var(--line);background:radial-gradient(70% 140% at 50% 120%,rgba(109,40,217,.35),rgba(16,13,22,0) 70%);text-align:center}
+.giant{font-family:var(--display);font-weight:900;font-size:140px;line-height:.9;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px var(--neon);text-shadow:0 0 60px rgba(177,75,255,.35)}
+footer p{margin-top:28px;font-size:18px;color:#B7ADC9}
+footer small{display:block;margin-top:64px;padding-bottom:40px;font-size:13px;color:var(--faint)}
+
+@media (max-width:900px){
+  .wrap{padding:0 16px}
+  .hero{grid-template-columns:minmax(0,1fr);padding-top:16px}
+  .hero .orb{left:50%;margin:-60px 0!important;transform:translateX(-50%) scale(.7)}
+  h1{font-size:40px}
+  .steps{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .feats{grid-template-columns:minmax(0,1fr)}
+  .giant{font-size:60px}
+  .orb.small{transform:scale(.55);margin:-90px 0}
+}
+@media (max-width:520px){.steps{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ═════ TRAVA ═════ -->
+<main id="gate">
+  <div class="orb small" aria-hidden="true">
+    <div class="glow"></div>
+    <div class="globe"><div class="mer"></div><div class="mer" style="transform:rotateY(60deg)"></div><div class="mer" style="transform:rotateY(120deg)"></div><div class="mer" style="transform:rotateX(90deg)"></div></div>
+    <div class="tilt" style="width:300px;height:300px;margin:-150px 0 0 -150px;transform:rotateX(72deg) rotateY(-14deg)"><div class="ring" style="animation:spin-z 11s linear infinite"><span class="sat"></span></div></div>
+    <div class="tilt" style="width:400px;height:400px;margin:-200px 0 0 -200px;transform:rotateX(78deg) rotateY(18deg)"><div class="ring" style="animation:spin-z 17s linear infinite reverse"><span class="sat b"></span></div></div>
+  </div>
+  <div class="brand">MAGNATA<small>Live Manager</small></div>
+  <p class="lead">Acesso fechado. Coloque a chave que o Magnata te mandou pra ver a página e baixar o app.</p>
+  <form id="gate-form" autocomplete="off">
+    <label for="key" class="hidden">Chave de acesso</label>
+    <input class="field" id="key" placeholder="MAG-XXXXX-XXXXX-XXXXX-XXXXX" spellcheck="false" autofocus>
+    <button class="btn btn-neon" id="go" type="submit">Entrar</button>
+    <div class="err" id="err" role="alert"></div>
+  </form>
+</main>
+
+<!-- ═════ PÁGINA (liberada) ═════ -->
+<div id="page" class="hidden">
+  <header class="wrap">
+    <div class="logo">MAGNATA<span>.</span></div>
+    <div class="hello">Liberado pra <b id="who">você</b></div>
+  </header>
+
+  <section class="wrap hero">
+    <div>
+      <p class="kicker">Live Manager</p>
+      <h1>Suas contas entram juntas na live</h1>
+      <p class="sub">Cola o link da live do TikTok e aperta lançar. As contas entram uma por uma, ficam até a live acabar e saem sozinhas.</p>
+      <div class="dl-row">
+        <a class="btn btn-neon" id="dl-win" href="#" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+          Baixar pro Windows
+        </a>
+        <a class="btn btn-ghost" id="dl-mac" href="#" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+          Baixar pro Mac
+        </a>
+      </div>
+      <p style="margin-top:14px;font-size:15px;color:var(--faint)">Windows 10 ou 11. Mac com chip Apple (M1 em diante) e Google Chrome instalado.</p>
+    </div>
+    <div>
+      <div class="orb" aria-hidden="true" style="margin:0 auto">
+        <div class="glow"></div>
+        <div class="globe"><div class="mer"></div><div class="mer" style="transform:rotateY(60deg)"></div><div class="mer" style="transform:rotateY(120deg)"></div><div class="mer" style="transform:rotateX(90deg)"></div></div>
+        <div class="tilt" style="width:300px;height:300px;margin:-150px 0 0 -150px;transform:rotateX(72deg) rotateY(-14deg)"><div class="ring" style="animation:spin-z 11s linear infinite"><span class="sat"></span><span class="sat b"></span></div></div>
+        <div class="tilt" style="width:372px;height:372px;margin:-186px 0 0 -186px;transform:rotateX(62deg) rotateY(28deg)"><div class="ring" style="animation:spin-z 15s linear infinite reverse"><span class="sat"></span></div></div>
+        <div class="tilt" style="width:436px;height:436px;margin:-218px 0 0 -218px;transform:rotateX(80deg) rotateY(8deg)"><div class="ring" style="animation:spin-z 21s linear infinite"><span class="sat"></span><span class="sat b"></span></div></div>
+      </div>
+      <p class="orb-cap">Cada ponto rosa é uma conta na live</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap" style="padding-top:88px;padding-bottom:88px">
+      <h2>Como instalar</h2>
+      <div class="seg" role="group" aria-label="Sistema">
+        <button type="button" data-os="win" aria-pressed="true">Windows</button>
+        <button type="button" data-os="mac" aria-pressed="false">Mac</button>
+      </div>
+      <div id="inst-win">
+        <div class="steps">
+          <div class="step"><div class="n">1</div><h3>Baixa o .zip</h3><p>No botão <b>Baixar pro Windows</b> lá em cima.</p></div>
+          <div class="step"><div class="n">2</div><h3>Extrai a pasta</h3><p>Botão direito no arquivo, <b>Extrair tudo</b>. Não abre de dentro do .zip.</p></div>
+          <div class="step"><div class="n">3</div><h3>Abre o app</h3><p>Dentro da pasta, dois cliques em <code>MagnataLiveManager.exe</code>.</p></div>
+          <div class="step"><div class="n">4</div><h3>Cola sua chave</h3><p>A mesma que você usou aqui. Marca "Lembrar neste PC" e pronto.</p></div>
+        </div>
+        <div class="warn-box"><b>Apareceu "O Windows protegeu o computador"?</b> É normal em app que não é da loja. Clica em <b>Mais informações</b> e depois em <b>Executar assim mesmo</b>. Se o antivírus reclamar, libera a pasta do app.</div>
+      </div>
+      <div id="inst-mac" class="hidden">
+        <div class="steps">
+          <div class="step"><div class="n">1</div><h3>Baixa o .zip</h3><p>No botão <b>Baixar pro Mac</b>. Se não abrir sozinho, dois cliques no .zip.</p></div>
+          <div class="step"><div class="n">2</div><h3>Põe em Aplicativos</h3><p>Arrasta o <code>MagnataLiveManager</code> pra pasta <b>Aplicativos</b> no Finder.</p></div>
+          <div class="step"><div class="n">3</div><h3>Libera na 1ª vez</h3><p>Abre o app. Se o Mac barrar, vai em <b>Ajustes do Sistema</b>, <b>Privacidade e Segurança</b>, rola até o fim e clica <b>Abrir Mesmo Assim</b>.</p></div>
+          <div class="step"><div class="n">4</div><h3>Cola sua chave</h3><p>A mesma que você usou aqui. Marca "Lembrar neste PC" e pronto.</p></div>
+        </div>
+        <div class="warn-box"><b>Precisa do Google Chrome instalado</b>, porque o app usa ele por baixo dos panos. <b>Disse que o app está "danificado"?</b> Abre o Terminal, cola isso e dá Enter, depois abre de novo:<code class="term">xattr -cr /Applications/MagnataLiveManager.app</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:88px;padding-bottom:96px">
+    <h2>Como usar</h2>
+    <div class="feats">
+      <div><h3>Lançar na live</h3><p>Cola o link da live do TikTok e clica em Lançar na live. O contador mostra quantas contas entraram.</p></div>
+      <div><h3>Parar</h3><p>O botão Parar tira todas as contas na hora. Se a live acabar, elas saem sozinhas.</p></div>
+      <div><h3>"Em uso por fulano"</h3><p>Conta que já tá numa live de outra pessoa fica travada até ela sair. Espera ou fala com quem tá usando.</p></div>
+      <div><h3>Caiu, volta sozinha</h3><p>Se uma conta cair no meio da live, o app tenta reconectar ela sem você fazer nada.</p></div>
+      <div><h3>Pode minimizar</h3><p>As contas rodam em segundo plano, com o som mudo. Só não fecha a janela do app, senão todas saem.</p></div>
+      <div><h3>Sua chave é só sua</h3><p>Não passa pra ninguém. Se vazar, o Magnata gera outra e a antiga para de funcionar.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap" style="padding-top:96px">
+      <div class="giant">MAGNATA</div>
+      <p>Live Manager. Feito pra rodar com os meus.</p>
+      <small>© 2026 MAGNATA. Uso privado, acesso só com chave.</small>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+const SUPA_URL = "https://rfhyvazvezsmdtfdaebn.supabase.co";
+const SUPA_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJmaHl2YXp2ZXpzbWR0ZmRhZWJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyMjU4OTAsImV4cCI6MjEwNTgwMTg5MH0.EaNThyB1TuHlT28Hlhu1DY9Yt5l9G4s9QZdYQxRNdUw";
+const $ = s => document.querySelector(s);
+const keyEl = $("#key");
+
+keyEl.addEventListener("input", () => {
+  const raw = keyEl.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const body = raw.startsWith("MAG") ? raw.slice(3) : raw;
+  const parts = body.slice(0, 20).match(/.{1,5}/g) || [];
+  keyEl.value = body ? "MAG-" + parts.join("-") : raw;
+});
+
+async function unlock(key) {
+  const r = await fetch(SUPA_URL + "/rest/v1/rpc/tlm_download", {
+    method: "POST",
+    headers: {"apikey": SUPA_ANON, "Authorization": "Bearer " + SUPA_ANON, "Content-Type": "application/json"},
+    body: JSON.stringify({p_key: key})
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.message === "CHAVE_INVALIDA" ? "Chave errada ou bloqueada." : "Não deu pra conferir agora. Tenta de novo em 1 minuto.");
+  return j;
+}
+
+const IS_MAC = /Macintosh|Mac OS X/.test(navigator.userAgent);
+function pickOS(os) {
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.os === os)));
+  $("#inst-win").classList.toggle("hidden", os !== "win");
+  $("#inst-mac").classList.toggle("hidden", os !== "mac");
+}
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => pickOS(b.dataset.os)));
+
+function show(data) {
+  $("#who").textContent = data.name || "você";
+  $("#dl-win").href = data.url;
+  $("#dl-mac").href = data.url_mac || data.url;
+  if (IS_MAC) {
+    $("#dl-mac").className = "btn btn-neon"; $("#dl-win").className = "btn btn-ghost";
+    $("#dl-win").parentNode.insertBefore($("#dl-mac"), $("#dl-win"));
+  }
+  pickOS(IS_MAC ? "mac" : "win");
+  $("#gate").classList.add("hidden");
+  $("#page").classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+$("#gate-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const key = keyEl.value.trim();
+  const btn = $("#go");
+  if (key.length < 10) { $("#err").textContent = "Cola a chave inteira (MAG-...)."; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>';
+  try {
+    const data = await unlock(key);
+    try { sessionStorage.setItem("mg_key", key); } catch (_) {}
+    show(data);
+  } catch (err) {
+    $("#err").textContent = err.message || "Erro de conexão.";
+    const f = $("#gate-form"); f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
+  } finally {
+    btn.disabled = false; btn.textContent = "Entrar";
+  }
+});
+
+(async () => {
+  let saved = null;
+  try { saved = sessionStorage.getItem("mg_key"); } catch (_) {}
+  if (saved) { try { show(await unlock(saved)); } catch (_) {} }
+})();
+</script>
+</body>
+</html>

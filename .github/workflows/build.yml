@@ -1,0 +1,84 @@
+name: Compilar app (Windows + Mac)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar bibliotecas
+        run: python -m pip install --upgrade playwright pyinstaller
+      - name: Compilar .exe
+        working-directory: app
+        run: python -m PyInstaller --noconfirm --onedir --windowed --collect-all playwright --add-data "ui.html;." --name MagnataLiveManager app.py
+      - name: Autoteste (abre um navegador de verdade)
+        shell: pwsh
+        run: |
+          $env:TLM_SELFTEST = "$PWD\selftest.txt"
+          $p = Start-Process -FilePath "app\dist\MagnataLiveManager\MagnataLiveManager.exe" -Wait -PassThru
+          if (Test-Path selftest.txt) { Get-Content selftest.txt }
+          if ($p.ExitCode -ne 0) { Write-Error "Autoteste falhou ($($p.ExitCode))"; exit 1 }
+      - name: Compactar
+        shell: pwsh
+        run: Compress-Archive -Path app/dist/MagnataLiveManager -DestinationPath MagnataLiveManager-Windows.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: MagnataLiveManager-Windows.zip
+
+  mac:
+    runs-on: macos-latest   # Mac com chip Apple (M1, M2, M3, M4)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Instalar bibliotecas
+        run: python -m pip install --upgrade playwright pyinstaller
+      - name: Compilar .app
+        working-directory: app
+        run: python -m PyInstaller --noconfirm --onedir --windowed --collect-all playwright --add-data "ui.html:." --osx-bundle-identifier com.magnata.livemanager --name MagnataLiveManager app.py
+      - name: Autoteste (abre um navegador de verdade)
+        run: |
+          set +e
+          TLM_SELFTEST="$PWD/selftest.txt" ./app/dist/MagnataLiveManager.app/Contents/MacOS/MagnataLiveManager
+          code=$?
+          cat selftest.txt 2>/dev/null
+          exit $code
+      - name: Compactar
+        run: ditto -c -k --sequesterRsrc --keepParent app/dist/MagnataLiveManager.app MagnataLiveManager-Mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: MagnataLiveManager-Mac.zip
+
+  publicar:
+    needs: [windows, mac]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - name: Publicar versão
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v$(date -u +%Y.%m.%d)-${GITHUB_RUN_NUMBER}"
+          gh release create "$TAG" MagnataLiveManager-Windows.zip MagnataLiveManager-Mac.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "MAGNATA Live Manager $TAG" \
+            --notes "Versão compilada e testada automaticamente (Windows + Mac)." \
+            --latest
