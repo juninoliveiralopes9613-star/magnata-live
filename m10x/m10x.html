@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>M10X · Método 10X</title>
+<meta name="description" content="Mentoria M10X: venda o Lucro Já com método, acompanhe teu faturamento ao vivo e ganhe pulseira e placas a cada marco batido.">
+<meta property="og:title" content="M10X · Método 10X">
+<meta property="og:description" content="Fatura, bate a meta, pendura a placa. A mentoria dos afiliados do Lucro Já.">
+<meta property="og:image" content="https://kkthewmnnglpnmqafmvw.supabase.co/storage/v1/object/public/imagens/m10x/site/placas_mockup.webp">
+<meta name="theme-color" content="#04092A">
+<link rel="icon" type="image/webp" href="https://kkthewmnnglpnmqafmvw.supabase.co/storage/v1/object/public/imagens/m10x/site/m10_logo_1x.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,600;0,700;0,800;0,900;1,800;1,900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --abismo:#04092A;--noite:#020619;--painel:#08113A;--painel2:#0B1749;--cobalto:#1F5BFF;--eletrico:#3D7BFF;--geada:#8DB2FF;--gelo:#EAF0FF;
+  --mudo:#93A0C8;--mudo2:#6C79A3;--linha:rgba(141,178,255,.14);--linha2:rgba(141,178,255,.26);
+  --ok:#2BD48A;--alerta:#FFC63D;--erro:#FF5468;
+  --cromo:linear-gradient(180deg,#FBFDFF 0%,#C3D0EE 36%,#3D5797 49%,#E6EEFF 57%,#8AA0D4 79%,#33508F 100%);
+  --fd:"Exo 2",system-ui,sans-serif;--ft:"Instrument Sans",system-ui,-apple-system,sans-serif;
+  --raio:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font:400 16px/1.55 var(--ft);color:var(--gelo);background:var(--abismo);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--geada);outline-offset:3px;border-radius:8px}
+.wrap{width:min(1180px,100% - 32px);margin-inline:auto}
+.esc{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+[hidden]{display:none!important}
+.mudo{color:var(--mudo)}
+.wm{font:900 italic 1em/1 var(--fd);letter-spacing:.01em;white-space:nowrap}.wm i{font-style:inherit;color:var(--cobalto)}
+.cromo{background:var(--cromo);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 22px;border-radius:999px;font:700 15px/1 var(--ft);text-decoration:none;white-space:nowrap;transition:transform .15s,box-shadow .2s,background .2s,opacity .2s}
+.btn:active{transform:scale(.97)}
+.btn-azul{color:#fff;background:linear-gradient(180deg,#4A80FF 0%,#1F5BFF 50%,#1240D6 100%);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 -2px 0 rgba(0,0,0,.2) inset,0 12px 30px -10px rgba(31,91,255,.8)}
+.btn-azul:hover{box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 -2px 0 rgba(0,0,0,.2) inset,0 16px 36px -10px rgba(31,91,255,1)}
+.btn-vidro{color:var(--gelo);background:rgba(141,178,255,.08);box-shadow:0 0 0 1px var(--linha2) inset}
+.btn-vidro:hover{background:rgba(141,178,255,.15)}
+.btn-fant{height:40px;padding:0 14px;color:var(--mudo);font-weight:600}
+.btn-fant:hover{color:var(--gelo)}
+.btn-zap{color:#05250F;background:#25D366}
+.btn-p{height:38px;padding:0 14px;font-size:13px}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:gira .8s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+/* ================= PÁGINA DE VENDAS ================= */
+.topo{position:fixed;inset:0 0 auto;z-index:40;transition:background .3s,box-shadow .3s}
+.topo.solido{background:rgba(4,9,42,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--linha)}
+.topo .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:12px}
+.marca{display:flex;align-items:center;gap:10px;text-decoration:none}
+.marca img{width:48px;height:auto}
+.marca .wm{font-size:20px}
+.topo nav{display:flex;align-items:center;gap:4px}
+
+.hero{position:relative;min-height:min(100svh,900px);display:grid;align-items:center;padding:96px 0 56px;overflow:hidden;isolation:isolate;
+  background:radial-gradient(900px 600px at 72% 46%,rgba(31,91,255,.20),transparent 62%),radial-gradient(700px 500px at -10% 100%,rgba(31,91,255,.10),transparent 60%),var(--abismo)}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:160px;background:linear-gradient(180deg,transparent,var(--abismo));z-index:-1}
+.hero .wrap{display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:20px}
+.selo{display:inline-flex;align-items:center;gap:9px;padding:7px 14px 7px 8px;border-radius:999px;background:rgba(141,178,255,.08);box-shadow:0 0 0 1px var(--linha2) inset;font-size:13px;font-weight:600;color:#C9D5F5}
+.selo i{width:8px;height:8px;border-radius:50%;background:var(--cobalto);box-shadow:0 0 0 4px rgba(31,91,255,.25)}
+.hero h1{font:900 clamp(42px,6.6vw,86px)/.92 var(--fd);letter-spacing:-.015em;margin:22px 0;text-transform:uppercase}
+.hero h1 span{display:block}
+.hero h1 .cromo{filter:drop-shadow(0 0 22px rgba(61,123,255,.35))}
+.hero p.lead{font-size:clamp(16px,1.6vw,19px);max-width:33em;color:#C1CBE6}
+.hero .acoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.hero .acoes .btn{height:56px;padding:0 28px;font-size:16px}
+.numeros{display:flex;gap:34px;margin-top:40px;flex-wrap:wrap}
+.numeros b{display:block;font:800 24px/1 var(--fd)}
+.numeros small{color:var(--mudo);font-size:13px}
+.palco{position:relative;display:grid;place-items:center;aspect-ratio:1.05/1}
+.palco video,.palco .poster{width:118%;max-width:none;-webkit-mask:radial-gradient(closest-side,#000 66%,transparent 100%);mask:radial-gradient(closest-side,#000 66%,transparent 100%)}
+.palco::after{content:"";position:absolute;bottom:9%;width:58%;height:30px;border-radius:50%;background:radial-gradient(closest-side,rgba(31,91,255,.55),transparent);filter:blur(10px)}
+
+.faixa-foto{position:relative;padding:20px 0 90px}
+.foto-parede{position:relative;border-radius:28px;overflow:hidden;box-shadow:0 0 0 1px var(--linha) inset,0 40px 90px -40px rgba(0,0,0,.9)}
+.foto-parede img{width:100%;aspect-ratio:3/2;object-fit:cover}
+.foto-parede figcaption{position:absolute;left:0;right:0;bottom:0;padding:70px 28px 24px;background:linear-gradient(180deg,transparent,rgba(2,6,25,.92));display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.foto-parede figcaption b{font:800 clamp(20px,2.6vw,30px)/1.1 var(--fd);text-transform:uppercase}
+.foto-parede figcaption span{color:#C1CBE6;font-size:15px;max-width:30em}
+
+.secao{padding:96px 0}
+.cab{max-width:660px}
+.cab h2{font:900 clamp(30px,4vw,52px)/1 var(--fd);text-transform:uppercase;letter-spacing:-.01em}
+.cab p{margin-top:14px;color:var(--mudo);font-size:17px}
+.passos{display:grid;grid-template-columns:repeat(3,1fr);margin-top:48px;border-top:1px solid var(--linha)}
+.passo{padding:30px 30px 6px 0}
+.passo+.passo{padding-left:30px;border-left:1px solid var(--linha)}
+.passo .n{font:900 italic 56px/1 var(--fd)}
+.passo h3{font:800 21px/1.2 var(--fd);margin:16px 0 8px}
+.passo p{color:var(--mudo)}
+
+.vitrine{position:relative;background:radial-gradient(900px 400px at 50% 0%,rgba(31,91,255,.22),transparent 70%),var(--noite);overflow:hidden}
+.trilho{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px;perspective:1300px}
+.premio{position:relative;border-radius:24px;padding:16px 16px 20px;background:linear-gradient(180deg,rgba(141,178,255,.07),rgba(141,178,255,.02));box-shadow:0 0 0 1px var(--linha) inset;transform-style:preserve-3d;transition:transform .25s ease-out,box-shadow .3s}
+.premio:hover{box-shadow:0 0 0 1px rgba(141,178,255,.4) inset,0 30px 60px -30px rgba(31,91,255,.6)}
+.premio .arte{aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:radial-gradient(closest-side,rgba(31,91,255,.28),transparent 80%),#03050C;display:grid;place-items:center}
+.premio .arte img{width:100%;height:100%;object-fit:contain}
+.premio .info{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:16px}
+.premio h3{font:800 19px/1.15 var(--fd);text-transform:uppercase}
+.premio p{color:var(--mudo);font-size:14px;margin-top:6px}
+.premio .meta{flex:none;font:700 13px/1 var(--ft);padding:8px 11px;border-radius:999px;background:rgba(141,178,255,.12);color:#CFE0FF}
+
+.dentro .grade-dentro{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+.dentro .item{padding:24px;border-radius:22px;background:linear-gradient(180deg,rgba(141,178,255,.07),rgba(141,178,255,.02));box-shadow:0 0 0 1px var(--linha) inset}
+.dentro .item .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:rgba(31,91,255,.16);box-shadow:0 0 0 1px rgba(61,123,255,.35) inset;color:#BFD2FF}
+.dentro .item h3{font:800 18px/1.2 var(--fd);margin:16px 0 6px}
+.dentro .item p{color:var(--mudo);font-size:15px}
+.dentro .item.largo{grid-column:span 2;display:grid;grid-template-columns:1fr 1.1fr;gap:24px;align-items:center}
+.tela{border-radius:20px;padding:20px;background:var(--noite);box-shadow:0 0 0 1px var(--linha) inset}
+
+/* barra de faturamento (estilo Applyfy, cromada) */
+.barra-meta .linha{display:flex;align-items:center;gap:12px}
+.barra-meta .ico{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(141,178,255,.1);box-shadow:0 0 0 1px var(--linha) inset}
+.barra-meta .ico img{width:30px}
+.barra-meta .vl{font:800 16px/1 var(--fd);white-space:nowrap}
+.barra-meta .alvo{font:700 16px/1 var(--fd);white-space:nowrap;color:#CFE0FF}
+.trilha{position:relative;flex:1;margin:0 8px;height:14px;border-radius:999px;background:rgba(141,178,255,.12);box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+.trilha .enche{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;transition:width 1.4s cubic-bezier(.2,.8,.2,1);background:linear-gradient(180deg,#D7E4FF 0%,#6F97FF 22%,#1F5BFF 55%,#1240D6 78%,#5B86FF 100%);box-shadow:0 0 18px rgba(31,91,255,.7)}
+.trilha .enche::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.7) 50%,transparent 70%);background-size:220% 100%;animation:liquido 2.8s linear infinite}
+@keyframes liquido{from{background-position:120% 0}to{background-position:-120% 0}}
+.trilha .ponta{position:absolute;top:50%;width:26px;height:26px;margin-left:-13px;transform:translateY(-50%);border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(31,91,255,.5),0 0 24px rgba(31,91,255,.9);transition:left 1.4s cubic-bezier(.2,.8,.2,1)}
+.barra-meta .rodape{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:13px;color:var(--mudo)}
+.barra-meta .rodape b{color:#fff}
+
+.inscricao .wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start}
+.cartao{border-radius:26px;padding:30px;background:linear-gradient(180deg,rgba(141,178,255,.08),rgba(141,178,255,.03));box-shadow:0 0 0 1px var(--linha2) inset,0 40px 80px -40px rgba(0,0,0,.8)}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.campo{display:grid;gap:6px;min-width:0}
+.campo.todo{grid-column:1/-1}
+.campo label{font-size:13px;font-weight:600;color:#C9D5F5}
+.campo input,.campo select,.campo textarea{width:100%;height:50px;padding:0 14px;border-radius:14px;border:1px solid var(--linha2);background:rgba(2,6,25,.6);color:#fff;font-size:16px;transition:border-color .2s,box-shadow .2s}
+.campo textarea{height:100px;padding:12px 14px;resize:vertical;line-height:1.45}
+.campo input::placeholder,.campo textarea::placeholder{color:#5F6C96}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--geada);box-shadow:0 0 0 4px rgba(141,178,255,.15)}
+.campo select option{background:var(--painel)}
+.campo .dica{font-size:12px;color:var(--mudo2)}
+.campo input:-webkit-autofill{-webkit-text-fill-color:#fff;-webkit-box-shadow:0 0 0 40px #0A1440 inset;caret-color:#fff}
+.erro-msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(255,84,104,.12);color:#FFB3BC;font-size:14px;font-weight:600}
+.ok-msg{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(43,212,138,.12);color:#A6F3CF;font-size:14px;font-weight:600}
+.feito{text-align:center;padding:24px 8px}
+.feito h3{font:800 26px/1.15 var(--fd);margin:16px 0 8px;text-transform:uppercase}
+
+.faq{background:var(--noite)}
+.faq .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px}
+details{border-bottom:1px solid var(--linha)}
+details summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;padding:22px 0;font:700 17px/1.35 var(--ft)}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font:500 28px/1 var(--fd);color:var(--eletrico);transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
+.rodape-site{padding:36px 0 44px;background:var(--noite);border-top:1px solid var(--linha);color:var(--mudo);font-size:14px}
+.rodape-site .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.rodape-site img{width:46px}
+
+/* ================= ÁREA DO MENTORADO ================= */
+.app{min-height:100dvh;background:radial-gradient(900px 520px at 90% -10%,rgba(31,91,255,.18),transparent 65%),var(--abismo)}
+.entrada{min-height:100dvh;display:grid;grid-template-columns:1.05fr .95fr}
+.entrada .lado{position:relative;display:grid;place-items:center;overflow:hidden;background:var(--abismo)}
+.entrada .lado video,.entrada .lado .poster{width:min(100%,760px);-webkit-mask:radial-gradient(closest-side,#000 64%,transparent 100%);mask:radial-gradient(closest-side,#000 64%,transparent 100%)}
+.entrada .lado p{position:absolute;bottom:36px;left:40px;right:40px;font:700 13px/1.4 var(--fd);letter-spacing:.14em;text-transform:uppercase;color:var(--mudo)}
+.entrada .form{display:grid;place-items:center;padding:40px 24px;background:linear-gradient(90deg,rgba(2,6,25,0),rgba(2,6,25,.6))}
+.caixa{width:min(420px,100%)}
+.caixa h1{font:900 34px/1.02 var(--fd);text-transform:uppercase;margin:22px 0 8px}
+.abas{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(141,178,255,.08);margin:26px 0 22px;box-shadow:0 0 0 1px var(--linha) inset}
+.abas button{flex:1;height:40px;border-radius:999px;font-weight:600;color:var(--mudo);transition:background .2s,color .2s}
+.abas button.on{background:var(--gelo);color:var(--abismo)}
+.link{color:var(--geada);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+.casca{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100dvh}
+.casca>div{min-width:0}
+.lateral{position:sticky;top:0;height:100dvh;display:flex;flex-direction:column;gap:6px;padding:22px 16px;border-right:1px solid var(--linha);background:rgba(2,6,25,.55)}
+.lateral .marca{padding:4px 8px 18px}
+.nav-i{display:flex;align-items:center;gap:12px;height:46px;padding:0 14px;border-radius:14px;color:#AEB9DA;font-weight:600;text-decoration:none;transition:background .2s,color .2s}
+.nav-i svg{width:20px;height:20px;flex:none;opacity:.9}
+.nav-i:hover{background:rgba(141,178,255,.07);color:#fff}
+.nav-i.on{background:linear-gradient(90deg,rgba(31,91,255,.26),rgba(31,91,255,.06));color:#fff;box-shadow:0 0 0 1px rgba(61,123,255,.35) inset}
+.nav-i .q{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--cobalto);color:#fff}
+.lateral .sep{height:1px;background:var(--linha);margin:10px 6px}
+.lateral .quem{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--linha)}
+.avatar{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 14px/1 var(--fd);background:var(--cromo);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.quem .t{min-width:0;flex:1}.quem .t b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quem .t small{display:block;font-size:12px;color:var(--mudo2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topo-app{display:none}
+.conteudo{min-width:0;padding:30px clamp(16px,3vw,40px) 90px}
+.ola{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.ola h1{font:900 clamp(26px,3.4vw,40px)/1.02 var(--fd);text-transform:uppercase}
+.ola p{margin-top:6px;color:var(--mudo)}
+.bloco{border-radius:var(--raio);padding:24px;background:linear-gradient(180deg,rgba(141,178,255,.07),rgba(141,178,255,.025));box-shadow:0 0 0 1px var(--linha) inset}
+.bloco>h2,.titulo-b{font:800 16px/1.2 var(--fd);text-transform:uppercase;letter-spacing:.02em;margin-bottom:16px}
+.grade-2{display:grid;grid-template-columns:1.45fr 1fr;gap:16px}
+.grade-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pilha{display:grid;gap:16px}
+.grande{position:relative;overflow:hidden}
+.grande .rotulo{font-size:13px;font-weight:600;color:var(--mudo)}
+.grande .valor{font:900 clamp(38px,5.6vw,66px)/1 var(--fd);letter-spacing:-.02em;margin:10px 0 24px;font-variant-numeric:tabular-nums}
+.grande .valor small{font-size:.4em;font-weight:700;margin-right:8px;color:var(--geada);vertical-align:.6em}
+.grande .agua{position:absolute;right:-40px;top:-30px;width:260px;opacity:.07;pointer-events:none}
+.mini b{display:block;font:800 26px/1 var(--fd);margin-top:8px;font-variant-numeric:tabular-nums}
+.mini span{font-size:13px;font-weight:600;color:var(--mudo)}
+.aviso{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:rgba(255,198,61,.08);color:#FFE29A;font-size:14px;box-shadow:0 0 0 1px rgba(255,198,61,.25) inset;margin-bottom:16px}
+.aviso svg{flex:none;margin-top:1px}
+.prox{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center}
+.prox img{width:120px;border-radius:12px}
+.prox h3{font:800 22px/1.1 var(--fd);text-transform:uppercase;margin:4px 0 6px}
+.atalhos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.atalho{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:18px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset;text-decoration:none;transition:background .2s,box-shadow .2s}
+.atalho:hover{background:rgba(141,178,255,.1);box-shadow:0 0 0 1px var(--linha2) inset}
+.atalho svg{width:24px;height:24px;color:var(--geada)}
+.atalho b{font:700 15px/1.2 var(--fd)}
+.atalho small{color:var(--mudo);font-size:13px}
+.vendas{list-style:none}
+.vendas li{display:flex;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--linha);font-size:14px}
+.vendas li:last-child{border-bottom:0}
+.vazio{padding:28px 12px;text-align:center;color:var(--mudo);font-size:14px}
+
+/* premiações */
+.hero-premios{position:relative;border-radius:26px;overflow:hidden;min-height:300px;display:flex;align-items:flex-end;box-shadow:0 0 0 1px var(--linha) inset;margin-bottom:16px}
+.hero-premios img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+.hero-premios .txt{position:relative;padding:28px;width:100%;background:linear-gradient(180deg,transparent,rgba(2,6,25,.94) 62%)}
+.hero-premios h2{font:900 clamp(26px,3.6vw,44px)/1 var(--fd);text-transform:uppercase}
+.hero-premios p{color:#C1CBE6;margin-top:8px;max-width:46ch}
+.degraus{display:flex;align-items:flex-start;margin:6px 0 2px;overflow-x:auto;padding:6px 2px 10px;scrollbar-width:thin}
+.degrau{flex:1;min-width:96px;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;text-align:center}
+.degrau::before{content:"";position:absolute;top:21px;left:-50%;width:100%;height:3px;background:rgba(141,178,255,.15);z-index:0}
+.degrau:first-child::before{display:none}
+.degrau.ok::before{background:linear-gradient(90deg,#1F5BFF,#6F97FF)}
+.degrau .bola{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#0A1446;box-shadow:0 0 0 2px rgba(141,178,255,.2)}
+.degrau.ok .bola{background:var(--cromo);box-shadow:0 0 0 3px rgba(31,91,255,.35),0 0 20px rgba(31,91,255,.6)}
+.degrau.prox .bola{box-shadow:0 0 0 2px var(--geada);animation:pulsa 2s ease-in-out infinite}
+@keyframes pulsa{50%{box-shadow:0 0 0 7px rgba(141,178,255,.14),0 0 0 2px var(--geada)}}
+.degrau small{font:700 12px/1.2 var(--fd);color:var(--mudo);text-transform:uppercase}
+.degrau.ok small{color:#fff}
+.grade-premios{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card-p{border-radius:20px;padding:12px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset;display:flex;flex-direction:column}
+.card-p .arte{position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:radial-gradient(closest-side,rgba(31,91,255,.25),transparent 80%),#03050C;display:grid;place-items:center}
+.card-p .arte img{width:100%;height:100%;object-fit:contain}
+.card-p.trava .arte img{filter:grayscale(1) brightness(.4)}
+.card-p .cadeado{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;align-items:center;font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:rgba(2,6,25,.85);color:#C9D5F5}
+.card-p h3{font:800 17px/1.2 var(--fd);text-transform:uppercase;margin:14px 4px 4px}
+.card-p .sub{font-size:13px;color:var(--mudo);flex:1;margin:0 4px}
+.card-p .pe{margin:14px 4px 4px}
+.card-p .btn{width:100%;height:44px}
+.mini-barra{height:6px;border-radius:999px;background:rgba(141,178,255,.12);overflow:hidden;margin-top:6px}
+.mini-barra i{display:block;height:100%;background:linear-gradient(90deg,#1F5BFF,#8DB2FF)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(141,178,255,.12);color:#CFE0FF;white-space:nowrap}
+.chip.verde{background:rgba(43,212,138,.14);color:#A6F3CF}.chip.amarelo{background:rgba(255,198,61,.14);color:#FFE29A}.chip.vermelho{background:rgba(255,84,104,.14);color:#FFB3BC}
+/* linha do tempo da entrega */
+.entrega{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;padding:20px;border-radius:20px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset}
+.entrega+.entrega{margin-top:12px}
+.entrega img{width:150px;border-radius:12px}
+.entrega h3{font:800 19px/1.1 var(--fd);text-transform:uppercase}
+.tempo{display:grid;grid-template-columns:repeat(5,1fr);margin-top:18px;position:relative}
+.tempo .et{position:relative;text-align:center;font-size:12px;font-weight:600;color:var(--mudo2);padding-top:30px}
+.tempo .et::before{content:"";position:absolute;top:8px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#0A1446;box-shadow:0 0 0 2px rgba(141,178,255,.25);z-index:1}
+.tempo .et::after{content:"";position:absolute;top:15px;left:-50%;width:100%;height:2px;background:rgba(141,178,255,.15)}
+.tempo .et:first-child::after{display:none}
+.tempo .et.ok{color:#fff}
+.tempo .et.ok::before{background:var(--cobalto);box-shadow:0 0 0 3px rgba(31,91,255,.3),0 0 14px rgba(31,91,255,.8)}
+.tempo .et.ok::after{background:linear-gradient(90deg,#1F5BFF,#6F97FF)}
+.tempo .et.agora::before{background:#fff;animation:pulsa 2s infinite}
+.galeria{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.galeria button{border-radius:14px;overflow:hidden;aspect-ratio:1;box-shadow:0 0 0 1px var(--linha) inset;background:#03050C}
+.galeria img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.galeria button:hover img{transform:scale(1.05)}
+
+/* aulas e conteúdo */
+.modulo+.modulo{margin-top:26px}
+.modulo h2{font:800 15px/1.2 var(--fd);text-transform:uppercase;letter-spacing:.04em;color:var(--geada);margin-bottom:12px}
+.grade-aulas{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.aula{position:relative;display:flex;flex-direction:column;text-align:left;border-radius:18px;overflow:hidden;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset;transition:box-shadow .2s,transform .2s}
+.aula:hover{box-shadow:0 0 0 1px var(--linha2) inset;transform:translateY(-2px)}
+.aula .capa{aspect-ratio:16/9;display:grid;place-items:center;background:radial-gradient(closest-side,rgba(31,91,255,.35),transparent 85%),linear-gradient(135deg,#0B1749,#03050C);position:relative}
+.aula .capa img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
+.aula .play{position:relative;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);box-shadow:0 0 0 1px rgba(255,255,255,.3) inset}
+.aula .corpo{padding:14px 16px 16px}
+.aula h3{font:700 16px/1.3 var(--ft)}
+.aula small{color:var(--mudo);font-size:13px}
+.aula .visto{position:absolute;top:10px;right:10px}
+.aula.trava{opacity:.65;cursor:not-allowed}
+.conteudos{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.cont{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:18px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset}
+.cont .tp{display:flex;align-items:center;gap:10px}
+.cont .tp span{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(31,91,255,.16);color:#BFD2FF;flex:none}
+.cont h3{font:700 16px/1.3 var(--ft)}
+.cont p{color:var(--mudo);font-size:14px}
+.cont .acoes{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+
+/* links e página */
+.planos{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.plano{position:relative;padding:20px;border-radius:20px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset;display:flex;flex-direction:column;gap:10px}
+.plano.dest{background:linear-gradient(180deg,rgba(31,91,255,.18),rgba(31,91,255,.04));box-shadow:0 0 0 1px rgba(61,123,255,.5) inset}
+.plano .nome{font:800 18px/1 var(--fd);text-transform:uppercase}
+.plano .preco{font:900 34px/1 var(--fd)}.plano .preco small{font-size:14px;font-weight:700;color:var(--mudo);margin-left:4px}
+.plano .url{font-size:12px;color:var(--mudo2);word-break:break-all;padding:8px 10px;border-radius:10px;background:rgba(2,6,25,.6);box-shadow:0 0 0 1px var(--linha) inset}
+.plano .acoes{display:flex;gap:8px;margin-top:auto}
+.plano .acoes .btn{flex:1}
+.passo-n{display:flex;gap:16px;align-items:flex-start}
+.passo-n .num{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:800 15px/1 var(--fd);background:rgba(31,91,255,.2);box-shadow:0 0 0 1px rgba(61,123,255,.5) inset}
+.passo-n+.passo-n{margin-top:22px}
+.passo-n h3{font:700 17px/1.3 var(--ft);margin-bottom:4px}
+.editor{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px;align-items:start}
+.previa-lj{position:sticky;top:20px;border-radius:22px;overflow:hidden;background:#0B0908;box-shadow:0 0 0 1px var(--linha2) inset,0 40px 80px -40px rgba(0,0,0,.9)}
+.previa-lj .barra-nav{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#141110;border-bottom:1px solid rgba(255,255,255,.06)}
+.previa-lj .barra-nav i{width:9px;height:9px;border-radius:50%;background:#2a2522}
+.previa-lj .barra-nav span{margin-left:8px;font-size:12px;color:#8d857f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.previa-lj .heroL{padding:34px 26px 30px;color:#FBF8F5;background:radial-gradient(500px 260px at 80% 0%,rgba(255,170,60,.16),transparent 70%)}
+.previa-lj .eyeL{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.07);font-size:12px;font-weight:600}
+.previa-lj .eyeL i{width:7px;height:7px;border-radius:50%;background:#FFB23F}
+.previa-lj h4{font:800 clamp(26px,3vw,36px)/1.04 system-ui,sans-serif;margin:16px 0 12px;letter-spacing:-.02em}
+.previa-lj h4 span{display:block;color:#FFB23F}
+.previa-lj p{font-size:14px;color:#cfc6bf;max-width:44ch}
+.previa-lj .ctaL{display:inline-flex;margin-top:18px;height:44px;align-items:center;padding:0 20px;border-radius:999px;background:#FFB23F;color:#1a1004;font-weight:800;font-size:14px}
+.previa-lj .ljv{display:flex;align-items:center;gap:12px;margin-top:18px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.06);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset;max-width:380px}
+.previa-lj .ljv img,.previa-lj .ljv .ini{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none;background:#fff;color:#111;display:grid;place-items:center;font-weight:800}
+.previa-lj .ljv small{display:block;font-size:11px;opacity:.7}.previa-lj .ljv b{display:block;font-size:15px}
+.previa-lj .ljv a{margin-left:auto;height:34px;padding:0 12px;border-radius:999px;background:#25D366;color:#06260f;font-weight:800;font-size:12px;display:inline-flex;align-items:center;text-decoration:none}
+.opcoes-ia{display:grid;gap:10px;margin-top:14px}
+.op-ia{text-align:left;padding:14px 16px;border-radius:14px;background:rgba(2,6,25,.6);box-shadow:0 0 0 1px var(--linha) inset;transition:box-shadow .2s}
+.op-ia:hover{box-shadow:0 0 0 1px var(--geada) inset}
+.op-ia b{display:block;font:800 16px/1.2 var(--fd)}.op-ia b span{color:var(--geada)}
+.op-ia small{display:block;color:var(--mudo);font-size:13px;margin-top:6px}
+.foto-v{display:flex;align-items:center;gap:12px}
+.foto-v img,.foto-v .ini{width:58px;height:58px;border-radius:50%;object-fit:cover;background:rgba(141,178,255,.12);display:grid;place-items:center;font:800 20px/1 var(--fd)}
+.stats-pg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.url-box{display:flex;gap:8px;align-items:center;padding:8px 8px 8px 14px;border-radius:14px;background:rgba(2,6,25,.6);box-shadow:0 0 0 1px var(--linha2) inset}
+.url-box span{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* lucro já */
+.lj-card{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;padding:30px;border-radius:26px;background:radial-gradient(600px 300px at 100% 0%,rgba(255,178,63,.14),transparent 70%),linear-gradient(180deg,rgba(141,178,255,.07),rgba(141,178,255,.02));box-shadow:0 0 0 1px var(--linha) inset}
+.lj-card h2{font:900 clamp(28px,3.6vw,44px)/1 var(--fd);text-transform:uppercase}
+.lj-card h2 span{color:#FFB23F}
+.lista-check{list-style:none;display:grid;gap:12px;margin-top:18px}
+.lista-check li{display:flex;gap:12px;color:#C1CBE6}
+.lista-check svg{flex:none;margin-top:3px}
+
+/* modal */
+.fundo{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:rgba(1,3,14,.76);backdrop-filter:blur(6px);animation:aparece .2s}
+@keyframes aparece{from{opacity:0}}
+.modal{width:min(560px,100%);max-height:calc(100dvh - 32px);overflow:auto;border-radius:24px;padding:26px;background:var(--painel);box-shadow:0 0 0 1px var(--linha2) inset,0 40px 80px -20px rgba(0,0,0,.7);animation:sobe .3s cubic-bezier(.2,.8,.2,1)}
+.modal.largo{width:min(980px,100%);padding:16px}
+@keyframes sobe{from{transform:translateY(20px);opacity:0}}
+.modal h2{font:800 22px/1.15 var(--fd);text-transform:uppercase}
+.modal .acoes{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.player{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000}
+.player.vert{aspect-ratio:9/16;max-height:78dvh;margin:0 auto}
+.player iframe,.player video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.festa{text-align:center}
+.festa .grandeza{width:min(260px,70%);margin:6px auto 16px;filter:drop-shadow(0 20px 40px rgba(31,91,255,.5))}
+.festa h2{font-size:clamp(24px,5vw,32px)}
+.confete{position:fixed;inset:0;pointer-events:none;z-index:70}
+.lightbox img{width:100%;border-radius:16px}
+
+/* admin */
+.tabs-adm{display:flex;gap:6px;overflow-x:auto;margin-bottom:18px;padding-bottom:4px}
+.tabs-adm button{flex:none;height:40px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:600;color:var(--mudo);box-shadow:0 0 0 1px var(--linha) inset}
+.tabs-adm button.on{background:var(--gelo);color:var(--abismo);box-shadow:none}
+.tabs-adm button .q{margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--cobalto);color:#fff;font-size:11px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpis .bloco{padding:18px}.kpis b{display:block;font:800 26px/1 var(--fd);margin-top:8px}
+.tabela{width:100%;border-collapse:collapse;font-size:14px}
+.tabela th{text-align:left;font-size:12px;font-weight:700;color:var(--mudo);padding:10px;border-bottom:1px solid var(--linha);white-space:nowrap}
+.tabela td{padding:12px 10px;border-bottom:1px solid var(--linha);vertical-align:middle}
+.rolagem{overflow-x:auto;margin:0 -8px;padding:0 8px}
+.mini-sel{height:34px;border-radius:10px;padding:0 8px;background:rgba(2,6,25,.6);border:1px solid var(--linha2);color:#fff;font-size:13px}
+.busca{height:42px;width:min(320px,100%);padding:0 14px;border-radius:12px;background:rgba(2,6,25,.6);border:1px solid var(--linha2);color:#fff}
+.linha-ferr{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:90;padding:12px 18px;border-radius:14px;background:var(--gelo);color:var(--abismo);font-weight:700;font-size:14px;box-shadow:0 20px 40px -10px rgba(0,0,0,.5);animation:sobe .25s;max-width:calc(100% - 32px);text-align:center}
+.carrega{min-height:100dvh;display:grid;place-items:center}
+.carrega img{width:120px;animation:flutua 2.4s ease-in-out infinite}
+@keyframes flutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.esqueleto{height:120px;border-radius:18px;background:linear-gradient(90deg,rgba(141,178,255,.05),rgba(141,178,255,.12),rgba(141,178,255,.05));background-size:200% 100%;animation:brilha 1.4s linear infinite}
+@keyframes brilha{to{background-position:-200% 0}}
+
+@media (max-width:1100px){.atalhos{grid-template-columns:1fr 1fr}.editor{grid-template-columns:1fr}.previa-lj{position:relative;top:0}}
+@media (max-width:980px){
+  .casca{grid-template-columns:minmax(0,1fr)}
+  .lateral{display:none}
+  .topo-app{display:block;position:sticky;top:0;z-index:30;background:rgba(4,9,42,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--linha)}
+  .topo-app .l1{display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 16px}
+  .topo-app .l1 .marca img{width:40px}
+  .topo-app nav{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}
+  .topo-app nav::-webkit-scrollbar{display:none}
+  .topo-app .nav-i{flex:none;height:38px;padding:0 14px;border-radius:999px;font-size:14px;box-shadow:0 0 0 1px var(--linha) inset}
+  .topo-app .nav-i svg{width:17px;height:17px}
+  .conteudo{padding-top:20px}
+}
+@media (max-width:900px){
+  .hero .wrap,.inscricao .wrap,.faq .wrap,.grade-2,.lj-card{grid-template-columns:1fr}
+  .hero{padding-top:84px;min-height:auto}
+  .palco{order:-1;max-width:460px;margin:0 auto -20px;width:100%}
+  .passos{grid-template-columns:1fr}
+  .passo,.passo+.passo{padding:24px 0;border-left:0;border-bottom:1px solid var(--linha)}
+  .trilho{grid-template-columns:1fr 1fr}
+  .dentro .grade-dentro{grid-template-columns:1fr 1fr}.dentro .item.largo{grid-column:1/-1;grid-template-columns:1fr}
+  .entrada{grid-template-columns:1fr}.entrada .lado{min-height:300px}.entrada .lado video,.entrada .lado .poster{width:min(92%,420px)}.entrada .lado p{display:none}
+  .grade-3{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .galeria{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:560px){
+  .topo .btn-vidro,.topo .btn-fant{display:none}
+  .marca .wm{font-size:17px}
+  .trilho{gap:10px}.premio{padding:8px 8px 12px;border-radius:16px}.premio .info{flex-direction:column;align-items:flex-start;gap:8px}.premio h3{font-size:14px}.premio p{display:none}
+  .dentro .grade-dentro{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}.cartao{padding:20px}
+  .bloco{padding:18px}
+  .barra-meta .alvo{display:none}
+  .hero .acoes .btn{flex:1}
+  .grade-premios{grid-template-columns:1fr 1fr;gap:10px}
+  .card-p{padding:8px}.card-p h3{font-size:14px}.card-p .sub{font-size:12px}.card-p .btn{height:40px;font-size:13px;padding:0 8px}
+  .entrega{grid-template-columns:1fr;text-align:left}.entrega img{width:120px}
+  .tempo .et{font-size:10px}
+  .prox{grid-template-columns:84px 1fr}.prox img{width:84px}
+  .atalhos{grid-template-columns:1fr 1fr}
+  .foto-parede{border-radius:20px}.foto-parede figcaption{position:static;padding:16px 16px 18px;background:rgba(2,6,25,.9)}
+  .galeria{grid-template-columns:repeat(2,1fr)}
+  .stats-pg{grid-template-columns:1fr 1fr}.stats-pg>:last-child{grid-column:1/-1}
+  .mini b{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<!-- ======================= PÁGINA DE VENDAS ======================= -->
+<div id="site">
+  <header class="topo" id="topo">
+    <div class="wrap">
+      <a class="marca" href="#inicio" aria-label="M10X, início"><img data-img="m10_logo_1x.webp" alt=""><span class="wm">M10<i>X</i></span></a>
+      <nav>
+        <a class="btn btn-fant" href="#premiacoes">Premiações</a>
+        <a class="btn btn-fant" href="#dentro">Por dentro</a>
+        <a class="btn btn-vidro" href="#entrar" data-ir="entrar">Entrar</a>
+        <a class="btn btn-azul" href="#mentoria">Quero ser mentorado</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <span class="selo"><i></i>Mentoria dos afiliados Lucro Já</span>
+          <h1><span>Fatura.</span><span>Bate a meta.</span><span class="cromo">Pendura a placa.</span></h1>
+          <p class="lead">O M10X é a mentoria de quem vende o Lucro Já todo dia. Teu faturamento aparece ao vivo no painel e cada marco batido vira prêmio físico na tua casa: a pulseira, a placa de 10K, 50K, 100K e por aí vai.</p>
+          <div class="acoes">
+            <a class="btn btn-azul" href="#mentoria">Quero ser mentorado</a>
+            <a class="btn btn-vidro" href="#entrar" data-ir="entrar">Já sou mentorado</a>
+          </div>
+          <div class="numeros" id="numeros-hero"></div>
+        </div>
+        <div class="palco" aria-hidden="true" data-video></div>
+      </div>
+    </section>
+
+    <section class="faixa-foto">
+      <div class="wrap">
+        <figure class="foto-parede">
+          <img data-img="placas_mockup.webp" alt="Pulseira M10X e as placas de 10K e 100K em molduras pretas" loading="lazy">
+          <figcaption><b>Isso aqui é de verdade</b><span>A pulseira e as placas chegam na tua casa, com teu nome, quando o painel mostra que tu bateu o marco.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="secao" id="como">
+      <div class="wrap">
+        <div class="cab"><h2>Como funciona</h2><p>Sem mistério: tu vende, o painel conta, a placa chega.</p></div>
+        <div class="passos">
+          <article class="passo"><div class="n cromo">01</div><h3>Entra na mentoria</h3><p>Manda teu pedido aqui embaixo. A gente conversa no WhatsApp e libera teu acesso à área M10X.</p></article>
+          <article class="passo"><div class="n cromo">02</div><h3>Vende com método</h3><p>Aulas, conteúdos, tua página de vendas e teus links de checkout num lugar só. Cada venda entra sozinha no teu faturamento.</p></article>
+          <article class="passo"><div class="n cromo">03</div><h3>Bate a meta, pede o prêmio</h3><p>Chegou no marco, o painel avisa e libera o botão. Tu coloca o endereço e acompanha a placa até a tua porta.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao vitrine" id="premiacoes">
+      <div class="wrap">
+        <div class="cab"><h2>As premiações <span class="cromo">M10X</span></h2><p>Cada uma é um marco de faturamento. Não dá pra comprar: só batendo a meta.</p></div>
+        <div class="trilho" id="vitrine"></div>
+      </div>
+    </section>
+
+    <section class="secao dentro" id="dentro">
+      <div class="wrap">
+        <div class="cab"><h2>Por dentro da área M10X</h2><p>Tudo que tu precisa pra vender o Lucro Já, do primeiro link até a placa na parede.</p></div>
+        <div class="grade-dentro">
+          <article class="item largo">
+            <div><span class="ic" data-ico="barra"></span><h3>Faturamento ao vivo</h3><p>A barra mostra quanto falta pra próxima premiação. Bateu, aparece o aviso na hora.</p></div>
+            <div class="tela"><p class="mudo" style="font-size:13px;font-weight:600">Faturamento total · exemplo</p><p style="font:900 clamp(30px,4vw,44px)/1 var(--fd);margin:10px 0 22px"><small style="font-size:.42em;color:var(--geada);vertical-align:.55em;margin-right:6px">R$</small>5.539,29</p><div class="barra-meta" id="barra-demo"></div></div>
+          </article>
+          <article class="item"><span class="ic" data-ico="trofeu"></span><h3>Premiações</h3><p>Pulseira e placas com foto real, pedido em 1 minuto e cada etapa da entrega na tela.</p></article>
+          <article class="item"><span class="ic" data-ico="play"></span><h3>Aulas</h3><p>As aulas do time, organizadas por módulo, pra assistir no celular ou no PC.</p></article>
+          <article class="item"><span class="ic" data-ico="pasta"></span><h3>Conteúdos</h3><p>Scripts, materiais e arquivos prontos pra copiar e usar na divulgação.</p></article>
+          <article class="item"><span class="ic" data-ico="pagina"></span><h3>Tua página de vendas</h3><p>Com teu nome, tua foto, teu WhatsApp e títulos escritos pela IA. Publica com um toque.</p></article>
+          <article class="item"><span class="ic" data-ico="link"></span><h3>Teus links de checkout</h3><p>Mensal, trimestral, semestral e anual com o teu código, prontos pra copiar e mandar.</p></article>
+          <article class="item"><span class="ic" data-ico="app"></span><h3>Lucro Já</h3><p>O SaaS que tu vende, a um toque: catálogo, anúncio pronto com IA e lucro na tela.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao inscricao" id="mentoria">
+      <div class="wrap">
+        <div class="cab">
+          <h2>Quero ser mentorado</h2>
+          <p>Preenche aqui. O time M10X te chama no WhatsApp pra explicar como funciona e ver se faz sentido pra ti agora.</p>
+          <p style="margin-top:22px;font-size:15px">Já é afiliado Lucro Já? Teu e-mail já está liberado. <a class="link" href="#entrar" data-ir="entrar">Entra na área M10X</a>.</p>
+        </div>
+        <div class="cartao">
+          <form id="form-insc" novalidate>
+            <div class="campos">
+              <div class="campo todo"><label for="i-nome">Nome completo</label><input id="i-nome" name="nome" autocomplete="name" required></div>
+              <div class="campo"><label for="i-whats">WhatsApp com DDD</label><input id="i-whats" name="whats" inputmode="tel" autocomplete="tel" placeholder="(67) 99999-9999" required></div>
+              <div class="campo"><label for="i-email">E-mail</label><input id="i-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+              <div class="campo"><label for="i-insta">Instagram</label><input id="i-insta" name="instagram" placeholder="@teuperfil" autocapitalize="off"></div>
+              <div class="campo"><label for="i-fat">Quanto tu fatura por mês hoje?</label>
+                <select id="i-fat" name="faturamento_atual"><option value="">Escolhe</option><option>Ainda não vendo</option><option>Até R$ 1 mil</option><option>R$ 1 mil a R$ 5 mil</option><option>R$ 5 mil a R$ 20 mil</option><option>Mais de R$ 20 mil</option></select></div>
+              <div class="campo todo"><label for="i-obj">O que tu quer conquistar nos próximos 90 dias?</label><textarea id="i-obj" name="objetivo" maxlength="600"></textarea></div>
+              <input class="esc" tabindex="-1" autocomplete="off" name="site" aria-hidden="true">
+            </div>
+            <div id="insc-erro" class="erro-msg" hidden></div>
+            <button class="btn btn-azul" style="width:100%;height:56px;margin-top:18px;font-size:16px" type="submit" id="insc-btn">Mandar meu pedido</button>
+            <p style="margin-top:12px;font-size:12px;color:var(--mudo2);text-align:center">Teus dados ficam só com o time M10X.</p>
+          </form>
+          <div class="feito" id="insc-ok" hidden>
+            <img data-img="m10_logo_1x.webp" alt="" style="width:140px;margin:0 auto">
+            <h3>Pedido enviado</h3>
+            <p class="mudo">Logo o time M10X te chama no WhatsApp. Fica de olho.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao faq">
+      <div class="wrap">
+        <div class="cab"><h2>Perguntas</h2></div>
+        <div>
+          <details><summary>Como o meu faturamento é contado?</summary><p>Toda venda aprovada feita com o teu link de afiliado entra no painel automaticamente. Reembolso e chargeback saem da conta.</p></details>
+          <details><summary>Quando posso pedir a placa?</summary><p>Assim que o teu faturamento passa do valor da placa, o botão "Solicitar" libera no painel. Tu preenche o endereço e acompanha cada etapa até a entrega.</p></details>
+          <details><summary>A placa tem custo?</summary><p>Não. A placa é reconhecimento do M10X por ter batido a meta. Ela não é vendida.</p></details>
+          <details><summary>Já sou afiliado do Lucro Já. Como entro?</summary><p>Teu e-mail já está liberado. Toca em "Entrar" e usa a mesma senha do Lucro Já. Se nunca criou senha, escolhe "Primeiro acesso".</p></details>
+          <details><summary>Onde ficam meus links de checkout?</summary><p>Na aba "Meus links" da área M10X. Quando tua afiliação é aprovada, teus links de mensal, trimestral, semestral e anual aparecem lá, prontos pra copiar.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="rodape-site"><div class="wrap"><img data-img="m10_logo_1x.webp" alt="M10X"><span>M10X · Método 10X · mentoria dos afiliados Lucro Já</span><a href="#entrar" data-ir="entrar" class="link">Área do mentorado</a></div></footer>
+</div>
+
+<!-- ======================= ÁREA DO MENTORADO ======================= -->
+<div id="app" class="app" hidden></div>
+
+<script>
+(function(){
+"use strict";
+var SB_URL="https://kkthewmnnglpnmqafmvw.supabase.co";
+var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrdGhld21ubmdscG5tcWFmbXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NTY5MjUsImV4cCI6MjEwNDEzMjkyNX0.uxOj9Tz06MLrFEZDSqWX5ZKtf_7vDfE8cFjkOgsffyk";
+var FN=SB_URL+"/functions/v1/m10x", PFN=SB_URL+"/functions/v1/sfy-parceiros";
+var IMG=window.M10X_IMG||SB_URL+"/storage/v1/object/public/imagens/m10x/site/";
+var VID=window.M10X_VID||SB_URL+"/storage/v1/object/public/videos/m10x/m10_loop.mp4";
+var LOGO=IMG+"m10_logo.webp", LOGO1=IMG+"m10_logo_1x.webp";
+var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{storageKey:"m10x-sessao",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+var $=function(s,el){return (el||document).querySelector(s)}, $$=function(s,el){return [].slice.call((el||document).querySelectorAll(s))};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var brl=function(v){return Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})};
+var curto=function(v){v=Number(v||0);if(v>=1e6)return (v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+"M";if(v>=1e3)return (v/1e3).toLocaleString("pt-BR",{maximumFractionDigits:1})+"K";return String(Math.round(v))};
+var data=function(s){try{return new Date(s).toLocaleDateString("pt-BR",{day:"2-digit",month:"short"})}catch(e){return ""}};
+var REDUZ=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+var PADRAO=[{id:0,nome:"Pulseira M10X",meta:1000,tipo:"pulseira",imagem:IMG+"pulseira.webp",descricao:"Teu primeiro marco: os primeiros R$ 1 mil."},{id:0,nome:"Placa 10K",meta:10000,tipo:"placa",imagem:IMG+"placa10k.webp",descricao:"A primeira placa da parede."},{id:0,nome:"Placa 50K",meta:50000,tipo:"placa",imagem:IMG+"placa50k.webp",descricao:"R$ 50 mil faturados vendendo com método."},{id:0,nome:"Placa 100K",meta:100000,tipo:"placa",imagem:IMG+"placa100k.webp",descricao:"Seis dígitos. Poucos chegam aqui."},{id:0,nome:"Placa 500K",meta:500000,tipo:"placa",imagem:IMG+"placa500k.webp",descricao:"Meio milhão faturado."},{id:0,nome:"Placa 1M",meta:1000000,tipo:"placa",imagem:IMG+"placa1m.webp",descricao:"O primeiro milhão. A placa mais rara do M10X."}];
+
+/* ícones (traço) */
+var ICO={
+ casa:'<path d="M3.5 10.5 12 4l8.5 6.5V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1Z"/>',
+ trofeu:'<path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/>',
+ play:'<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5Z"/>',
+ pasta:'<path d="M3.5 7.5a2 2 0 0 1 2-2H10l2 2h6.5a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2Z"/>',
+ link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+ pagina:'<rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+ app:'<rect x="3.5" y="4" width="17" height="13" rx="2"/><path d="M8 20.5h8M12 17v3.5"/>',
+ admin:'<path d="M12 3.5 19 6v5.5c0 4.2-3 7.6-7 9-4-1.4-7-4.8-7-9V6Z"/><path d="m9 12 2 2 4-4"/>',
+ sair:'<path d="M9 4.5H6a1.5 1.5 0 0 0-1.5 1.5v12A1.5 1.5 0 0 0 6 19.5h3"/><path d="m14 16 4-4-4-4M18 12H9"/>',
+ barra:'<path d="M4 19.5h16"/><rect x="5.5" y="11" width="3" height="6" rx="1"/><rect x="10.5" y="7" width="3" height="10" rx="1"/><rect x="15.5" y="4" width="3" height="13" rx="1"/>',
+ copiar:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
+ abrir:'<path d="M14 4.5h5.5V10M19.5 4.5 11 13M18 14v4.5a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1H10"/>',
+ baixar:'<path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/>',
+ texto:'<path d="M5 6.5h14M5 11h14M5 15.5h9"/>',
+ cadeado:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ ok:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+ ia:'<path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="3"/>',
+ alerta:'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>'
+};
+function ico(n,t){return '<svg width="'+(t||20)+'" height="'+(t||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[n]||"")+'</svg>';}
+var ZAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>';
+
+function api(acao,corpo,auth){return chama(FN,acao,corpo,auth);}
+function parc(acao,corpo){return chama(PFN,acao,corpo,true);}
+function chama(url,acao,corpo,auth){
+  var h={"content-type":"application/json",apikey:SB_KEY};
+  var p=auth?sb.auth.getSession().then(function(r){var t=r.data&&r.data.session&&r.data.session.access_token;h.authorization="Bearer "+(t||SB_KEY);}):Promise.resolve(h.authorization="Bearer "+SB_KEY);
+  return p.then(function(){return fetch(url,{method:"POST",headers:h,body:JSON.stringify(Object.assign({acao:acao},corpo||{}))})})
+   .then(function(r){return r.json().catch(function(){return {erro:"Resposta inválida."}}).then(function(j){if(!r.ok||j.erro){var e=new Error(j.msg||(j.erro!=="falha"&&j.erro)||"Falhou. Tenta de novo.");e.status=r.status;throw e;}return j;})});
+}
+function toast(t){$$(".toast").forEach(function(x){x.remove()});var d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2800);}
+function carregando(btn,sim,txt){if(!btn)return;if(sim){btn.dataset.t=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spin"></span>'+(txt||"");}else{btn.disabled=false;if(btn.dataset.t)btn.innerHTML=btn.dataset.t;}}
+function copia(t,msg){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast(msg||"Copiado!")}).catch(function(){var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");toast(msg||"Copiado!")}catch(e){toast("Não deu pra copiar. Segura e copia na mão.")}a.remove();});}
+function fotoDe(p){return p.imagem||IMG+(p.tipo==="pulseira"?"pulseira.webp":"placa10k.webp");}
+function arte(p,cls){return '<img'+(cls?' class="'+cls+'"':'')+' src="'+esc(fotoDe(p))+'" alt="'+esc(p.nome)+'" decoding="async">';}
+
+/* vídeo do M10 girando (sem som, em loop). Movimento reduzido: só a imagem parada */
+function video(el){
+  if(!el)return;
+  var poster=IMG+"m10_poster.webp";
+  if(REDUZ){el.innerHTML='<img class="poster" src="'+LOGO+'" alt="">';return;}
+  el.innerHTML='<video muted autoplay loop playsinline preload="auto" poster="'+poster+'" disablepictureinpicture><source src="'+VID+'" type="video/mp4"></video>';
+  var v=$("video",el);v.muted=true;var t=v.play();if(t&&t.catch)t.catch(function(){});
+  v.addEventListener("error",function(){el.innerHTML='<img class="poster" src="'+LOGO+'" alt="">';});
+}
+
+/* barra de faturamento */
+function barraHTML(total,alvo,rotulo){
+  return '<div class="linha"><span class="ico"><img src="'+LOGO1+'" alt=""></span><span class="vl">R$ '+brl(total)+'</span><div class="trilha"><div class="enche"></div><div class="ponta" style="left:0"></div></div><span class="alvo">R$ '+brl(alvo)+'</span></div>'+
+    '<div class="rodape"><span>'+(alvo>total?'Faltam <b>R$ '+brl(alvo-total)+'</b> pra '+esc(rotulo):'<b>Meta batida</b>')+'</span><span>'+Math.min(100,Math.floor(total/alvo*100))+'%</span></div>';
+}
+function animaBarra(el,total,alvo){var pct=Math.max(0,Math.min(100,total/alvo*100));var e=$(".enche",el),p=$(".ponta",el);requestAnimationFrame(function(){requestAnimationFrame(function(){e.style.width=pct+"%";p.style.left=pct+"%";})});}
+
+/* =================== PÁGINA DE VENDAS =================== */
+function iniciaSite(){
+  $$("img[data-img]").forEach(function(i){i.src=IMG+i.dataset.img});
+  $$("[data-ico]").forEach(function(i){i.innerHTML=ico(i.dataset.ico,24)});
+  video($("#site [data-video]"));
+  var topo=$("#topo");var rola=function(){topo.classList.toggle("solido",scrollY>10)};addEventListener("scroll",rola,{passive:true});rola();
+  var bd=$("#barra-demo");bd.innerHTML=barraHTML(5539.29,10000,"a Placa 10K");
+  if("IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){animaBarra(bd,5539.29,10000);io.disconnect();}})},{threshold:.5});io.observe(bd);}else animaBarra(bd,5539.29,10000);
+  vitrine(PADRAO);
+  api("placas").then(function(j){if(j.placas&&j.placas.length)vitrine(j.placas);}).catch(function(){});
+  var f=$("#form-insc"),w=$("#i-whats");
+  w.addEventListener("input",function(){var d=w.value.replace(/\D/g,"").slice(0,11);w.value=d.length>6?"("+d.slice(0,2)+") "+d.slice(2,d.length-4)+"-"+d.slice(-4):d.length>2?"("+d.slice(0,2)+") "+d.slice(2):d;});
+  f.addEventListener("submit",function(ev){
+    ev.preventDefault();var er=$("#insc-erro"),bt=$("#insc-btn");er.hidden=true;
+    var d=Object.fromEntries(new FormData(f).entries());
+    if((d.nome||"").trim().length<3){er.textContent="Coloca teu nome completo.";er.hidden=false;$("#i-nome").focus();return;}
+    if(String(d.whats||"").replace(/\D/g,"").length<10){er.textContent="WhatsApp com DDD, tipo (67) 99999-9999.";er.hidden=false;w.focus();return;}
+    carregando(bt,true,"Enviando…");
+    api("inscrever",d).then(function(){f.hidden=true;$("#insc-ok").hidden=false;}).catch(function(e){er.textContent=e.message;er.hidden=false;}).then(function(){carregando(bt,false)});
+  });
+}
+function vitrine(lista){
+  lista=lista.slice().sort(function(a,b){return a.meta-b.meta});
+  $("#vitrine").innerHTML=lista.map(function(p){
+    return '<article class="premio"><div class="arte">'+arte(p)+'</div><div class="info"><div><h3>'+esc(p.nome)+'</h3>'+(p.descricao?'<p>'+esc(p.descricao)+'</p>':'')+'</div><span class="meta">R$ '+curto(p.meta)+'</span></div></article>';
+  }).join("");
+  var ult=lista[lista.length-1];
+  $("#numeros-hero").innerHTML='<div><b>'+lista.length+'</b><small>premiações físicas</small></div><div><b>R$ '+curto(lista[0].meta)+'</b><small>primeiro marco</small></div><div><b>R$ '+curto(ult.meta)+'</b><small>placa mais rara</small></div>';
+  if(!REDUZ&&matchMedia("(hover:hover)").matches)$$(".premio").forEach(function(c){
+    c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform="rotateY("+(x*9)+"deg) rotateX("+(-y*9)+"deg)";});
+    c.addEventListener("pointerleave",function(){c.style.transform="";});
+  });
+}
+
+/* =================== ROTAS =================== */
+var APP=$("#app"),SITE=$("#site"),estado={eu:null,parc:null,adm:null,aba:"inicio",abaAdm:"mentorados"};
+var ABAS=[["inicio","Início","casa"],["premios","Premiações","trofeu"],["aulas","Aulas","play"],["conteudos","Conteúdos","pasta"],["links","Meus links","link"],["pagina","Minha página","pagina"],["lucroja","Lucro Já","app"]];
+function rota(){
+  var h=location.hash.replace("#","");
+  var naArea=/^(entrar|painel|admin)(\/|$)/.test(h)||/access_token|type=recovery/.test(location.hash);
+  SITE.hidden=naArea;APP.hidden=!naArea;
+  if(!naArea){document.title="M10X · Método 10X";return;}
+  scrollTo(0,0);
+  sb.auth.getSession().then(function(r){
+    var s=r.data&&r.data.session;
+    if(/type=recovery/.test(location.hash)) return telaNovaSenha();
+    if(!s) return telaEntrar();
+    if(h==="entrar"||!h){location.replace("#painel");return;}
+    var aba=h==="admin"?"admin":(h.split("/")[1]||"inicio");
+    if(aba!=="admin"&&!ABAS.some(function(a){return a[0]===aba}))aba="inicio";
+    abre(aba);
+  });
+}
+document.addEventListener("click",function(e){var a=e.target.closest("[data-ir]");if(a){e.preventDefault();location.hash=a.dataset.ir;}});
+addEventListener("hashchange",rota);
+sb.auth.onAuthStateChange(function(ev){if(ev==="PASSWORD_RECOVERY")telaNovaSenha();});
+
+/* =================== LOGIN =================== */
+function ladoVideo(){return '<div class="lado" data-video></div>';}
+function telaEntrar(modo){
+  modo=modo||"entrar";document.title="Entrar · M10X";
+  APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa">'+
+   '<a href="#" class="link" style="font-size:14px" data-voltar>← Voltar pro site</a>'+
+   '<h1>'+(modo==="primeiro"?"Criar minha senha":modo==="esqueci"?"Recuperar senha":"Entrar na área M10X")+'</h1>'+
+   '<p class="mudo">'+(modo==="primeiro"?"Pra quem é afiliado e ainda não tem senha no Lucro Já.":modo==="esqueci"?"A gente manda um link pro teu e-mail.":"Usa o mesmo e-mail e senha do Lucro Já.")+'</p>'+
+   (modo!=="esqueci"?'<div class="abas" role="tablist"><button type="button" data-modo="entrar" class="'+(modo==="entrar"?"on":"")+'">Já tenho senha</button><button type="button" data-modo="primeiro" class="'+(modo==="primeiro"?"on":"")+'">Primeiro acesso</button></div>':'<div style="height:22px"></div>')+
+   '<form id="f-login" novalidate><div class="campos" style="grid-template-columns:1fr">'+
+   '<div class="campo"><label for="l-email">E-mail</label><input id="l-email" type="email" autocomplete="email" required></div>'+
+   (modo!=="esqueci"?'<div class="campo"><label for="l-senha">'+(modo==="primeiro"?"Crie uma senha (mín. 8)":"Senha")+'</label><input id="l-senha" type="password" autocomplete="'+(modo==="primeiro"?"new-password":"current-password")+'" required></div>':'')+
+   '</div><div id="l-erro" class="erro-msg" hidden></div><div id="l-ok" class="ok-msg" hidden></div>'+
+   '<button class="btn btn-azul" type="submit" id="l-btn" style="width:100%;height:56px;margin-top:18px;font-size:16px">'+(modo==="primeiro"?"Criar senha e entrar":modo==="esqueci"?"Mandar link":"Entrar")+'</button></form>'+
+   '<p style="margin-top:18px;font-size:14px;text-align:center">'+(modo==="esqueci"?'<a href="#" class="link" data-modo="entrar">Voltar pro login</a>':'<a href="#" class="link" data-modo="esqueci">Esqueci a senha</a>')+'</p>'+
+   '</div></div></div>';
+  video($(".lado",APP));
+  $$("[data-modo]",APP).forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();var em=$("#l-email").value;telaEntrar(b.dataset.modo);$("#l-email").value=em;})});
+  $("[data-voltar]",APP).addEventListener("click",function(e){e.preventDefault();history.pushState(null,"",location.pathname);rota();});
+  $("#f-login").addEventListener("submit",function(ev){
+    ev.preventDefault();var er=$("#l-erro"),ok=$("#l-ok"),bt=$("#l-btn");er.hidden=ok.hidden=true;
+    var email=$("#l-email").value.trim().toLowerCase(),senha=$("#l-senha")?$("#l-senha").value:"";
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){er.textContent="Confere o e-mail.";er.hidden=false;return;}
+    carregando(bt,true);var p;
+    if(modo==="esqueci") p=sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(r){if(r.error)throw r.error;ok.textContent="Se esse e-mail tiver conta, o link chega em instantes. Olha também o spam.";ok.hidden=false;});
+    else if(modo==="primeiro") p=api("primeiro_acesso",{email:email,senha:senha}).then(function(){return sb.auth.signInWithPassword({email:email,password:senha})}).then(function(r){if(r.error)throw r.error;location.hash="painel";});
+    else p=sb.auth.signInWithPassword({email:email,password:senha}).then(function(r){if(r.error){var m=/invalid/i.test(r.error.message)?"E-mail ou senha errados. Se nunca entrou, usa \"Primeiro acesso\".":r.error.message;throw new Error(m);}location.hash="painel";});
+    p.catch(function(e){er.textContent=e.message||"Não deu. Tenta de novo.";er.hidden=false;}).then(function(){carregando(bt,false)});
+  });
+  setTimeout(function(){var i=$("#l-email");if(i&&matchMedia("(min-width:900px)").matches)i.focus();},50);
+}
+function telaNovaSenha(){
+  APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Nova senha</h1><p class="mudo">Escolhe uma senha nova com pelo menos 8 caracteres.</p>'+
+   '<form id="f-ns" style="margin-top:22px"><div class="campo"><label for="ns">Nova senha</label><input id="ns" type="password" autocomplete="new-password"></div><div id="ns-erro" class="erro-msg" hidden></div>'+
+   '<button class="btn btn-azul" id="ns-btn" style="width:100%;height:56px;margin-top:18px">Salvar e entrar</button></form></div></div></div>';
+  video($(".lado",APP));
+  $("#f-ns").addEventListener("submit",function(ev){ev.preventDefault();var v=$("#ns").value,er=$("#ns-erro");if(v.length<8){er.textContent="Mínimo 8 caracteres.";er.hidden=false;return;}
+    carregando($("#ns-btn"),true);sb.auth.updateUser({password:v}).then(function(r){if(r.error)throw r.error;location.replace(location.pathname+"#painel");}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando($("#ns-btn"),false);});});
+}
+function sair(){sb.auth.signOut().then(function(){estado.eu=null;estado.parc=null;estado.adm=null;location.hash="entrar";});}
+
+/* =================== CASCA DA ÁREA =================== */
+function navHTML(){
+  var eu=estado.eu||{},pend=estado.adm?estado.adm.pedidos.filter(function(p){return p.status==="pendente"}).length:0;
+  var itens=ABAS.map(function(a){return '<a class="nav-i'+(estado.aba===a[0]?" on":"")+'" href="#painel/'+a[0]+'">'+ico(a[2])+'<span>'+a[1]+'</span></a>';}).join("");
+  if(eu.admin)itens+='<a class="nav-i'+(estado.aba==="admin"?" on":"")+'" href="#admin">'+ico("admin")+'<span>Admin</span>'+(pend?'<span class="q">'+pend+'</span>':'')+'</a>';
+  return itens;
+}
+function casca(html){
+  var eu=estado.eu||{},nome=(eu.nome||eu.email||"?").trim(),ini=nome.charAt(0).toUpperCase();
+  return '<div class="casca"><aside class="lateral"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:20px">M10<i>X</i></span></a>'+navHTML()+
+   '<div class="quem"><span class="avatar">'+esc(ini)+'</span><div class="t"><b>'+esc(nome)+'</b><small>'+esc(eu.email||"")+'</small></div><button class="btn btn-fant" style="padding:0 8px" data-sair aria-label="Sair">'+ico("sair")+'</button></div></aside>'+
+   '<div><header class="topo-app"><div class="l1"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:18px">M10<i>X</i></span></a><button class="btn btn-fant" data-sair>'+ico("sair",18)+' Sair</button></div><nav>'+navHTML()+'</nav></header>'+
+   '<main class="conteudo">'+html+'</main></div></div>';
+}
+function pinta(html){APP.innerHTML=casca(html);$$("[data-sair]",APP).forEach(function(b){b.addEventListener("click",sair)});var on=$(".topo-app .nav-i.on",APP);if(on&&on.scrollIntoView)on.scrollIntoView({inline:"center",block:"nearest"});}
+
+function abre(aba){
+  estado.aba=aba;
+  var titulos={inicio:"Início",premios:"Premiações",aulas:"Aulas",conteudos:"Conteúdos",links:"Meus links",pagina:"Minha página",lucroja:"Lucro Já",admin:"Admin"};
+  document.title=(titulos[aba]||"Painel")+" · M10X";
+  if(!estado.eu){APP.innerHTML='<div class="carrega"><img src="'+LOGO+'" alt="Carregando"></div>';return carregaTudo().then(function(){if(estado.eu)abre(aba);});}
+  if(aba==="admin"){ if(!estado.eu.admin){location.replace("#painel");return;} return carregaAdmin(); }
+  ({inicio:vInicio,premios:vPremios,aulas:vAulas,conteudos:vConteudos,links:vLinks,pagina:vPagina,lucroja:vLucroja})[aba]();
+}
+function carregaTudo(){
+  var a=api("eu",{},true).then(function(eu){estado.eu=eu;});
+  var b=parc("eu").then(function(p){estado.parc=p;}).catch(function(e){estado.parc={erro:e.message,status:e.status};});
+  return Promise.all([a,b]).catch(function(e){
+    if(e.status===401){sb.auth.signOut();telaEntrar();return;}
+    APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Acesso ainda não liberado</h1><p class="mudo">'+esc(e.message)+'</p><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-azul" href="#mentoria" data-site>Quero ser mentorado</a><button class="btn btn-vidro" id="sair2">Trocar de conta</button></div></div></div></div>';
+    video($(".lado",APP));
+    $("#sair2").addEventListener("click",sair);
+    $("[data-site]",APP).addEventListener("click",function(ev){ev.preventDefault();location.hash="mentoria";});
+  });
+}
+function recarrega(aba){estado.eu=null;estado.parc=null;return abre(aba||estado.aba);}
+
+/* =================== INÍCIO =================== */
+function vInicio(){
+  var eu=estado.eu,prox=eu.proxima,placas=eu.placas||[];
+  var alvo=prox?prox.meta:(placas.length?placas[placas.length-1].meta:1);
+  var nome=(eu.nome||"").split(" ")[0]||"mentorado";
+  var h='<div class="ola"><div><h1>Fala, '+esc(nome)+'</h1><p>'+(prox?'Próxima premiação: <b style="color:#fff">'+esc(prox.nome)+'</b>':'Tu bateu todos os marcos do M10X.')+'</p></div>'+(eu.admin&&!eu.membro?'<span class="chip amarelo">Tu está vendo como dono (sem vendas próprias)</span>':'')+'</div>';
+  if(eu.sem_codigo&&eu.membro)h+='<div class="aviso">'+ico("alerta")+'<span>Teu link de afiliado ainda não está ligado no M10X, então as vendas não estão contando. Gera tua página em <a class="link" href="#painel/pagina">Minha página</a> ou chama o suporte.</span></div>';
+  h+='<div class="grade-2"><section class="bloco grande"><img class="agua" src="'+LOGO1+'" alt=""><p class="rotulo">Faturamento total</p><p class="valor"><small>R$</small><span id="contador">0,00</span></p><div class="barra-meta" id="barra-eu"></div></section>'+
+   '<div class="pilha"><div class="grade-2" style="grid-template-columns:1fr 1fr"><section class="bloco mini"><span>Este mês</span><b>R$ '+brl(eu.mes)+'</b></section><section class="bloco mini"><span>Vendas contadas</span><b>'+eu.vendas_qtd+'</b></section></div>'+
+   (prox?'<a class="bloco prox" href="#painel/premios" style="text-decoration:none">'+arte(prox)+'<div><span class="mudo" style="font-size:13px;font-weight:600">Próxima premiação</span><h3>'+esc(prox.nome)+'</h3><span class="mudo" style="font-size:14px">Faltam R$ '+brl(prox.meta-eu.total)+'</span></div></a>':'<section class="bloco"><h2>Parede completa</h2><p class="mudo">Todas as premiações batidas. Lenda.</p></section>')+'</div></div>';
+  h+='<div class="atalhos" style="margin-top:16px">'+
+   atalho("pagina","pagina","Minha página","Tua página com nome, foto e IA")+atalho("links","link","Meus links","Checkout de cada plano")+atalho("aulas","play","Aulas","Continua de onde parou")+atalho("lucroja","app","Lucro Já","Abrir o SaaS")+'</div>';
+  h+='<section class="bloco" style="margin-top:16px"><h2>Últimas vendas</h2>'+(eu.ultimas&&eu.ultimas.length?'<ul class="vendas">'+eu.ultimas.map(function(v){return '<li><span>'+esc(nomeProduto(v.produto))+' <span class="mudo">· '+data(v.em)+'</span></span><b>R$ '+brl(v.valor)+'</b></li>'}).join("")+'</ul>':'<p class="vazio">Tua primeira venda aparece aqui assim que for aprovada.</p>')+'</section>';
+  pinta(h);
+  var bar=$("#barra-eu");bar.innerHTML=barraHTML(eu.total,alvo,prox?prox.nome:"a última placa");animaBarra(bar,eu.total,alvo);
+  conta($("#contador"),eu.total);
+  if(eu.membro&&eu.novas&&eu.novas.length){var p=placas.find(function(x){return x.id===eu.novas[eu.novas.length-1]});if(p)setTimeout(function(){festa(p)},900);}
+}
+function atalho(aba,ic,t,s){return '<a class="atalho" href="#painel/'+aba+'">'+ico(ic,24)+'<div><b>'+t+'</b><br><small>'+s+'</small></div></a>';}
+function nomeProduto(p){return {mensal:"Lucro Já · Mensal",trimestral:"Lucro Já · Trimestral",semestral:"Lucro Já · Semestral",anual:"Lucro Já · Anual",vitalicio:"Lucro Já · Vitalício"}[p]||p||"Venda";}
+function conta(el,alvo){if(!el)return;if(REDUZ){el.textContent=brl(alvo);return;}var t0=null,d=1400;function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=brl(alvo*e);if(k<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
+
+/* =================== PREMIAÇÕES =================== */
+var ETAPAS=[["pendente","Pedido recebido"],["aprovado","Aprovado"],["producao","Em produção"],["enviado","A caminho"],["entregue","Na tua parede"]];
+function vPremios(){
+  var eu=estado.eu,prox=eu.proxima,placas=eu.placas||[];
+  var h='<div class="ola"><div><h1>Premiações</h1><p>'+(prox?'Faltam <b style="color:#fff">R$ '+brl(prox.meta-eu.total)+'</b> pra '+esc(prox.nome):'Todas batidas.')+'</p></div></div>';
+  h+='<div class="hero-premios"><img src="'+IMG+'placas_mockup.webp" alt="Pulseira e placas M10X"><div class="txt"><h2>Da tela pra tua parede</h2><p>Bateu o marco, o botão libera. Tu confirma o endereço e acompanha cada etapa até a placa chegar.</p></div></div>';
+  h+='<section class="bloco"><h2>Tua escada</h2><div class="degraus">'+placas.map(function(p){var c=p.atingida?"ok":(prox&&p.id===prox.id?"prox":"");
+    return '<div class="degrau '+c+'"><span class="bola">'+(p.atingida?ico("ok",18):'<span style="color:#8DB2FF">'+ico("cadeado",16)+'</span>')+'</span><small>'+esc(curto(p.meta))+'</small></div>';}).join("")+'</div></section>';
+  var peds=placas.filter(function(p){return p.pedido});
+  if(peds.length){
+    h+='<section style="margin-top:16px"><h2 class="titulo-b">Como tua premiação chega</h2>'+peds.map(function(p){
+      var st=p.pedido.status,rec=st==="recusado",idx=ETAPAS.findIndex(function(e){return e[0]===st});
+      return '<article class="entrega">'+arte(p)+'<div><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3>'+esc(p.nome)+'</h3>'+(rec?'<span class="chip vermelho">Recusado · fala com o suporte</span>':'<span class="chip">Pedido em '+data(p.pedido.criado_em)+'</span>')+'</div>'+
+        (rec?'':'<div class="tempo">'+ETAPAS.map(function(e,i){return '<div class="et'+(i<=idx?" ok":"")+(i===idx&&i<4?" agora":"")+'">'+e[1]+'</div>'}).join("")+'</div>')+
+        (p.pedido.rastreio?'<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="mudo" style="font-size:14px">Rastreio <b style="color:#fff">'+esc(p.pedido.rastreio)+'</b></span><a class="btn btn-vidro btn-p" target="_blank" rel="noopener" href="https://www.linkcorreios.com.br/?id='+encodeURIComponent(p.pedido.rastreio)+'">'+ico("abrir",16)+' Acompanhar</a><button class="btn btn-fant btn-p" data-copiar="'+esc(p.pedido.rastreio)+'">'+ico("copiar",16)+' Copiar</button></div>':'')+
+        '</div></article>';}).join("")+'</section>';
+  }
+  h+='<section style="margin-top:16px"><h2 class="titulo-b">Todas as premiações</h2><div class="grade-premios">'+placas.map(function(p){
+    var pe;
+    if(p.pedido){var i=ETAPAS.findIndex(function(e){return e[0]===p.pedido.status});pe='<span class="chip'+(p.pedido.status==="entregue"?" verde":p.pedido.status==="recusado"?" vermelho":"")+'">'+esc(i>=0?ETAPAS[i][1]:"Recusado")+'</span>';}
+    else if(p.atingida)pe=eu.membro?'<button class="btn btn-azul" data-pedir="'+p.id+'">Solicitar '+(p.tipo==="pulseira"?"pulseira":"placa")+'</button>':'<span class="chip verde">Liberada</span>';
+    else{var pct=Math.min(100,eu.total/p.meta*100);pe='<div style="font-size:13px" class="mudo">Faltam R$ '+brl(p.meta-eu.total)+'</div><div class="mini-barra"><i style="width:'+pct+'%"></i></div>';}
+    return '<article class="card-p'+(p.atingida?"":" trava")+'"><div class="arte">'+arte(p)+(p.atingida?'':'<span class="cadeado">'+ico("cadeado",12)+' R$ '+curto(p.meta)+'</span>')+'</div><h3>'+esc(p.nome)+'</h3><p class="sub">'+esc(p.descricao||"")+'</p><div class="pe">'+pe+'</div></article>';
+  }).join("")+'</div></section>';
+  var gal=["placas_mockup.webp","pulseira.webp","pulseira2.webp","placa100k_det.webp","placa10k.webp","placa100k.webp","placa500k.webp","placa1m.webp"];
+  h+='<section class="bloco" style="margin-top:16px"><h2>Galeria</h2><div class="galeria">'+gal.map(function(g){return '<button data-zoom="'+g+'" aria-label="Ampliar foto"><img src="'+IMG+g+'" alt="" loading="lazy"></button>'}).join("")+'</div></section>';
+  pinta(h);
+  $$("[data-pedir]",APP).forEach(function(b){b.addEventListener("click",function(){modalPedido(placas.find(function(p){return String(p.id)===b.dataset.pedir}))})});
+  $$("[data-copiar]",APP).forEach(function(b){b.addEventListener("click",function(){copia(b.dataset.copiar,"Código copiado")})});
+  $$("[data-zoom]",APP).forEach(function(b){b.addEventListener("click",function(){var f=modal('<div class="lightbox"><img src="'+IMG+b.dataset.zoom+'" alt=""></div><div class="acoes"><button class="btn btn-vidro" data-fecha>Fechar</button></div>',"largo");})});
+}
+function festa(p){
+  var f=modal('<div class="festa"><img class="grandeza" src="'+esc(fotoDe(p))+'" alt=""><h2>Tu bateu R$ '+curto(p.meta)+'!</h2><p class="mudo" style="margin-top:8px">'+(p.tipo==="pulseira"?"A pulseira M10X":"A "+esc(p.nome))+' é tua. Pede agora e a gente manda pra tua casa.</p>'+
+   '<div class="acoes" style="justify-content:center"><button class="btn btn-vidro" data-depois>Depois</button><button class="btn btn-azul" data-agora>Solicitar agora</button></div></div>');
+  confete();
+  var fecha=function(){f.remove();api("conquista_vista",{ids:estado.eu.novas},true).catch(function(){});estado.eu.novas=[];};
+  $("[data-depois]",f).addEventListener("click",fecha);
+  $("[data-agora]",f).addEventListener("click",function(){fecha();modalPedido(p);});
+}
+function confete(){
+  if(REDUZ)return;var c=document.createElement("canvas");c.className="confete";document.body.appendChild(c);var x=c.getContext("2d"),W=c.width=innerWidth,H=c.height=innerHeight;
+  var cores=["#1F5BFF","#8DB2FF","#FFFFFF","#C3D0EE","#3D7BFF"],ps=[];for(var i=0;i<150;i++)ps.push({x:W/2+(Math.random()-.5)*120,y:H*.35,vx:(Math.random()-.5)*13,vy:-Math.random()*13-4,r:Math.random()*6+3,c:cores[i%5],a:Math.random()*6,va:(Math.random()-.5)*.3});
+  var t=0;(function f(){x.clearRect(0,0,W,H);ps.forEach(function(p){p.vy+=.32;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();});if(++t<170)requestAnimationFrame(f);else c.remove();})();
+}
+function modal(html,cls){
+  var f=document.createElement("div");f.className="fundo";f.innerHTML='<div class="modal'+(cls?" "+cls:"")+'" role="dialog" aria-modal="true">'+html+'</div>';
+  APP.appendChild(f);
+  f.addEventListener("click",function(e){if(e.target===f||e.target.closest("[data-fecha]"))f.remove();});
+  var esc2=function(e){if(e.key==="Escape"){f.remove();removeEventListener("keydown",esc2);}};addEventListener("keydown",esc2);
+  return f;
+}
+function modalPedido(p){
+  if(!p)return;var pul=p.tipo==="pulseira";
+  var f=modal('<div style="display:flex;gap:16px;align-items:center"><img src="'+esc(fotoDe(p))+'" alt="" style="width:76px;border-radius:12px"><div><h2>Solicitar '+esc(p.nome)+'</h2><p class="mudo" style="margin-top:6px">Confere o endereço com calma. É pra lá que a gente manda.</p></div></div>'+
+   '<form id="f-ped" style="margin-top:18px" novalidate><div class="campos">'+
+   '<div class="campo todo"><label>Nome de quem recebe</label><input name="nome" autocomplete="name" value="'+esc(estado.eu.nome||"")+'"></div>'+
+   '<div class="campo"><label>Telefone</label><input name="telefone" inputmode="tel" autocomplete="tel"></div>'+
+   '<div class="campo"><label>CEP</label><input name="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9"></div>'+
+   '<div class="campo todo"><label>Rua</label><input name="rua" autocomplete="address-line1"></div>'+
+   '<div class="campo"><label>Número</label><input name="numero"></div><div class="campo"><label>Complemento</label><input name="complemento" autocomplete="address-line2"></div>'+
+   '<div class="campo"><label>Bairro</label><input name="bairro"></div><div class="campo"><label>Cidade</label><input name="cidade" autocomplete="address-level2"></div>'+
+   '<div class="campo"><label>UF</label><input name="uf" maxlength="2" autocomplete="address-level1" style="text-transform:uppercase"></div>'+
+   (pul?'<div class="campo"><label>Tamanho do pulso</label><select name="tamanho"><option>P</option><option selected>M</option><option>G</option></select></div>':'<div class="campo"><label>Nome gravado na placa</label><input name="nome_placa" maxlength="40" placeholder="Como tu quer aparecer"></div>')+
+   '</div><div id="mp-erro" class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul" id="mp-btn">Confirmar pedido</button></div></form>');
+  var fm=$("#f-ped",f);
+  fm.cep.addEventListener("input",function(){var d=fm.cep.value.replace(/\D/g,"").slice(0,8);fm.cep.value=d.length>5?d.slice(0,5)+"-"+d.slice(5):d;
+    if(d.length===8)fetch("https://viacep.com.br/ws/"+d+"/json/").then(function(r){return r.json()}).then(function(j){if(j&&!j.erro){fm.rua.value=fm.rua.value||j.logradouro||"";fm.bairro.value=fm.bairro.value||j.bairro||"";fm.cidade.value=j.localidade||fm.cidade.value;fm.uf.value=j.uf||fm.uf.value;fm.numero.focus();}}).catch(function(){});});
+  fm.addEventListener("submit",function(ev){ev.preventDefault();var er=$("#mp-erro",f),bt=$("#mp-btn",f);er.hidden=true;
+    var e=Object.fromEntries(new FormData(fm).entries());carregando(bt,true,"Enviando…");
+    api("solicitar_placa",{placa_id:p.id,entrega:e},true).then(function(){f.remove();toast("Pedido feito! Acompanha em Premiações.");recarrega("premios");})
+     .catch(function(x){er.textContent=x.message;er.hidden=false;carregando(bt,false);});});
+}
+
+/* =================== AULAS E CONTEÚDOS (vêm da área de afiliados do Lucro Já) =================== */
+function semParc(titulo){
+  var p=estado.parc||{};
+  var pend=p.status&&p.status!=="aprovado"&&!p.erro;
+  return '<div class="ola"><div><h1>'+titulo+'</h1></div></div><section class="bloco" style="max-width:640px"><h2>'+(pend?"Teu cadastro de afiliado está em análise":"Liga teu cadastro de afiliado")+'</h2><p class="mudo">'+
+   (pend?"Assim que o time aprovar, essa aba libera sozinha.":"As aulas, os conteúdos e tua página vêm do teu cadastro de afiliado do Lucro Já. Ele precisa estar aprovado com este mesmo e-mail.")+'</p>'+
+   (pend?'':'<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-azul" href="https://afiliados.lucroja.online" target="_blank" rel="noopener">Pedir cadastro de afiliado</a></div>')+'</section>';
+}
+function parcOk(){var p=estado.parc;return p&&!p.erro&&p.status==="aprovado";}
+function vistas(){try{return JSON.parse(localStorage.getItem("m10x-vistas")||"[]")}catch(e){return []}}
+function marcaVista(id){try{var v=vistas();if(v.indexOf(id)<0){v.push(id);localStorage.setItem("m10x-vistas",JSON.stringify(v.slice(-500)));}}catch(e){}}
+function embed(u){
+  u=String(u||"");var m;
+  if((m=/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{6,})/.exec(u)))return "https://www.youtube.com/embed/"+m[1]+"?rel=0&autoplay=1";
+  if((m=/drive\.google\.com\/file\/d\/([\w-]+)/.exec(u)))return "https://drive.google.com/file/d/"+m[1]+"/preview";
+  if((m=/vimeo\.com\/(?:video\/)?(\d+)/.exec(u)))return "https://player.vimeo.com/video/"+m[1]+"?autoplay=1";
+  if((m=/loom\.com\/share\/([\w-]+)/.exec(u)))return "https://www.loom.com/embed/"+m[1];
+  return "";
+}
+function capaYT(u){var m=/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{6,})/.exec(String(u||""));return m?"https://i.ytimg.com/vi/"+m[1]+"/hqdefault.jpg":"";}
+function vAulas(){
+  if(!parcOk())return pinta(semParc("Aulas"));
+  var aulas=estado.parc.aulas||[],vs=vistas();
+  var feitas=aulas.filter(function(a){return vs.indexOf(a.id)>=0}).length;
+  var h='<div class="ola"><div><h1>Aulas</h1><p>'+(aulas.length?feitas+' de '+aulas.length+' assistidas':'')+'</p></div></div>';
+  if(!aulas.length)h+='<section class="bloco"><p class="vazio">As aulas aparecem aqui assim que o time publicar.</p></section>';
+  var mods=[];aulas.forEach(function(a){var m=a.modulo||"Começando";if(mods.indexOf(m)<0)mods.push(m);});
+  mods.forEach(function(m){
+    h+='<section class="modulo"><h2>'+esc(m)+'</h2><div class="grade-aulas">'+aulas.filter(function(a){return (a.modulo||"Começando")===m}).map(function(a){
+      var capa=a.bloqueado?"":capaYT(a.url),v=vs.indexOf(a.id)>=0;if(!capa&&!a.bloqueado)capa=IMG+"m10x_fin.webp";
+      return '<button class="aula'+(a.bloqueado?" trava":"")+'" data-aula="'+a.id+'"'+(a.bloqueado?' aria-disabled="true"':'')+'><div class="capa">'+(capa?'<img src="'+capa+'" alt="" loading="lazy">':'')+'<span class="play">'+ico(a.bloqueado?"cadeado":"play",24)+'</span>'+(v?'<span class="chip verde visto">'+ico("ok",14)+' Vista</span>':'')+'</div><div class="corpo"><h3>'+esc(a.titulo)+'</h3><small>'+(a.bloqueado?"Libera no cargo "+esc(a.libera):esc(a.descricao||"").slice(0,90))+'</small></div></button>';
+    }).join("")+'</div></section>';
+  });
+  pinta(h);
+  $$("[data-aula]",APP).forEach(function(b){b.addEventListener("click",function(){var a=aulas.find(function(x){return String(x.id)===b.dataset.aula});if(!a||a.bloqueado){if(a)toast("Essa aula libera no cargo "+a.libera+".");return;}abreAula(a);})});
+}
+function abreAula(a){
+  var u=a.url||"",e=a.tipo==="link"?embed(u):"",vid=/\.(mp4|webm|mov|m4v|ogg)(\?|$)/i.test(a.arquivo_nome||u);
+  if(a.tipo==="link"&&!e){window.open(u,"_blank","noopener");marcaVista(a.id);return;}
+  var player=e?'<iframe src="'+esc(e)+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>':vid?'<video src="'+esc(u)+'" controls autoplay playsinline></video>':'';
+  var f=modal((player?'<div class="player'+(a.vertical?" vert":"")+'">'+player+'</div>':'')+'<div style="padding:16px 8px 4px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap"><div><h2 style="font-size:20px">'+esc(a.titulo)+'</h2>'+(a.descricao?'<p class="mudo" style="margin-top:6px;white-space:pre-line">'+esc(a.descricao)+'</p>':'')+'</div><div style="display:flex;gap:8px">'+
+    (!player&&u?'<a class="btn btn-azul btn-p" href="'+esc(u)+'" target="_blank" rel="noopener">'+ico("baixar",16)+' Baixar</a>':'')+'<button class="btn btn-vidro btn-p" data-fecha>Fechar</button></div></div>',"largo");
+  marcaVista(a.id);
+  f.addEventListener("click",function(ev){if(ev.target===f||ev.target.closest("[data-fecha]"))vAulas();});
+}
+function tam(b){b=Number(b||0);return b>1e6?(b/1e6).toFixed(1)+" MB":b>1e3?Math.round(b/1e3)+" KB":b?b+" B":"";}
+function vConteudos(){
+  if(!parcOk())return pinta(semParc("Conteúdos"));
+  var cs=estado.parc.conteudo||[];
+  var h='<div class="ola"><div><h1>Conteúdos</h1><p>Materiais prontos pra copiar, baixar e usar na divulgação.</p></div></div>';
+  h+=cs.length?'<div class="conteudos">'+cs.map(function(c){
+    var tp=c.tipo==="texto"?"texto":c.tipo==="link"?"link":"baixar";
+    var img=c.tipo==="arquivo"&&/^image\//.test(c.mime||"")&&c.url;
+    var ac=c.bloqueado?'<span class="chip">'+ico("cadeado",12)+' Libera no cargo '+esc(c.libera)+'</span>':
+      c.tipo==="texto"?'<button class="btn btn-azul btn-p" data-ver="'+c.id+'">'+ico("texto",16)+' Ver</button><button class="btn btn-vidro btn-p" data-copia="'+c.id+'">'+ico("copiar",16)+' Copiar</button>':
+      c.tipo==="link"?'<a class="btn btn-azul btn-p" href="'+esc(c.url)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Abrir</a><button class="btn btn-vidro btn-p" data-copialink="'+esc(c.url)+'">'+ico("copiar",16)+' Copiar link</button>':
+      '<a class="btn btn-azul btn-p" href="'+esc(c.url)+'" target="_blank" rel="noopener" download="'+esc(c.arquivo_nome||"")+'">'+ico("baixar",16)+' Baixar</a>';
+    return '<article class="cont">'+(img?'<img src="'+esc(c.url)+'" alt="" style="border-radius:12px;aspect-ratio:16/9;object-fit:cover" loading="lazy">':'')+'<div class="tp"><span>'+ico(tp)+'</span><div><h3>'+esc(c.titulo)+'</h3>'+(c.arquivo_nome?'<small class="mudo">'+esc(c.arquivo_nome)+(c.tamanho?' · '+tam(c.tamanho):'')+'</small>':'')+'</div></div>'+(c.descricao?'<p>'+esc(c.descricao)+'</p>':'')+'<div class="acoes">'+ac+'</div></article>';
+  }).join("")+'</div>':'<section class="bloco"><p class="vazio">Os conteúdos aparecem aqui assim que o time publicar.</p></section>';
+  pinta(h);
+  var acha=function(id){return cs.find(function(c){return String(c.id)===String(id)})};
+  $$("[data-ver]",APP).forEach(function(b){b.addEventListener("click",function(){var c=acha(b.dataset.ver);modal('<h2>'+esc(c.titulo)+'</h2><div style="margin-top:14px;white-space:pre-wrap;font-size:15px;line-height:1.6;max-height:60dvh;overflow:auto;padding:14px;border-radius:14px;background:rgba(2,6,25,.6)">'+esc(c.texto||"")+'</div><div class="acoes"><button class="btn btn-vidro" data-fecha>Fechar</button><button class="btn btn-azul" data-cp>'+ico("copiar",16)+' Copiar texto</button></div>');$("[data-cp]").addEventListener("click",function(){copia(c.texto||"")});})});
+  $$("[data-copia]",APP).forEach(function(b){b.addEventListener("click",function(){copia(acha(b.dataset.copia).texto||"")})});
+  $$("[data-copialink]",APP).forEach(function(b){b.addEventListener("click",function(){copia(b.dataset.copialink,"Link copiado")})});
+}
+
+/* =================== MEUS LINKS =================== */
+function vLinks(){
+  var eu=estado.eu,pl=eu.planos||[];
+  var h='<div class="ola"><div><h1>Meus links</h1><p>Teus links de checkout com o teu código. Toda venda por eles conta no teu faturamento.</p></div></div>';
+  if(pl.length){
+    h+='<div class="planos">'+pl.map(function(p){
+      return '<article class="plano'+(p.plano==="anual"?" dest":"")+'"><span class="nome">'+esc(p.nome)+'</span><div class="preco">R$ '+p.preco+'<small>'+esc(p.periodo)+'</small></div><div class="url">'+esc(p.link)+'</div>'+
+       '<div class="acoes"><button class="btn btn-azul btn-p" data-copiar="'+esc(p.link)+'">'+ico("copiar",16)+' Copiar</button><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Garante o Lucro Já no plano "+p.nome+" por R$ "+p.preco+": "+p.link)+'">'+ZAP+' Mandar</a></div></article>';
+    }).join("")+'</div>';
+    if(eu.pagina)h+='<section class="bloco" style="margin-top:16px"><h2>Tua página de vendas</h2><div class="url-box"><span>'+esc(eu.pagina.url)+'</span><button class="btn btn-azul btn-p" data-copiar="'+esc(eu.pagina.url)+'">'+ico("copiar",16)+' Copiar</button><a class="btn btn-vidro btn-p" href="'+esc(eu.pagina.url)+'" target="_blank" rel="noopener">'+ico("abrir",16)+'</a></div><p class="mudo" style="font-size:13px;margin-top:10px">'+eu.pagina.visitas+' visitas · os 4 planos já estão ligados nela.</p></section>';
+    h+=blocoTrocaLinks(true);
+  } else h+=passosLinks();
+  pinta(h);ligaLinks();
+}
+function passosLinks(){
+  var p=estado.parc||{},lk=p.links;
+  if(!parcOk())return '<section class="bloco" style="max-width:720px"><h2>Falta ligar teu cadastro de afiliado</h2><p class="mudo">Os links aparecem aqui depois que tua afiliação é aprovada. Primeiro pede teu cadastro na área de afiliados do Lucro Já com este mesmo e-mail.</p><div style="margin-top:18px"><a class="btn btn-azul" href="https://afiliados.lucroja.online" target="_blank" rel="noopener">Pedir cadastro de afiliado</a></div></section>';
+  return '<section class="bloco" style="max-width:780px"><h2>Libera teus links em 2 passos</h2>'+
+   '<div class="passo-n"><span class="num">1</span><div><h3>Pede a afiliação na Applyfy</h3><p class="mudo">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b>'+(lk?' ('+lk.pct+'% de comissão)':'')+'. Toca nos dois botões e pede a afiliação. O time aprova rapidinho.</p>'+
+   (lk?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Anual</a></div>':'<p class="mudo" style="margin-top:8px">Os links de afiliação do teu cargo ainda não foram cadastrados. Chama o suporte.</p>')+'</div></div>'+
+   '<div class="passo-n"><span class="num">2</span><div style="flex:1;min-width:0"><h3>Cola teus links de checkout</h3><p class="mudo">Depois de aprovado, a Applyfy te dá 2 links de checkout (Assinatura e Anual). Cola aqui uma vez e o M10X monta os 4 planos sozinho.</p>'+formLinks()+'</div></div></section>';
+}
+function formLinks(){
+  var p=estado.parc||{},pg=p.pagina||{};
+  return '<form id="f-links" style="margin-top:14px" novalidate><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Link de checkout da Assinatura (mensal)</label><input name="mensal" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.mensal||"")+'"></div><div class="campo"><label>Link de checkout do Anual</label><input name="vital" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.vital||"")+'"></div></div><div class="erro-msg" hidden></div><button class="btn btn-azul" style="margin-top:14px">Salvar e gerar meus links</button></form>';
+}
+function blocoTrocaLinks(fechado){return parcOk()?'<details class="bloco" style="margin-top:16px"'+(fechado?'':' open')+'><summary style="padding:0">Trocar meus links de checkout</summary><div style="margin-top:6px">'+formLinks()+'</div></details>':'';}
+function ligaLinks(){
+  $$("[data-copiar]",APP).forEach(function(b){b.addEventListener("click",function(){copia(b.dataset.copiar,"Link copiado")})});
+  var f=$("#f-links",APP);if(!f)return;
+  f.addEventListener("submit",function(ev){ev.preventDefault();var er=$(".erro-msg",f),bt=$(".btn-azul",f);er.hidden=true;var d=Object.fromEntries(new FormData(f).entries());
+    if(!/^https:\/\/[^\s]*applyfy\.com\.br\/checkout\//i.test(d.mensal||"")||!/^https:\/\/[^\s]*applyfy\.com\.br\/checkout\//i.test(d.vital||"")){er.textContent="Cola os dois links de CHECKOUT da Applyfy (começam com https://checkout.applyfy.com.br/checkout/…).";er.hidden=false;return;}
+    carregando(bt,true,"Salvando…");
+    parc("pagina_salvar",{mensal:d.mensal.trim(),vital:d.vital.trim()}).then(function(){toast("Links salvos! Tua página já está no ar.");recarrega();}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});
+}
+
+/* =================== MINHA PÁGINA =================== */
+var rascunho=null;
+function vPagina(){
+  var eu=estado.eu,pg=eu.pagina;
+  var h='<div class="ola"><div><h1>Minha página</h1><p>Tua página de vendas do Lucro Já com teu nome, tua foto e teu WhatsApp. Os 4 planos já vão com teus links.</p></div>'+(pg?'<a class="btn btn-vidro" href="'+esc(pg.url)+'" target="_blank" rel="noopener">'+ico("abrir",18)+' Abrir página</a>':'')+'</div>';
+  if(!pg){h+=passosLinks();pinta(h);ligaLinks();return;}
+  var c=rascunho||Object.assign({nome:(eu.nome||"").split(" ")[0]||"",whats:"",foto:"",selo:"",titulo:"",destaque:"",sub:"",msg:""},pg.config||{});
+  rascunho=c;
+  h+='<div class="stats-pg"><section class="bloco mini"><span>Visitas</span><b>'+pg.visitas+'</b></section><section class="bloco mini"><span>Status</span><b style="font-size:20px">'+(pg.ativo?'<span style="color:var(--ok)">No ar</span>':'Pausada')+'</b></section><section class="bloco" style="padding:16px"><div class="url-box" style="padding:6px 6px 6px 12px"><span style="font-size:13px">'+esc(pg.url.replace("https://",""))+'</span><button class="btn btn-azul btn-p" data-copiar="'+esc(pg.url)+'">'+ico("copiar",16)+'</button></div><a class="btn btn-zap btn-p" style="width:100%;margin-top:8px" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Dá uma olhada: "+pg.url)+'">'+ZAP+' Mandar no WhatsApp</a></section></div>';
+  h+='<div class="editor"><div class="pilha">'+
+   '<section class="bloco"><h2>Quem indica</h2><div class="foto-v">'+(c.foto?'<img src="'+esc(c.foto)+'" alt="">':'<span class="ini">'+esc((c.nome||"?").charAt(0).toUpperCase())+'</span>')+'<div style="display:flex;gap:8px;flex-wrap:wrap"><label class="btn btn-vidro btn-p">Trocar foto<input type="file" accept="image/png,image/jpeg,image/webp" hidden id="pg-foto"></label>'+(c.foto?'<button class="btn btn-fant btn-p" id="pg-tira">Tirar</button>':'')+'</div></div>'+
+    '<div class="campos" style="margin-top:16px"><div class="campo"><label>Teu nome na página</label><input data-c="nome" maxlength="40" value="'+esc(c.nome)+'"></div><div class="campo"><label>WhatsApp com DDD</label><input data-c="whats" inputmode="tel" maxlength="16" placeholder="(67) 99999-9999" value="'+esc(c.whats)+'"></div>'+
+    '<div class="campo todo"><label>Mensagem que já vem escrita no WhatsApp</label><input data-c="msg" maxlength="160" placeholder="Oi! Vim pela tua página do Lucro Já e quero saber mais." value="'+esc(c.msg)+'"></div></div></section>'+
+   '<section class="bloco"><h2>Topo da página</h2><div class="campos"><div class="campo todo"><label>Selinho</label><input data-c="selo" maxlength="60" placeholder="Mercado Livre sem estoque" value="'+esc(c.selo)+'"></div><div class="campo"><label>Título · linha 1</label><input data-c="titulo" maxlength="60" placeholder="Você vende." value="'+esc(c.titulo)+'"></div><div class="campo"><label>Título · linha destacada</label><input data-c="destaque" maxlength="60" placeholder="O lucro vem já." value="'+esc(c.destaque)+'"></div><div class="campo todo"><label>Subtítulo</label><textarea data-c="sub" maxlength="280" placeholder="Deixa em branco pra usar o texto oficial.">'+esc(c.sub)+'</textarea></div></div>'+
+    '<div style="margin-top:18px;padding:16px;border-radius:16px;background:rgba(31,91,255,.08);box-shadow:0 0 0 1px rgba(61,123,255,.3) inset"><h3 style="font:800 15px/1.2 var(--fd);display:flex;align-items:center;gap:8px">'+ico("ia",18)+' Escrever com IA</h3><p class="mudo" style="font-size:13px;margin-top:4px">A IA escreve 3 opções de topo. Toca na que gostar pra usar.</p>'+
+    '<div class="campos" style="margin-top:12px"><div class="campo"><label>Pra quem é tua página?</label><input id="ia-pub" maxlength="120" placeholder="Ex.: mães que querem renda em casa"></div><div class="campo"><label>Tom</label><select id="ia-tom"><option value="direto">Direto</option><option value="inspirador">Inspirador</option><option value="urgente">Urgente</option><option value="premium">Premium</option><option value="descontraido">Descontraído</option></select></div><div class="campo todo"><label>Alguma ideia tua? (opcional)</label><input id="ia-ideia" maxlength="200" placeholder="Ex.: falar que dá pra começar pelo celular"></div></div>'+
+    '<button class="btn btn-azul" id="ia-btn" style="margin-top:12px">'+ico("ia",18)+' Gerar 3 opções</button><div class="opcoes-ia" id="ia-ops"></div></div></section>'+
+   '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-azul" id="pg-salvar" style="flex:1;height:54px">Salvar e publicar</button><button class="btn btn-vidro" id="pg-oficial" style="height:54px">Voltar pro texto oficial</button></div>'+
+   blocoTrocaLinks(true)+
+   '</div><div><div class="previa-lj" id="previa"></div><p class="mudo" style="font-size:13px;margin-top:10px;text-align:center">Prévia do topo da tua página. O resto (planos, FAQ) é o oficial do Lucro Já.</p></div></div>';
+  pinta(h);ligaLinks();
+  var prev=function(){
+    var z=String(c.whats||"").replace(/\D/g,"");
+    $("#previa").innerHTML='<div class="barra-nav"><i></i><i></i><i></i><span>'+esc(pg.url.replace("https://",""))+'</span></div><div class="heroL"><span class="eyeL"><i></i>'+esc(c.selo||"Mercado Livre sem estoque")+'</span><h4>'+esc(c.titulo||"Você vende.")+'<span>'+esc(c.titulo?(c.destaque||""):(c.destaque||"O lucro vem já."))+'</span></h4><p>'+esc(c.sub||"Você escolhe o produto num catálogo nacional, vê quanto sobra antes de anunciar, o anúncio sai pronto e vai pro seu Mercado Livre.")+'</p><span class="ctaL">Quero começar hoje</span>'+
+      ((c.nome||c.foto)?'<div class="ljv">'+(c.foto?'<img src="'+esc(c.foto)+'" alt="">':'<span class="ini">'+esc((c.nome||"?").charAt(0).toUpperCase())+'</span>')+'<div><small>Quem te indica</small><b>'+esc(c.nome||"")+'</b></div>'+(z.length>=10?'<a>'+'Falar comigo'+'</a>':'')+'</div>':'')+'</div>';
+  };
+  prev();
+  $$("[data-c]",APP).forEach(function(i){i.addEventListener("input",function(){c[i.dataset.c]=i.value;prev();});});
+  var zp=$('[data-c="whats"]',APP);zp.addEventListener("input",function(){var d=zp.value.replace(/\D/g,"").slice(0,11);zp.value=d.length>6?"("+d.slice(0,2)+") "+d.slice(2,d.length-4)+"-"+d.slice(-4):d.length>2?"("+d.slice(0,2)+") "+d.slice(2):d;c.whats=zp.value;prev();});
+  $("#pg-foto").addEventListener("change",function(){var f=this.files[0];if(!f)return;if(f.size>3e6){toast("Foto até 3 MB");return;}reduzFoto(f).then(function(d){toast("Subindo foto…");return api("pagina_foto",{imagem:d},true);}).then(function(r){c.foto=r.url;vPagina();toast("Foto pronta. Agora salva.");}).catch(function(e){toast(e.message||"Não deu pra subir a foto.")});});
+  var tira=$("#pg-tira");if(tira)tira.addEventListener("click",function(){c.foto="";vPagina();});
+  $("#pg-oficial").addEventListener("click",function(){c.selo=c.titulo=c.destaque=c.sub="";vPagina();toast("Topo oficial de volta. Salva pra publicar.");});
+  $("#pg-salvar").addEventListener("click",function(){var b=this;carregando(b,true,"Publicando…");api("pagina_config",{config:c},true).then(function(r){rascunho=null;estado.eu.pagina.config=r.config;toast("Publicado! Tua página já mudou.");carregando(b,false);}).catch(function(e){toast(e.message);carregando(b,false);});});
+  $("#ia-btn").addEventListener("click",function(){var b=this;carregando(b,true,"Escrevendo…");
+    api("pagina_ia",{publico:$("#ia-pub").value,tom:$("#ia-tom").value,ideia:$("#ia-ideia").value},true).then(function(r){
+      $("#ia-ops").innerHTML=r.opcoes.map(function(o,i){return '<button class="op-ia" data-op="'+i+'"><small style="margin:0 0 6px">'+esc(o.selo)+'</small><b>'+esc(o.titulo)+' <span>'+esc(o.destaque)+'</span></b><small>'+esc(o.sub)+'</small></button>'}).join("");
+      $$("[data-op]",APP).forEach(function(x){x.addEventListener("click",function(){var o=r.opcoes[+x.dataset.op];c.selo=o.selo;c.titulo=o.titulo;c.destaque=o.destaque;c.sub=o.sub;var keep=$("#ia-ops").innerHTML;vPagina();$("#ia-ops").innerHTML="";toast("Aplicado na prévia. Salva pra publicar.");});});
+    }).catch(function(e){toast(e.message)}).then(function(){carregando(b,false)});});
+}
+function reduzFoto(file){return new Promise(function(ok,ruim){var r=new FileReader();r.onerror=ruim;r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,480/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);ok(cv.toDataURL("image/jpeg",.88));};im.onerror=ruim;im.src=r.result;};r.readAsDataURL(file);});}
+
+/* =================== LUCRO JÁ (SaaS) =================== */
+function vLucroja(){
+  var eu=estado.eu,lj=eu.lucroja;
+  var ate=lj&&lj.ate?new Date(lj.ate):null,ativo=lj&&lj.plano&&lj.plano!=="nenhum"&&(!ate||ate>new Date()||/vital/i.test(lj.plano));
+  var h='<div class="ola"><div><h1>Lucro Já</h1><p>O SaaS que tu vende e usa.</p></div></div>';
+  h+='<section class="lj-card"><div><span class="chip'+(ativo?" verde":"")+'">'+(lj?(ativo?"Teu acesso: "+esc(lj.plano):"Acesso sem plano ativo"):"Sem acesso com este e-mail")+(ate&&ativo&&!/vital/i.test(lj.plano)?" · até "+ate.toLocaleDateString("pt-BR"):"")+'</span><h2 style="margin-top:16px">Lucro <span>Já</span></h2><p class="mudo" style="margin-top:10px;max-width:46ch">Catálogo nacional, anúncio pronto com IA, lucro na tela antes de publicar e o fornecedor posta. Vende no Mercado Livre e na Shopee sem estoque.</p>'+
+   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-azul" href="https://lucroja.online/app" target="_blank" rel="noopener">'+ico("abrir",18)+' Abrir o Lucro Já</a><a class="btn btn-vidro" href="https://lucroja.online" target="_blank" rel="noopener">Página oficial</a>'+(eu.pagina?'<a class="btn btn-vidro" href="'+esc(eu.pagina.url)+'" target="_blank" rel="noopener">Minha página</a>':'')+'</div></div>'+
+   '<ul class="lista-check">'+["Catálogo nacional com custo e lucro na tela","IA monta título, descrição e ficha técnica","Publica no Mercado Livre e na Shopee","Vendeu, o fornecedor separa, embala e posta","Estúdio IA pra foto e vídeo do produto"].map(function(t){return '<li><svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#1F5BFF"/><path d="M6 10.4l2.6 2.6L14.2 7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'+t+'</li>'}).join("")+'</ul></section>';
+  h+='<div class="grade-3" style="margin-top:16px">'+atalho("links","link","Meus links","Checkout com teu código")+atalho("pagina","pagina","Minha página","Personaliza e publica")+atalho("aulas","play","Aulas","Como vender o Lucro Já")+'</div>';
+  pinta(h);
+}
+
+/* =================== ADMIN =================== */
+function carregaAdmin(){api("adm_resumo",{},true).then(function(d){estado.adm=d;desenhaAdmin();}).catch(function(e){toast(e.message)});}
+function desenhaAdmin(){
+  var d=estado.adm,a=estado.abaAdm;
+  var pend=d.pedidos.filter(function(p){return p.status==="pendente"}).length,novos=d.inscricoes.filter(function(i){return i.status==="novo"}).length;
+  var totalFat=d.membros.reduce(function(s,m){return s+m.total},0);
+  var h='<div class="ola"><div><h1>Admin M10X</h1><p>Mentorados, premiações e pedidos num lugar só.</p></div><button class="btn btn-vidro" id="recarrega">Atualizar</button></div>'+
+   '<div class="kpis"><div class="bloco"><span class="mudo" style="font-size:13px">Mentorados ativos</span><b>'+d.membros.filter(function(m){return m.ativo}).length+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Faturamento somado</span><b>R$ '+curto(totalFat)+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Pedidos de placa</span><b>'+pend+(pend===1?' novo':' novos')+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Querem entrar</span><b>'+novos+(novos===1?' novo':' novos')+'</b></div></div>'+
+   '<div class="tabs-adm">'+[["mentorados","Mentorados"],["pedidos","Pedidos de placa",pend],["inscricoes","Querem entrar",novos],["placas","Premiações"],["config","Avisos"]].map(function(t){return '<button data-aba="'+t[0]+'" class="'+(a===t[0]?"on":"")+'">'+t[1]+(t[2]?'<span class="q">'+t[2]+'</span>':'')+'</button>'}).join("")+'</div><section class="bloco" id="adm-corpo"></section>';
+  pinta(h);
+  $("#recarrega").addEventListener("click",carregaAdmin);
+  $$("[data-aba]",APP).forEach(function(b){b.addEventListener("click",function(){estado.abaAdm=b.dataset.aba;desenhaAdmin();})});
+  ({mentorados:admMentorados,pedidos:admPedidos,inscricoes:admInscricoes,placas:admPlacas,config:admConfig})[a]($("#adm-corpo"));
+}
+function admMentorados(el){
+  var d=estado.adm;
+  el.innerHTML='<div class="linha-ferr"><input class="busca" id="busca" placeholder="Buscar nome ou e-mail"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-vidro" id="importar">Puxar afiliados novos</button><button class="btn btn-azul" id="liberar">Liberar e-mails</button></div></div><div class="rolagem"><table class="tabela"><thead><tr><th>Mentorado</th><th>Faturamento</th><th>Mês</th><th>Nível</th><th>Códigos de afiliado</th><th>Status</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>';
+  var desenha=function(q){q=(q||"").toLowerCase();$("#tb").innerHTML=d.membros.filter(function(m){return !q||(m.email+" "+(m.nome||"")).toLowerCase().indexOf(q)>=0}).map(function(m){
+    return '<tr><td><b>'+esc(m.nome||"—")+'</b><div class="mudo" style="font-size:12px">'+esc(m.email)+'</div></td><td><b>R$ '+brl(m.total)+'</b>'+(m.ajuste?'<div class="mudo" style="font-size:12px">ajuste '+brl(m.ajuste)+'</div>':'')+'</td><td>R$ '+brl(m.mes)+'</td><td>'+(m.nivel?'<span class="chip">'+esc(m.nivel)+'</span>':'<span class="mudo">—</span>')+'</td><td>'+(m.codigos.length?m.codigos.map(function(c){return '<span class="chip" style="margin:2px">'+esc(c)+'</span>'}).join(""):'<span class="chip amarelo">sem código</span>')+'</td><td>'+(m.ativo?'<span class="chip verde">Liberado</span>':'<span class="chip vermelho">Bloqueado</span>')+'</td><td><button class="btn btn-fant" data-edita="'+esc(m.email)+'">Editar</button></td></tr>';}).join("")||'<tr><td colspan="7" class="vazio">Ninguém aqui.</td></tr>';
+    $$("[data-edita]",el).forEach(function(b){b.addEventListener("click",function(){modalMembro(d.membros.find(function(m){return m.email===b.dataset.edita}))})});};
+  desenha();$("#busca").addEventListener("input",function(e){desenha(e.target.value)});
+  $("#importar").addEventListener("click",function(){var b=this;carregando(b,true);api("adm_importar",{},true).then(function(r){toast(r.novos?r.novos+" afiliados novos liberados":"Nenhum afiliado novo");carregaAdmin();}).catch(function(e){toast(e.message);carregando(b,false);});});
+  $("#liberar").addEventListener("click",function(){modalForm("Liberar e-mails","Cola um ou vários e-mails (um por linha). Eles já conseguem entrar na área M10X.",'<div class="campo todo"><label>E-mails</label><textarea name="emails" style="height:140px"></textarea></div>',function(v){return api("adm_membro_add",{emails:v.emails},true).then(function(r){toast(r.liberados+" liberado(s)");carregaAdmin();})});});
+}
+function modalMembro(m){
+  modalForm("Editar mentorado",m.email,
+   '<div class="campo todo"><label>Nome</label><input name="nome" value="'+esc(m.nome||"")+'"></div>'+
+   '<div class="campo"><label>WhatsApp</label><input name="whats" value="'+esc(m.whats||"")+'"></div>'+
+   '<div class="campo"><label>Status</label><select name="ativo"><option value="1"'+(m.ativo?" selected":"")+'>Liberado</option><option value="0"'+(!m.ativo?" selected":"")+'>Bloqueado</option></select></div>'+
+   '<div class="campo todo"><label>Códigos de afiliado da Applyfy (o code= do link)</label><input name="codigos" value="'+esc((m.codigos_manuais||[]).join(", "))+'" placeholder="ex.: t1wsn05, opc1xmv"><span class="dica">Os da página de vendas dele já entram sozinhos'+(m.codigos.length?": "+esc(m.codigos.join(", ")):"")+'.</span></div>'+
+   '<div class="campo"><label>Ajuste de faturamento (R$)</label><input name="ajuste" inputmode="decimal" value="'+esc(String(m.ajuste||0).replace(".",","))+'"><span class="dica">Soma vendas de fora (outra plataforma). Pode ser negativo.</span></div>'+
+   '<div class="campo"><label>Observação</label><input name="obs" value="'+esc(m.obs||"")+'"></div>',
+   function(v){return api("adm_membro_salvar",{email:m.email,nome:v.nome,whats:v.whats,ativo:v.ativo==="1",codigos:v.codigos,ajuste:String(v.ajuste||"0").replace(/\./g,"").replace(",","."),obs:v.obs},true).then(function(){toast("Salvo");carregaAdmin();});});
+}
+function admPedidos(el){
+  var d=estado.adm,ops=[["pendente","Pedido recebido"],["aprovado","Aprovado"],["producao","Em produção"],["enviado","Enviado"],["entregue","Entregue"],["recusado","Recusado"]];
+  el.innerHTML=d.pedidos.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Mentorado</th><th>Prêmio</th><th>Entrega</th><th>Status</th><th>Rastreio</th></tr></thead><tbody>'+d.pedidos.map(function(p){var e=p.entrega||{};
+    return '<tr><td>'+data(p.criado_em)+'</td><td><b>'+esc(p.nome||"—")+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div><div class="mudo" style="font-size:12px">fat. R$ '+brl(p.faturamento)+'</div></td><td><span class="chip">'+esc(p.placa)+'</span>'+(e.nome_placa?'<div style="font-size:12px;margin-top:4px">Gravar: <b>'+esc(e.nome_placa)+'</b></div>':'')+(e.tamanho?'<div style="font-size:12px;margin-top:4px">Tamanho: <b>'+esc(e.tamanho)+'</b></div>':'')+'</td>'+
+    '<td style="font-size:13px;min-width:220px"><b>'+esc(e.nome)+'</b> · <a class="link" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(e.telefone||"").replace(/^55/,""))+'">'+esc(e.telefone)+'</a><div class="mudo">'+esc(e.rua)+', '+esc(e.numero)+' '+esc(e.complemento||"")+' · '+esc(e.bairro)+' · '+esc(e.cidade)+'/'+esc(e.uf)+' · '+esc(e.cep)+'</div></td>'+
+    '<td><select class="mini-sel" data-st="'+p.id+'">'+ops.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===p.status?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></td><td><input class="mini-sel" style="width:150px" data-rs="'+p.id+'" value="'+esc(p.rastreio||"")+'" placeholder="código"></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Nenhum pedido de placa ainda.</p>';
+  $$("[data-st]",el).forEach(function(s){s.addEventListener("change",function(){api("adm_pedido_status",{id:s.dataset.st,status:s.value},true).then(function(){toast("Status salvo");var p=estado.adm.pedidos.find(function(x){return String(x.id)===s.dataset.st});if(p)p.status=s.value;}).catch(function(e){toast(e.message)});})});
+  $$("[data-rs]",el).forEach(function(s){s.addEventListener("change",function(){var p=estado.adm.pedidos.find(function(x){return String(x.id)===s.dataset.rs});api("adm_pedido_status",{id:s.dataset.rs,status:p.status,rastreio:s.value},true).then(function(){toast("Rastreio salvo")}).catch(function(e){toast(e.message)});})});
+}
+function admInscricoes(el){
+  var d=estado.adm,ops=[["novo","Novo"],["contato","Em conversa"],["aprovado","Aprovado"],["recusado","Recusado"]];
+  el.innerHTML=d.inscricoes.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Pessoa</th><th>Fatura hoje</th><th>Objetivo</th><th>Status</th><th></th></tr></thead><tbody>'+d.inscricoes.map(function(i){
+    return '<tr><td>'+data(i.criado_em)+'</td><td><b>'+esc(i.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(i.email||"sem e-mail")+(i.instagram?' · @'+esc(i.instagram):'')+'</div></td><td>'+esc(i.faturamento_atual||"—")+'</td><td style="max-width:280px;font-size:13px">'+esc(i.objetivo||"—")+'</td>'+
+    '<td><select class="mini-sel" data-ins="'+i.id+'">'+ops.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===i.status?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></td><td><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(i.whats).replace(/^55/,""))+'?text='+encodeURIComponent("Fala, "+String(i.nome).split(" ")[0]+"! Aqui é do M10X, recebi teu pedido pra mentoria.")+'">'+ZAP+' WhatsApp</a></td></tr>';}).join("")+'</tbody></table></div><p class="mudo" style="font-size:13px;margin-top:12px">Marcou "Aprovado" e a pessoa deixou e-mail: a área dela é liberada na hora.</p>':'<p class="vazio">Ninguém pediu pra entrar ainda. O formulário fica no fim da página de vendas.</p>';
+  $$("[data-ins]",el).forEach(function(s){s.addEventListener("change",function(){api("adm_inscricao_status",{id:s.dataset.ins,status:s.value},true).then(function(){toast(s.value==="aprovado"?"Aprovado e liberado":"Status salvo")}).catch(function(e){toast(e.message)});})});
+}
+function admPlacas(el){
+  var d=estado.adm;
+  el.innerHTML='<div class="linha-ferr"><p class="mudo" style="font-size:14px;max-width:60ch">Troca a foto de cada premiação quando quiser. A foto aparece na página de vendas e na área dos mentorados.</p><button class="btn btn-azul" id="nova-placa">Nova premiação</button></div><div class="grade-premios">'+d.placas.map(function(p){
+    return '<article class="card-p'+(p.ativo?"":" trava")+'"><div class="arte">'+arte(p)+'</div><h3>'+esc(p.nome)+'</h3><p class="sub">Meta R$ '+brl(p.meta)+(p.ativo?"":" · escondida")+'</p><div class="pe" style="display:flex;gap:8px"><label class="btn btn-vidro" style="flex:1;height:40px">Foto<input type="file" accept="image/png,image/jpeg,image/webp" hidden data-foto="'+p.id+'"></label><button class="btn btn-vidro" style="flex:1;height:40px" data-pl="'+p.id+'">Editar</button></div></article>';}).join("")+'</div>';
+  $("#nova-placa").addEventListener("click",function(){modalPlaca({tipo:"placa",ativo:true})});
+  $$("[data-pl]",el).forEach(function(b){b.addEventListener("click",function(){modalPlaca(d.placas.find(function(p){return String(p.id)===b.dataset.pl}))})});
+  $$("[data-foto]",el).forEach(function(inp){inp.addEventListener("change",function(){var f=inp.files[0];if(!f)return;if(f.size>6e6){toast("Foto até 6 MB");return;}var r=new FileReader();r.onload=function(){toast("Subindo foto…");api("adm_placa_foto",{placa_id:inp.dataset.foto,imagem:r.result},true).then(function(){toast("Foto salva");carregaAdmin();}).catch(function(e){toast(e.message)});};r.readAsDataURL(f);})});
+}
+function modalPlaca(p){
+  modalForm(p.id?"Editar premiação":"Nova premiação","",
+   '<div class="campo todo"><label>Nome</label><input name="nome" value="'+esc(p.nome||"")+'" placeholder="Placa 10K"></div>'+
+   '<div class="campo"><label>Meta de faturamento (R$)</label><input name="meta" inputmode="decimal" value="'+esc(p.meta||"")+'"></div>'+
+   '<div class="campo"><label>Tipo</label><select name="tipo"><option value="placa"'+(p.tipo==="placa"?" selected":"")+'>Placa</option><option value="pulseira"'+(p.tipo==="pulseira"?" selected":"")+'>Pulseira</option><option value="outro"'+(p.tipo==="outro"?" selected":"")+'>Outro</option></select></div>'+
+   '<div class="campo todo"><label>Descrição curta</label><input name="descricao" maxlength="240" value="'+esc(p.descricao||"")+'"></div>'+
+   '<div class="campo"><label>Mostrar</label><select name="ativo"><option value="1"'+(p.ativo!==false?" selected":"")+'>Sim</option><option value="0"'+(p.ativo===false?" selected":"")+'>Esconder</option></select></div>',
+   function(v){var pl={id:p.id,nome:v.nome,meta:String(v.meta).replace(/\./g,"").replace(",","."),tipo:v.tipo,descricao:v.descricao,ativo:v.ativo==="1",ordem:p.ordem||0};
+     return api("adm_placa_salvar",{placa:pl},true).then(function(){toast("Salvo");carregaAdmin();});});
+}
+function admConfig(el){
+  var c=estado.adm.config;
+  el.innerHTML='<div style="max-width:620px"><h2 class="titulo-b">Avisos no Discord</h2><p class="mudo" style="margin-bottom:16px">Cada pedido de placa e cada pessoa que quer entrar chega num canal do teu Discord. No canal: Editar canal › Integrações › Webhooks › Novo webhook › Copiar URL.</p>'+
+   '<form id="f-cfg"><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>URL do webhook '+(c.discord?'<span class="chip verde" style="margin-left:6px">configurado</span>':'')+'</label><input name="discord" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"><span class="dica">Deixa em branco pra manter o atual.</span></div>'+
+   '<div class="campo"><label>WhatsApp do time M10X (com DDD)</label><input name="whats" inputmode="tel" value="'+esc(c.whats||"")+'"></div></div>'+
+   '<div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn btn-azul">Salvar</button><button type="button" class="btn btn-vidro" id="testar">Mandar teste</button></div></form></div>';
+  $("#f-cfg").addEventListener("submit",function(ev){ev.preventDefault();var v=Object.fromEntries(new FormData(ev.target).entries()),b={whats:v.whats};if(v.discord.trim())b.discord=v.discord.trim();
+    api("adm_config",b,true).then(function(){toast("Salvo");carregaAdmin();}).catch(function(e){toast(e.message)});});
+  $("#testar").addEventListener("click",function(){api("adm_config",{testar:true},true).then(function(){toast("Teste enviado. Olha o Discord.")}).catch(function(e){toast(e.message)});});
+}
+function modalForm(titulo,sub,campos,salvar){
+  var f=modal('<h2>'+esc(titulo)+'</h2>'+(sub?'<p class="mudo" style="margin-top:6px;word-break:break-all">'+esc(sub)+'</p>':'')+'<form style="margin-top:18px" novalidate><div class="campos">'+campos+'</div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Salvar</button></div></form>');
+  var fm=$("form",f);
+  fm.addEventListener("submit",function(ev){ev.preventDefault();var bt=$(".btn-azul",fm),er=$(".erro-msg",fm);er.hidden=true;carregando(bt,true);
+    salvar(Object.fromEntries(new FormData(fm).entries())).then(function(){f.remove()}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});
+}
+
+iniciaSite();rota();
+})();
+</script>
+</body>
+</html>
