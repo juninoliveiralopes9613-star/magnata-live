@@ -613,11 +613,10 @@ function copia(t,msg){(navigator.clipboard?navigator.clipboard.writeText(t):Prom
 function fotoDe(p){return p.imagem||IMG+(p.tipo==="pulseira"?"pulseira.webp":"placa10k.webp");}
 function arte(p,cls){return '<img'+(cls?' class="'+cls+'"':'')+' src="'+esc(fotoDe(p))+'" alt="'+esc(p.nome)+'" decoding="async">';}
 
-/* vídeo do M10 girando (sem som, em loop). Movimento reduzido: só a imagem parada */
+/* vídeo do M10 girando (sem som, em loop, giro lento). Toca sempre: é a marca, sem pisca-pisca */
 function video(el){
   if(!el)return;
   var poster=IMG+"m10_poster.webp";
-  if(REDUZ){el.innerHTML='<img class="poster" src="'+LOGO+'" alt="">';return;}
   el.innerHTML='<video muted autoplay loop playsinline preload="auto" poster="'+poster+'" disablepictureinpicture><source src="'+VID+'" type="video/mp4"></video>';
   var v=$("video",el);v.muted=true;var t=v.play();if(t&&t.catch)t.catch(function(){});
   v.addEventListener("error",function(){el.innerHTML='<img class="poster" src="'+LOGO+'" alt="">';});
