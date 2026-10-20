@@ -385,6 +385,8 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 @keyframes brilha{to{background-position:-200% 0}}
 
 /* ===== painel dos sócios (20/10) ===== */
+.preview-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-6px 0 20px;padding:12px 14px 12px 16px;border-radius:16px;background:linear-gradient(90deg,rgba(242,201,76,.16),rgba(242,201,76,.06));box-shadow:0 0 0 1px rgba(242,201,76,.45) inset;color:#FFE9A8;font-size:14px}
+.preview-bar span{flex:1;min-width:200px}.preview-bar b{color:#fff}
 .ponte{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;margin-bottom:20px;border-radius:16px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha2) inset}
 .ponte .luz{flex:none;width:12px;height:12px;margin-top:5px;border-radius:50%;background:var(--mudo2);box-shadow:0 0 0 4px rgba(108,121,163,.18)}
 .ponte.verde .luz{background:var(--ok);box-shadow:0 0 0 4px rgba(43,212,138,.18),0 0 14px rgba(43,212,138,.7)}
@@ -573,7 +575,7 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
       <div class="wrap">
         <div class="cab"><h2>Como funciona</h2><p>Sem mistério: tu faz a live, o painel conta a venda, a placa chega.</p></div>
         <div class="passos">
-          <article class="passo"><div class="n cromo">01</div><h3>Pede teu acesso</h3><p>Cria teu cadastro aqui embaixo. Tua área M10X libera na hora, com aulas, materiais, teus links e tua página.</p></article>
+          <article class="passo"><div class="n cromo">01</div><h3>Pede teu acesso</h3><p>Cria teu cadastro aqui embaixo. Os sócios liberam tua área M10X com aulas, materiais, teus links e tua página. Já é afiliado do Lucro Já na Applyfy? Libera sozinho.</p></article>
           <article class="passo"><div class="n cromo">02</div><h3>Revende em live</h3><p>Mostra a ferramenta na live e manda teu link ou tua página. Cada venda feita por eles entra sozinha no teu faturamento.</p></article>
           <article class="passo"><div class="n cromo">03</div><h3>Bate a meta, pede o prêmio</h3><p>Chegou no marco, o painel avisa e libera o botão. Tu coloca o endereço e acompanha a placa até a tua porta.</p></article>
         </div>
@@ -699,6 +701,7 @@ var ICO={
  filtro:'<path d="M4 5h16l-6.2 7.4V18l-3.6 2v-7.6Z"/>',
  subir:'<path d="M12 19V5M6 11l6-6 6 6"/>',
  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>',
+ olho:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/>',
  equipe:'<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="16.8" cy="9.5" r="2.5"/><path d="M15.6 14.6c2.6-.3 4.4 1.3 4.9 4.4"/>'
 };
 function ico(n,t){return '<svg width="'+(t||20)+'" height="'+(t||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[n]||"")+'</svg>';}
@@ -707,6 +710,7 @@ var ZAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" ari
 function api(acao,corpo,auth){return chama(FN,acao,corpo,auth);}
 function parc(acao,corpo){return chama(PFN,acao,corpo,true);}
 function chama(url,acao,corpo,auth){
+  if(estado&&estado.preview&&!/^(eu|placas|soc_ver)$/.test(acao))return Promise.reject(new Error("Modo visualização: volta pro painel de sócios pra mexer de verdade."));
   var h={"content-type":"application/json",apikey:SB_KEY};
   var p=auth?sb.auth.getSession().then(function(r){var t=r.data&&r.data.session&&r.data.session.access_token;h.authorization="Bearer "+(t||SB_KEY);}):Promise.resolve(h.authorization="Bearer "+SB_KEY);
   return p.then(function(){return fetch(url,{method:"POST",headers:h,body:JSON.stringify(Object.assign({acao:acao},corpo||{}))})})
@@ -766,7 +770,7 @@ function validaPedido(d){
 function pedirAcesso(d){
   return chama(PFN,"pedir",{nome:d.nome.trim(),email:d.email,whats:d.whats,senha:d.senha},false).then(function(r){
     return sb.auth.signInWithPassword({email:d.email,password:d.senha}).then(function(l){
-      if(l.error)return {entrou:false,msg:r.existia?"Acesso liberado! Teu e-mail já tinha login no Lucro Já: entra com a senha que tu já usa.":"Acesso liberado! Agora é só entrar."};
+      if(l.error)return {entrou:false,msg:r.existia?"Pedido enviado! Teu e-mail já tinha login no Lucro Já: entra com a senha que tu já usa pra acompanhar.":"Pedido enviado! Entra com teu e-mail e senha pra acompanhar."};
       return {entrou:true};
     });
   });
@@ -812,7 +816,7 @@ function ladoVideo(){return '<div class="lado" data-video></div>';}
 function telaEntrar(modo){
   modo=modo||"entrar";document.title="Entrar · M10X";
   var tit={entrar:"Entrar na área M10X",pedir:"Pedir acesso",primeiro:"Criar minha senha",esqueci:"Recuperar senha",socio:"Acesso dos sócios"}[modo];
-  var sub={entrar:"Mesmo e-mail e senha da área de afiliados do Lucro Já.",pedir:"Pra quem revende o Lucro Já. Teu acesso libera na hora, no cargo Iniciante (50%).",primeiro:"Pra quem se afiliou ao Lucro Já na Applyfy ou foi liberado pelo time e ainda não tem senha.",esqueci:"A gente manda um link pro teu e-mail.",socio:"Primeira vez do sócio: usa o teu e-mail de sócio e cria tua senha aqui. Depois é só entrar normal."}[modo];
+  var sub={entrar:"Mesmo e-mail e senha da área de afiliados do Lucro Já.",pedir:"Pra quem revende o Lucro Já. Os sócios conferem e liberam. Já é afiliado do Lucro Já na Applyfy? Libera sozinho.",primeiro:"Pra quem se afiliou ao Lucro Já na Applyfy ou foi liberado pelo time e ainda não tem senha.",esqueci:"A gente manda um link pro teu e-mail.",socio:"Primeira vez do sócio: usa o teu e-mail de sócio e cria tua senha aqui. Depois é só entrar normal."}[modo];
   var campo=function(id,rot,tipo,auto,ph,extra){return '<div class="campo"><label for="'+id+'">'+rot+'</label><input id="'+id+'" type="'+tipo+'" autocomplete="'+auto+'"'+(ph?' placeholder="'+ph+'"':'')+' required>'+(extra||'')+'</div>';};
   APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa">'+
    '<a href="#" class="link" style="font-size:14px" data-voltar>← Voltar pro site</a>'+
@@ -866,12 +870,13 @@ function navHTML(){
   if(eu.admin)itens+='<a class="nav-i'+(estado.aba==="admin"?" on":"")+'" href="#admin">'+ico("admin")+'<span>Admin</span>'+(pend?'<span class="q">'+pend+'</span>':'')+'</a>';
   return itens;
 }
+function barraPreview(){return estado.preview?'<div class="preview-bar" role="status">'+ico("olho",18)+'<span><b>Modo visualização.</b> É assim que um revendedor '+esc((estado.parc&&estado.parc.cargo&&estado.parc.cargo.nome)||"")+' vê a área. Nada que tu fizer aqui salva.</span><button class="btn btn-azul btn-p" data-sai-preview>Voltar pro painel de sócios</button></div>':"";}
 function casca(html){
   var eu=estado.eu||{},nome=(eu.nome||eu.email||"?").trim(),ini=nome.charAt(0).toUpperCase();
   return '<div class="casca"><aside class="lateral"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:20px">M10<i>X</i></span></a>'+navHTML()+
    cargoHTML()+'<div class="quem"><span class="avatar">'+esc(ini)+'</span><div class="t"><b>'+esc(nome)+'</b><small>'+esc(eu.email||"")+'</small></div><button class="btn btn-fant" style="padding:0 8px" data-sair aria-label="Sair">'+ico("sair")+'</button></div></aside>'+
    '<div><header class="topo-app"><div class="l1"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:18px">M10<i>X</i></span></a>'+chipMob()+'<button class="btn btn-fant" data-sair>'+ico("sair",18)+' Sair</button></div><nav>'+navHTML()+'</nav></header>'+
-   '<main class="conteudo">'+html+'</main></div></div>';
+   '<main class="conteudo">'+barraPreview()+html+'</main></div></div>';
 }
 function chipMob(){var p=estado.parc;if(!p||p.erro||!p.cargo)return "";var c=p.cargo;return '<a href="#painel/links" class="cargo-chip" style="--cg:'+esc(c.cor||"#8C96C8")+';margin-left:auto;margin-right:4px;text-decoration:none"><i></i>'+esc(c.nome)+(c.pct?' · '+c.pct+'%':'')+'</a>';}
 function cargoHTML(){
@@ -910,7 +915,7 @@ function carregaTudo(){
     if(e.status===401){sb.auth.signOut();telaEntrar();return;}
     var p=estado.parc||{};
     if(p.status&&!p.erro&&p.status!=="aprovado")return telaStatus(p);
-    APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Acesso ainda não liberado</h1><p class="mudo">'+esc(e.message)+'</p><p class="mudo" style="margin-top:10px">Se tu revende o Lucro Já, pede teu acesso: libera na hora.</p><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-azul" id="pedir2">Pedir acesso com este e-mail</button><button class="btn btn-vidro" id="sair2">Trocar de conta</button></div></div></div></div>';
+    APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Acesso ainda não liberado</h1><p class="mudo">'+esc(e.message)+'</p><p class="mudo" style="margin-top:10px">Se tu revende o Lucro Já, pede teu acesso que os sócios liberam.</p><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-azul" id="pedir2">Pedir acesso com este e-mail</button><button class="btn btn-vidro" id="sair2">Trocar de conta</button></div></div></div></div>';
     video($(".lado",APP));
     $("#sair2").addEventListener("click",sair);
     $("#pedir2").addEventListener("click",function(){modalPedirLogado();});
@@ -918,20 +923,20 @@ function carregaTudo(){
 }
 /* pedido de cadastro de afiliado pra quem já tem login */
 function modalPedirLogado(){
-  var f=modal('<h2>Pedir acesso</h2><p class="mudo" style="margin-top:6px">Teu login atual é reaproveitado e o acesso libera na hora.</p><form novalidate style="margin-top:16px"><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Nome completo</label><input name="nome" autocomplete="name"></div><div class="campo"><label>WhatsApp com DDD</label><input name="whats" inputmode="tel" autocomplete="tel"></div></div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Enviar pedido</button></div></form>');
+  var f=modal('<h2>Pedir acesso</h2><p class="mudo" style="margin-top:6px">Teu login atual é reaproveitado. Os sócios conferem e liberam.</p><form novalidate style="margin-top:16px"><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Nome completo</label><input name="nome" autocomplete="name"></div><div class="campo"><label>WhatsApp com DDD</label><input name="whats" inputmode="tel" autocomplete="tel"></div></div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Enviar pedido</button></div></form>');
   var fm=$("form",f);
   fm.addEventListener("submit",function(ev){ev.preventDefault();var er=$(".erro-msg",fm),bt=$(".btn-azul",fm);er.hidden=true;
     sb.auth.getSession().then(function(r){var em=r.data&&r.data.session&&r.data.session.user&&r.data.session.user.email;
       var d={nome:fm.nome.value.trim(),whats:fm.whats.value,email:String(em||"").toLowerCase()};
       if(d.nome.length<3||String(d.whats).replace(/\D/g,"").length<10){er.textContent="Coloca o nome completo e o WhatsApp com DDD.";er.hidden=false;return;}
-      carregando(bt,true);chama(PFN,"pedir",d,false).then(function(){f.remove();toast("Acesso liberado!");recarrega("inicio");}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});});
+      carregando(bt,true);chama(PFN,"pedir",d,false).then(function(){f.remove();toast("Pedido enviado!");recarrega("inicio");}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});});
 }
 var SUP_PADRAO=[{nome:"Olavo",papel:"Suporte",whats:"5514997084516"},{nome:"Caio Braga",papel:"Suporte",whats:"5519994212542"}];
 function suportes(){var l=estado.eu&&estado.eu.suporte;return (l&&l.length?l:SUP_PADRAO).filter(function(x){return String(x.whats||"").replace(/\D/g,"").length>=12});}
 function zapSup(){var l=suportes();return l.length?String(l[0].whats).replace(/\D/g,""):"";}
 function foneBR(w){w=String(w||"").replace(/\D/g,"").replace(/^55/,"");return w.length===11?"("+w.slice(0,2)+") "+w.slice(2,7)+"-"+w.slice(7):w.length===10?"("+w.slice(0,2)+") "+w.slice(2,6)+"-"+w.slice(6):w;}
 function telaStatus(p){
-  var T={pendente:["Aguardando aprovação","Pedido recebido, "+esc(String(p.nome||"").split(" ")[0])+"!","O time confere teu cadastro e libera teu acesso. Assim que aprovar, tudo abre aqui sozinho."],
+  var T={pendente:["Aguardando aprovação","Pedido recebido, "+esc(String(p.nome||"").split(" ")[0])+"!","Os sócios conferem teu cadastro e liberam teu acesso. Se tu já é afiliado do Lucro Já na Applyfy, libera sozinho em instantes. Assim que liberar, tudo abre aqui."],
          recusado:["Pedido não aprovado","Teu pedido não foi aprovado","Se acha que foi engano, fala com o suporte."],
          bloqueado:["Acesso pausado","Teu acesso está pausado","Fala com o suporte pra entender o que aconteceu."]}[p.status]||["Sem acesso","Sem acesso","Fala com o suporte."];
   var w=zapSup();
@@ -943,7 +948,7 @@ function telaStatus(p){
   $("#sair2").addEventListener("click",sair);
   var at=$("#st-at");if(at)at.addEventListener("click",function(){recarrega("inicio");});
 }
-function recarrega(aba){estado.eu=null;estado.parc=null;return abre(aba||estado.aba);}
+function recarrega(aba){if(estado.preview){estado.preview=false;}estado.eu=null;estado.parc=null;return abre(aba||estado.aba);}
 
 /* =================== INÍCIO =================== */
 var PERIODOS=[[7,"Últimos 7 dias"],[30,"Últimos 30 dias"],[90,"Últimos 90 dias"]];
@@ -992,7 +997,7 @@ function vInicio(){
   requestAnimationFrame(function(){requestAnimationFrame(function(){$$(".trilho-s i",APP).forEach(function(i){i.style.width=Math.max(0,Math.min(100,Number(i.dataset.w)||0))+"%";});});});
   var bar=$("#barra-eu");bar.innerHTML=barraHTML(eu.total,alvo,prox?prox.nome:"a última placa");animaBarra(bar,eu.total,alvo);
   if(estado.semAnim){$("#contador").textContent=brl(eu.total);estado.semAnim=false;}else conta($("#contador"),eu.total);
-  if(eu.membro&&eu.novas&&eu.novas.length){var p=placas.find(function(x){return x.id===eu.novas[eu.novas.length-1]});if(p)setTimeout(function(){festa(p)},900);}
+  if(eu.membro&&!estado.preview&&eu.novas&&eu.novas.length){var p=placas.find(function(x){return x.id===eu.novas[eu.novas.length-1]});if(p)setTimeout(function(){festa(p)},900);}
 }
 /* gráfico de transações (SVG próprio, curva suave igual ao da Applyfy) */
 function escalaY(max){if(!max)return 100;var b=max/4,p=Math.pow(10,Math.floor(Math.log10(b))),n=b/p;return (n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*p;}
@@ -1329,10 +1334,11 @@ function desenhaSocios(){
   var pendRev=(D.parceiros||[]).filter(function(p){return p.status==="pendente"}).length;
   var nCg=(R.cargo_pedidos||[]).length,nSem=(R.sem_dono||[]).length;
   var abas=[["afiliacoes","Afiliações Applyfy",pendAf],["revendedores","Revendedores",pendRev],["cargos","Subir de cargo",nCg],["vendas","Vendas sem dono",nSem],["aulas","Aulas"],["conteudos","Conteúdos"]];
-  var h='<div class="ola"><div><h1>Sócios</h1><p>Afiliações da Applyfy, revendedores, cargos, aulas e conteúdos da M10X.</p></div><button class="btn btn-vidro" id="soc-at">Atualizar</button></div>'+
+  var h='<div class="ola"><div><h1>Sócios</h1><p>Afiliações da Applyfy, revendedores, cargos, aulas e conteúdos da M10X.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-vidro" id="soc-ver">'+ico("olho",18)+' Ver como revendedor</button><button class="btn btn-vidro" id="soc-at">Atualizar</button></div></div>'+
    '<div class="tabs-adm">'+abas.map(function(t){return '<button data-soc="'+t[0]+'" class="'+(SOC.aba===t[0]?"on":"")+'">'+t[1]+(t[2]?'<span class="q">'+t[2]+'</span>':'')+'</button>'}).join("")+'</div><section class="bloco" id="soc-corpo"></section>';
   pinta(h);
   $("#soc-at").addEventListener("click",function(){carregaSocios();});
+  $("#soc-ver").addEventListener("click",function(){verComoRevendedor(this);});
   $$("[data-soc]",APP).forEach(function(b){b.addEventListener("click",function(){SOC.aba=b.dataset.soc;desenhaSocios();})});
   var el=$("#soc-corpo");
   ({afiliacoes:socAfil,revendedores:socRev,cargos:socCargosAba,vendas:socVendas,aulas:function(e){socMaterial(e,"aulas")},conteudos:function(e){socMaterial(e,"conteudo")}})[SOC.aba](el);
@@ -1380,10 +1386,10 @@ function socRev(el){
   var L=D.parceiros||[],F=(SOC.r&&SOC.r.faturamento)||{},pend=L.filter(function(p){return p.status==="pendente"});
   var sel=function(p){return '<select class="mini-sel" data-rcg="'+esc(p.id)+'" aria-label="Cargo">'+socCargos().map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===p.cargo?" selected":"")+'>'+esc(c.nome)+' · '+c.pct+'%</option>'}).join("")+'</select>';};
   var ST={aprovado:"Liberado",pendente:"Pendente",recusado:"Recusado",bloqueado:"Bloqueado"};
-  var h='<p class="mudo" style="font-size:14px;margin-bottom:16px;max-width:70ch">Quem pede acesso ou se afilia na Applyfy entra liberado sozinho no cargo inicial. Aqui vocês liberam na mão quem ficou de fora, trocam o cargo e bloqueiam quem precisar.</p>';
+  var h='<p class="mudo" style="font-size:14px;margin-bottom:16px;max-width:70ch">Quem já é afiliado aprovado do Lucro Já na Applyfy entra liberado sozinho. Os outros pedidos ficam aqui esperando vocês. Também dá pra liberar alguém na mão, trocar o cargo e bloquear quem precisar.</p>';
   if(pend.length)h+='<h2 class="titulo-b">Esperando liberação · '+pend.length+'</h2><div class="rolagem"><table class="tabela"><thead><tr><th>Pessoa</th><th>WhatsApp</th><th>Cargo</th><th></th></tr></thead><tbody>'+pend.map(function(p){
     return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+' · '+data(p.criado_em)+'</div></td><td>'+(p.whats?'<a class="link" target="_blank" rel="noopener" href="https://wa.me/'+esc(zapNum(p.whats))+'">'+esc(foneBR(p.whats))+'</a>':'—')+'</td><td>'+sel(p)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-rlib="'+esc(p.id)+'">Liberar</button> <button class="btn btn-fant btn-p" data-rrec="'+esc(p.id)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>';
-  h+='<div class="linha-ferr" style="margin-top:'+(pend.length?22:0)+'px"><h2 class="titulo-b" style="margin:0">Todos os revendedores · '+L.length+'</h2><input class="busca" id="rbusca" placeholder="Buscar nome ou e-mail" value="'+esc(SOC.busca)+'"></div><div class="rolagem"><table class="tabela"><thead><tr><th>Revendedor</th><th>Faturamento</th><th>Página</th><th>Cargo</th><th>Acesso</th></tr></thead><tbody id="rtb"></tbody></table></div>';
+  h+='<div class="linha-ferr" style="margin-top:'+(pend.length?22:0)+'px"><h2 class="titulo-b" style="margin:0">Todos os revendedores · '+L.length+'</h2><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="busca" id="rbusca" placeholder="Buscar nome ou e-mail" value="'+esc(SOC.busca)+'"><button class="btn btn-azul" id="rnovo">Liberar acesso na mão</button></div></div><div class="rolagem"><table class="tabela"><thead><tr><th>Revendedor</th><th>Faturamento</th><th>Página</th><th>Cargo</th><th>Acesso</th></tr></thead><tbody id="rtb"></tbody></table></div>';
   el.innerHTML=h;
   var linhas=function(q){q=(q||"").toLowerCase();$("#rtb",el).innerHTML=L.filter(function(p){return !q||(p.email+" "+(p.nome||"")).toLowerCase().indexOf(q)>=0}).sort(function(a,b){return ((F[b.email]||{}).total||0)-((F[a.email]||{}).total||0)}).map(function(p){var f=F[p.email];
     return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+(p.whats?' · <a class="link" target="_blank" rel="noopener" href="https://wa.me/'+esc(zapNum(p.whats))+'">'+esc(foneBR(p.whats))+'</a>':'')+'</div></td>'+
@@ -1397,9 +1403,32 @@ function socRev(el){
   };
   linhas(SOC.busca);
   $("#rbusca",el).addEventListener("input",function(e){SOC.busca=e.target.value;linhas(SOC.busca);});
+  $("#rnovo",el).addEventListener("click",function(){
+    modalForm("Liberar acesso na mão","A pessoa entra em lucroja.online/m10x com esse e-mail. Se já tem senha do Lucro Já, usa ela. Se não tem, toca em \"Fui liberado e não tenho senha\".",
+      '<div class="campo todo"><label>E-mail</label><input name="email" type="email" autocomplete="off" placeholder="email@da.pessoa"></div><div class="campo"><label>Nome</label><input name="nome" maxlength="80"></div><div class="campo"><label>WhatsApp</label><input name="whats" inputmode="tel" placeholder="(67) 99999-9999"></div>'+
+      '<div class="campo todo"><label>Cargo</label><select name="cargo">'+socCargos().map(function(c){return '<option value="'+esc(c.id)+'">'+esc(c.nome)+' · '+c.pct+'%</option>'}).join("")+'</select></div>',
+      function(v){if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v.email||"").trim()))return Promise.reject(new Error("Confere o e-mail."));
+        return api("soc_liberar",{email:String(v.email).trim().toLowerCase(),nome:v.nome,whats:v.whats,cargo:v.cargo},true).then(function(){toast("Liberado! Já pode entrar.");return soc("tudo")}).then(function(d){SOC.d=d;desenhaSocios();});});});
   $$("[data-rlib]",el).forEach(function(b){b.addEventListener("click",function(){var p=L.find(function(x){return String(x.id)===b.dataset.rlib});carregando(b,true);muda("status",{id:p.id,status:"aprovado",cargo:p.cargo||(socCargos()[0]||{}).id},"Liberado! A área dele já abriu.").then(desenhaSocios);})});
   $$("[data-rrec]",el).forEach(function(b){b.addEventListener("click",function(){var p=L.find(function(x){return String(x.id)===b.dataset.rrec});carregando(b,true);muda("status",{id:p.id,status:"recusado"},"Pedido recusado").then(desenhaSocios);})});
 }
+/* ver a área como um revendedor vê (sócio e dono). Nada salva nesse modo. */
+function verComoRevendedor(btn){
+  var D=SOC.d;if(!D||D.erro){toast("Toca em Atualizar e tenta de novo.");return;}
+  var L=socCargos(),c0=L[0]||{id:"",nome:"Iniciante",cor:"#8C96C8",pct:50};
+  var assina=function(lst){return Promise.all((lst||[]).filter(function(x){return x.ativo!==false}).map(function(x){var y=Object.assign({},x);
+    if(x.tipo!=="arquivo"||!x.arquivo)return y;return soc("ver",{arquivo:x.arquivo}).then(function(r){y.url=r.url;return y;}).catch(function(){y.url="";return y;});}));};
+  carregando(btn,true);
+  Promise.all([assina(D.aulas),assina(D.conteudo)]).then(function(r){
+    estado.euReal=estado.eu;estado.parcReal=estado.parc;
+    estado.eu=Object.assign({},estado.eu,{membro:true,admin:false,socio:false,cargo_pedido:null,nome:"Revendedor"});
+    estado.parc={ok:true,status:"aprovado",nome:"Revendedor",email:estado.eu.email,suporte:D.suporte||{},cargo:{id:c0.id,nome:c0.nome,cor:c0.cor,nivel:1,pct:c0.pct},
+      cargos:L.map(function(c,i){return {nome:c.nome,cor:c.cor,nivel:i+1}}),links:(D.links||[]).filter(function(x){return x.pct===c0.pct})[0]||null,aulas:r[0],conteudo:r[1],pagina:{}};
+    estado.preview=true;clearInterval(SOC.t);if(location.hash==="#painel/inicio")abre("inicio");else location.hash="painel/inicio";
+  }).catch(function(e){toast(e.message);carregando(btn,false);});
+}
+function saiPreview(){estado.preview=false;estado.eu=null;estado.parc=null;location.hash="painel/socios";}
+document.addEventListener("click",function(e){if(e.target.closest("[data-sai-preview]")){e.preventDefault();saiPreview();}});
 function zapNum(w){w=String(w||"").replace(/\D/g,"");return (w.length===10||w.length===11)?"55"+w:w;}
 
 /* ---------- pedidos pra subir de cargo ---------- */
@@ -1545,7 +1574,7 @@ function admAcessos(el){
   var pend=L.filter(function(p){return p.status==="pendente"});
   var st={aprovado:["Aprovado","verde"],pendente:["Pendente","amarelo"],recusado:["Recusado","vermelho"],bloqueado:["Bloqueado","vermelho"]};
   el.innerHTML='<h2 class="titulo-b">Esperando aprovação'+(pend.length?' · '+pend.length:'')+'</h2>'+(pend.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Pessoa</th><th>WhatsApp</th><th>Cargo</th><th></th></tr></thead><tbody>'+pend.map(function(p){
-     return '<tr><td>'+data(p.criado_em)+'</td><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td><a class="link" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(p.whats||"").replace(/^55/,""))+'">'+esc(p.whats||"")+'</a></td><td>'+sel(p)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-ap="'+esc(p.id)+'">Aprovar</button> <button class="btn btn-fant btn-p" data-rc="'+esc(p.id)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Ninguém esperando. Quem pede acesso agora é liberado na hora, no cargo inicial.</p>')+
+     return '<tr><td>'+data(p.criado_em)+'</td><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td><a class="link" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(p.whats||"").replace(/^55/,""))+'">'+esc(p.whats||"")+'</a></td><td>'+sel(p)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-ap="'+esc(p.id)+'">Aprovar</button> <button class="btn btn-fant btn-p" data-rc="'+esc(p.id)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Ninguém esperando. Quem pede acesso na página aparece aqui.</p>')+
    '<div class="linha-ferr" style="margin-top:22px"><h2 class="titulo-b" style="margin:0">Todos os revendedores · '+L.length+'</h2><input class="busca" id="busca-af" placeholder="Buscar nome ou e-mail"></div><div class="rolagem"><table class="tabela"><thead><tr><th>Revendedor</th><th>Página</th><th>Cargo</th><th>Status</th></tr></thead><tbody id="tb-af"></tbody></table></div>';
   var desenha=function(q){q=(q||"").toLowerCase();$("#tb-af").innerHTML=L.filter(function(p){return !q||(p.email+" "+(p.nome||"")).toLowerCase().indexOf(q)>=0}).map(function(p){var s1=st[p.status]||[p.status,""];
     return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td>'+(p.slug?'<a class="link" target="_blank" rel="noopener" href="https://lucroja.online/'+esc(p.slug)+'">'+esc(p.slug)+'</a><div class="mudo" style="font-size:12px">'+(p.visitas||0)+' visitas</div>':'<span class="mudo">—</span>')+'</td><td>'+sel(p)+'</td><td><select class="mini-sel" data-st-af="'+esc(p.id)+'">'+Object.keys(st).map(function(k){return '<option value="'+k+'"'+(k===p.status?" selected":"")+'>'+st[k][0]+'</option>'}).join("")+'</select></td></tr>';}).join("")||'<tr><td colspan="4" class="vazio">Ninguém aqui.</td></tr>';liga();};
@@ -1596,7 +1625,7 @@ function admConfig(el){
   $("#testar").addEventListener("click",function(){api("adm_config",{testar:true},true).then(function(){toast("Teste enviado. Olha o Discord.")}).catch(function(e){toast(e.message)});});
 }
 function modalForm(titulo,sub,campos,salvar){
-  var f=modal('<h2>'+esc(titulo)+'</h2>'+(sub?'<p class="mudo" style="margin-top:6px;word-break:break-all">'+esc(sub)+'</p>':'')+'<form style="margin-top:18px" novalidate><div class="campos">'+campos+'</div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Salvar</button></div></form>');
+  var f=modal('<h2>'+esc(titulo)+'</h2>'+(sub?'<p class="mudo" style="margin-top:6px;overflow-wrap:anywhere">'+esc(sub)+'</p>':'')+'<form style="margin-top:18px" novalidate><div class="campos">'+campos+'</div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Salvar</button></div></form>');
   var fm=$("form",f);
   fm.addEventListener("submit",function(ev){ev.preventDefault();var bt=$(".btn-azul",fm),er=$(".erro-msg",fm);er.hidden=true;carregando(bt,true);
     salvar(Object.fromEntries(new FormData(fm).entries())).then(function(){f.remove()}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});
