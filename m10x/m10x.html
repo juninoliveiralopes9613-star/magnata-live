@@ -1282,7 +1282,7 @@ function vLucroja(){
 /* =================== SUPORTE =================== */
 /* quem faz a M10X: a foto entra quando subir em imagens/m10x/site/dono_<id>.webp (sem foto, mostra as iniciais) */
 var DONOS=[
- {id:"guedes",nome:"Luiz Fernando Guedes",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X."},
+ {id:"guedes",v:2,nome:"Luiz Fernando Guedes",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X."},
  {id:"caio",nome:"Caio Braga",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X e das plataformas dele."},
  {id:"olavo",nome:"Olavo Ferracioli",papel:["Sócio e criador"],txt:"Sócio e um dos criadores da M10X."},
  {id:"junior",nome:"Junior Oliveira",papel:["Sócio e criador","Dev sênior","Boss"],txt:"Criador dos aplicativos da M10X e dev sênior."}];
@@ -1295,7 +1295,7 @@ function vSobre(){
    (L.length?'<div class="sup-l">'+L.map(function(c){var w=String(c.whats).replace(/\D/g,"");
      return '<article class="sup-c"><span class="avatar">'+esc(String(c.nome||"?").charAt(0).toUpperCase())+'</span><div><b>'+esc(c.nome)+'</b><small>'+esc(c.papel||"Suporte")+' · '+esc(foneBR(w))+'</small></div><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/'+w+'?text='+encodeURIComponent("Oi, "+String(c.nome).split(" ")[0]+"! Sou "+nome+" da M10X e preciso de ajuda.")+'">'+ZAP+' Chamar</a></article>';}).join("")+'</div>':'<p class="mudo" style="margin-top:12px">O contato do suporte ainda não foi cadastrado.</p>')+'</fieldset>';
   h+='<section class="criadores"><h2 class="titulo-b">Quem faz a M10X</h2><div class="donos">'+DONOS.map(function(d){
-    return '<article class="dono"><div class="foto"><span class="ini">'+esc(iniciais(d.nome))+'</span><img src="'+IMG+'dono_'+d.id+'.webp?v=1" alt="'+esc(d.nome)+'" decoding="async" hidden></div><div class="txt"><div class="papeis">'+d.papel.map(function(x){return '<span class="chip'+(x==="Boss"?' boss':'')+'">'+esc(x)+'</span>'}).join("")+'</div><h3>'+esc(d.nome)+'</h3><p>'+esc(d.txt)+'</p></div></article>';}).join("")+'</div></section>';
+    return '<article class="dono"><div class="foto"><span class="ini">'+esc(iniciais(d.nome))+'</span><img src="'+IMG+'dono_'+d.id+'.webp?v='+(d.v||1)+'" alt="'+esc(d.nome)+'" decoding="async" hidden></div><div class="txt"><div class="papeis">'+d.papel.map(function(x){return '<span class="chip'+(x==="Boss"?' boss':'')+'">'+esc(x)+'</span>'}).join("")+'</div><h3>'+esc(d.nome)+'</h3><p>'+esc(d.txt)+'</p></div></article>';}).join("")+'</div></section>';
   pinta(h);
   $$(".dono img",APP).forEach(function(im){var mostra=function(){im.hidden=false;im.previousElementSibling.hidden=true;};if(im.complete&&im.naturalWidth)mostra();else im.addEventListener("load",mostra);im.addEventListener("error",function(){im.remove();});});
 }
