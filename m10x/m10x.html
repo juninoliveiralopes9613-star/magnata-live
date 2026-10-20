@@ -566,7 +566,7 @@ var SB_URL="https://kkthewmnnglpnmqafmvw.supabase.co";
 var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrdGhld21ubmdscG5tcWFmbXZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NTY5MjUsImV4cCI6MjEwNDEzMjkyNX0.uxOj9Tz06MLrFEZDSqWX5ZKtf_7vDfE8cFjkOgsffyk";
 var FN=SB_URL+"/functions/v1/m10x", PFN=SB_URL+"/functions/v1/sfy-parceiros";
 var IMG=window.M10X_IMG||SB_URL+"/storage/v1/object/public/imagens/m10x/site/";
-var VID=window.M10X_VID||SB_URL+"/storage/v1/object/public/videos/m10x/m10_loop.mp4";
+var VID=window.M10X_VID||SB_URL+"/storage/v1/object/public/videos/m10x/m10_loop.mp4?v=2";
 var LOGO=IMG+"m10_logo.webp", LOGO1=IMG+"m10_logo_1x.webp";
 var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{storageKey:"m10x-sessao",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 var $=function(s,el){return (el||document).querySelector(s)}, $$=function(s,el){return [].slice.call((el||document).querySelectorAll(s))};
@@ -619,7 +619,7 @@ function arte(p,cls){return '<img'+(cls?' class="'+cls+'"':'')+' src="'+esc(foto
 /* vídeo do M10 girando (sem som, em loop, giro lento). Toca sempre: é a marca, sem pisca-pisca */
 function video(el){
   if(!el)return;
-  var poster=IMG+"m10_poster.webp";
+  var poster=IMG+"m10_poster.webp?v=2";
   el.innerHTML='<video muted autoplay loop playsinline preload="auto" poster="'+poster+'" disablepictureinpicture><source src="'+VID+'" type="video/mp4"></video>';
   var v=$("video",el);v.muted=true;var t=v.play();if(t&&t.catch)t.catch(function(){});
   v.addEventListener("error",function(){el.innerHTML='<img class="poster" src="'+LOGO+'" alt="">';});
