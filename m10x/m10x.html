@@ -412,13 +412,16 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 .viagens-topo{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .viagens-topo p{font-size:14px}
 .viagens-l{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.viagem{position:relative;overflow:hidden;border-radius:22px;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 0 0 1px var(--linha2) inset}
+.viagem{position:relative;overflow:hidden;border-radius:22px;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 0 0 1px var(--linha2) inset}
 .viagem.v-mar{background:linear-gradient(160deg,#0E3A7A 0%,#0A1C55 55%,#061036 100%)}
 .viagem.v-montanha{background:linear-gradient(160deg,#2A2370 0%,#121A57 55%,#070D33 100%)}
 .viagem.ok{box-shadow:0 0 0 1.5px rgba(43,212,138,.6) inset,0 20px 50px -24px rgba(43,212,138,.5)}
-.viagem .arte{position:absolute;inset:0 0 auto 0;height:62%;pointer-events:none}
-.viagem .arte svg{width:100%;height:100%}
-.viagem .txt{position:relative;padding:20px 22px 22px;display:grid;gap:8px;background:linear-gradient(180deg,transparent,rgba(4,9,42,.75) 30%)}
+.viagem .fundo-v{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.viagem:hover .fundo-v{transform:scale(1.04)}
+.viagem::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,9,42,.05) 0%,rgba(4,9,42,.25) 35%,rgba(4,9,42,.88) 72%,#04092A 100%);pointer-events:none}
+.viagem .txt{z-index:1}
+.viagem .txt{position:relative;padding:20px 22px 22px;display:grid;gap:8px}
+.viagem .txt .chip{background:rgba(4,9,42,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .viagem h3{font:900 clamp(26px,3vw,36px)/1 var(--fd);text-transform:uppercase;margin-top:6px}
 .viagem small{color:var(--geada);font-size:13px;font-weight:600;margin-top:-4px}
 .viagem p{font-size:14px;color:#C1CBE6;max-width:46ch}
@@ -1068,7 +1071,7 @@ var ARTE_VIAGEM={
 function blocoViagens(total){
   return '<section class="viagens"><div class="viagens-topo"><h2 class="titulo-b" style="margin:0">Viagens M10X</h2><p class="mudo">Além das placas: bateu o marco, a M10X paga a viagem.</p></div><div class="viagens-l">'+VIAGENS.map(function(v){
     var ok=total>=v.meta,pct=Math.max(0,Math.min(100,total/v.meta*100));
-    return '<article class="viagem v-'+v.tema+(ok?' ok':'')+'"><div class="arte">'+ARTE_VIAGEM[v.tema]+'</div><div class="txt"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip'+(ok?' verde':'')+'">'+(ok?'Conquistada':esc(v.premio))+'</span><span class="chip">Meta R$ '+curto(v.meta)+'</span></div>'+
+    return '<article class="viagem v-'+v.tema+(ok?' ok':'')+'"><img class="fundo-v" src="'+IMG+'viagem_'+v.id+'.webp?v=1" alt="" decoding="async" onerror="this.remove()"><div class="txt"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip'+(ok?' verde':'')+'">'+(ok?'Conquistada':esc(v.premio))+'</span><span class="chip">Meta R$ '+curto(v.meta)+'</span></div>'+
       '<h3>'+esc(v.lugar)+'</h3><small>'+esc(v.uf)+'</small><p>'+esc(v.txt)+'</p><div class="trilho-v"><i style="width:'+pct.toFixed(1)+'%"></i></div><span class="mudo" style="font-size:13px">'+(ok?'Tu bateu esse marco. Chama o suporte na aba Sobre pra marcar a viagem.':'Faltam <b style="color:#fff">R$ '+brl(v.meta-total)+'</b> · '+Math.floor(pct)+'%')+'</span></div></article>';}).join("")+'</div></section>';
 }
 var ETAPAS=[["pendente","Pedido recebido"],["aprovado","Aprovado"],["producao","Em produção"],["enviado","A caminho"],["entregue","Na tua parede"]];
@@ -1320,9 +1323,9 @@ function vLucroja(){
 /* =================== SUPORTE =================== */
 /* quem faz a M10X: a foto entra quando subir em imagens/m10x/site/dono_<id>.webp (sem foto, mostra as iniciais) */
 var DONOS=[
- {id:"guedes",v:2,nome:"Luiz Fernando Guedes",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X."},
+ {id:"guedes",v:2,nome:"Luiz Fernando Guedes",papel:["Sócio e criador"],txt:"Sócio e um dos criadores da M10X."},
  {id:"caio",nome:"Caio Braga",papel:["Sócio e produtor"],txt:"Sócio e um dos produtores da M10X e das plataformas dele."},
- {id:"olavo",nome:"Olavo Ferracioli",papel:["Sócio e produtor"],txt:"Sócio e um dos criadores da M10X."},
+ {id:"olavo",nome:"Olavo Ferracioli",papel:["Sócio e produtor"],txt:"Sócio e um dos produtores da M10X."},
  {id:"junior",nome:"Junior Oliveira",papel:["Sócio e criador","Dev sênior","Boss"],txt:"Criador dos aplicativos da M10X e dev sênior."}];
 function iniciais(n){var p=String(n||"").trim().split(/\s+/);return ((p[0]||"").charAt(0)+(p.length>1?p[p.length-1].charAt(0):"")).toUpperCase();}
 function vSobre(){
