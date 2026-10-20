@@ -407,6 +407,14 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 .mat-ac{display:flex;gap:6px}
 @media (max-width:640px){.af-item{grid-template-columns:auto minmax(0,1fr)}.af-acoes{grid-column:1/-1;justify-content:stretch}.af-acoes .btn{flex:1}.af-meta{grid-column:1/-1}.mat-item{grid-template-columns:auto minmax(0,1fr)}.mat-ac{grid-column:1/-1}.mat-ac .btn{flex:1}}
 
+/* ===== links: passo a passo (20/10) ===== */
+.cod{font:600 12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;padding:2px 6px;border-radius:6px;background:rgba(2,6,25,.7);color:#CFE0FF;overflow-wrap:anywhere}
+.mapa-pl{display:grid;grid-template-columns:minmax(0,1.1fr) auto minmax(0,1.4fr);gap:10px 14px;align-items:center;margin:16px 0 4px;padding:14px 16px;border-radius:16px;background:rgba(2,6,25,.45);box-shadow:0 0 0 1px var(--linha) inset}
+.mapa-pl .mp-t{display:block;font-size:14px;color:#DCE6FF}.mapa-pl .mp-t b{color:#fff}.mapa-pl .mp-s{display:block;font-size:12px;color:var(--mudo);margin-top:2px}
+.mapa-pl .mp-seta{color:var(--eletrico);font:800 20px/1 var(--fd)}
+.mapa-pl .mp-r{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:560px){.mapa-pl{grid-template-columns:minmax(0,1fr)}.mapa-pl .mp-seta{transform:rotate(90deg);justify-self:start}}
+
 /* ===== viagens (20/10) ===== */
 .viagens{margin-top:22px;padding-top:22px;border-top:1px solid var(--linha)}
 .viagens-topo{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -1226,7 +1234,10 @@ function vLinks(){
   var eu=estado.eu,pl=eu.planos||[];
   var h='<div class="ola"><div><h1>Meus links</h1><p>Teus links de checkout com o teu código. Toda venda por eles conta no teu faturamento.</p></div></div>';
   h+=blocoCargos();
+  var temA=pl.some(function(x){return x.plano==="anual"}),temM=pl.some(function(x){return x.plano!=="anual"});
+  if(pl.length&&(!temA||!temM))h+='<div class="aviso">'+ico("alerta")+'<span>'+(!temA?'O plano <b>Anual</b> não aparece porque falta o link de checkout do Anual. Pede afiliação no produto Anual e cola o checkout dele em "Trocar meus links de checkout" aqui embaixo.':'Mensal, Trimestral e Semestral não aparecem porque falta o link de checkout da Assinatura. Pede afiliação nela e cola o checkout em "Trocar meus links de checkout".')+'</span></div>';
   if(pl.length){
+    h+='<details class="bloco" style="margin-bottom:16px"><summary style="padding:0">De onde vêm esses 4 planos?</summary><div style="margin-top:12px">'+mapaPlanos()+'</div></details>';
     h+='<div class="planos">'+pl.map(function(p){
       return '<article class="plano'+(p.plano==="anual"?" dest":"")+'"><span class="nome">'+esc(p.nome)+'</span><div class="preco">R$ '+p.preco+'<small>'+esc(p.periodo)+'</small></div><div class="url">'+esc(p.link)+'</div>'+
        '<div class="acoes"><button class="btn btn-azul btn-p" data-copiar="'+esc(p.link)+'">'+ico("copiar",16)+' Copiar</button><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Garante o Lucro Já no plano "+p.nome+" por R$ "+p.preco+": "+p.link)+'">'+ZAP+' Mandar</a></div></article>';
@@ -1241,24 +1252,34 @@ function blocoAfiliacao(){
   var lk=p.links;
   return '<section class="bloco" style="margin-top:16px"><h2>Links de afiliação do teu cargo</h2><p class="mudo" style="font-size:14px">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b> ('+lk.pct+'% de comissão). Subiu de cargo? Pede a afiliação nova por aqui e depois troca teus links de checkout.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Anual</a></div></section>';
 }
+function mapaPlanos(){
+  return '<div class="mapa-pl"><div class="mp-l"><span class="mp-t">Link de checkout da <b>Assinatura</b></span><span class="mp-s">vira 3 planos</span></div><div class="mp-seta" aria-hidden="true">→</div><div class="mp-r"><span class="chip">Mensal R$ 165</span><span class="chip">Trimestral R$ 197</span><span class="chip">Semestral R$ 247</span></div>'+
+   '<div class="mp-l"><span class="mp-t">Link de checkout do <b>Anual</b></span><span class="mp-s">vira 1 plano</span></div><div class="mp-seta" aria-hidden="true">→</div><div class="mp-r"><span class="chip">Anual R$ 295</span></div></div>';
+}
 function passosLinks(){
-  var p=estado.parc||{},lk=p.links;
+  var p=estado.parc||{},lk=p.links,pg=p.pagina||{};
   if(!parcOk())return semParc("").replace('<div class="ola"><div><h1></h1></div></div>','');
-  return '<section class="bloco" style="max-width:780px"><h2>Libera teus links em 2 passos</h2>'+
-   '<div class="passo-n"><span class="num">1</span><div><h3>Pede a afiliação na Applyfy</h3><p class="mudo">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b>'+(lk?' ('+lk.pct+'% de comissão)':'')+'. Toca nos dois botões e pede a afiliação. O time aprova rapidinho.</p>'+
-   (lk?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Anual</a></div>':'<p class="mudo" style="margin-top:8px">Os links de afiliação do teu cargo ainda não foram cadastrados. Chama o suporte.</p>')+'</div></div>'+
-   '<div class="passo-n"><span class="num">2</span><div style="flex:1;min-width:0"><h3>Cola teus links de checkout</h3><p class="mudo">Depois de aprovado, a Applyfy te dá 2 links de checkout (Assinatura e Anual). Cola aqui uma vez e o M10X monta os 4 planos sozinho.</p>'+formLinks()+'</div></div></section>';
+  var vitrine=/panel\/showcase/i.test((pg.mensal||"")+(pg.vital||""));
+  return '<section class="bloco" style="max-width:860px">'+(vitrine?'<div class="aviso">'+ico("alerta")+'<span>Os links que tu salvou são de <b>pedir afiliação</b> (app.applyfy.com.br/panel/showcase…), não de checkout. Com eles ninguém consegue comprar. Faz o passo 3 de novo com os links de <b>checkout</b>.</span></div>':'')+
+   '<h2>Como liberar teus links</h2><p class="mudo" style="font-size:14px;margin:-8px 0 18px">O Lucro Já tem <b style="color:#fff">2 produtos</b> na Applyfy: <b style="color:#fff">Assinatura</b> e <b style="color:#fff">Anual</b>. Tu te afilia nos dois e cola os 2 links de checkout aqui. A M10X monta os 4 planos sozinha.</p>'+
+   '<div class="passo-n"><span class="num">1</span><div><h3>Pede afiliação nos 2 produtos</h3><p class="mudo">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b>'+(lk?' ('+lk.pct+'% de comissão)':'')+'. Toca nos 2 botões e pede afiliação em cada um. Se pedir só em um, o outro plano não aparece.</p>'+
+   (lk?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' 1. Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' 2. Afiliação Anual</a></div>':'<p class="mudo" style="margin-top:8px">Os links de afiliação do teu cargo ainda não foram cadastrados. Chama o suporte na aba Sobre.</p>')+'</div></div>'+
+   '<div class="passo-n"><span class="num">2</span><div><h3>Espera os sócios aceitarem</h3><p class="mudo">Os sócios aceitam o pedido pelo painel deles e a Applyfy te libera. Aí cada produto aprovado te dá <b style="color:#fff">1 link de checkout com o teu código</b>. Fica no teu painel da Applyfy, na afiliação de cada produto.</p></div></div>'+
+   '<div class="passo-n"><span class="num">3</span><div style="flex:1;min-width:0"><h3>Cola os 2 links de checkout aqui</h3><p class="mudo">O certo começa assim: <code class="cod">checkout.applyfy.com.br/checkout/…?code=TEUCODIGO</code>. O que começa com <code class="cod">app.applyfy.com.br/panel/showcase</code> é só pra pedir afiliação e não serve aqui.</p>'+mapaPlanos()+formLinks()+'</div></div></section>';
 }
 function formLinks(){
   var p=estado.parc||{},pg=p.pagina||{};
-  return '<form id="f-links" style="margin-top:14px" novalidate><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Link de checkout da Assinatura (mensal)</label><input name="mensal" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.mensal||"")+'"></div><div class="campo"><label>Link de checkout do Anual</label><input name="vital" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.vital||"")+'"></div></div><div class="erro-msg" hidden></div><button class="btn btn-azul" style="margin-top:14px">Salvar e gerar meus links</button></form>';
+  return '<form id="f-links" style="margin-top:14px" novalidate><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Link de checkout da Assinatura <span class="mudo" style="font-weight:500">(vira Mensal, Trimestral e Semestral)</span></label><input name="mensal" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.mensal||"")+'"></div><div class="campo"><label>Link de checkout do Anual <span class="mudo" style="font-weight:500">(vira o plano Anual)</span></label><input name="vital" inputmode="url" placeholder="https://checkout.applyfy.com.br/checkout/…" value="'+esc(pg.vital||"")+'"></div></div><div class="erro-msg" hidden></div><button class="btn btn-azul" style="margin-top:14px">Salvar e gerar meus links</button></form>';
 }
 function blocoTrocaLinks(fechado){return parcOk()?'<details class="bloco" style="margin-top:16px"'+(fechado?'':' open')+'><summary style="padding:0">Trocar meus links de checkout</summary><div style="margin-top:6px">'+formLinks()+'</div></details>':'';}
 function ligaLinks(){
   $$("[data-copiar]",APP).forEach(function(b){b.addEventListener("click",function(){copia(b.dataset.copiar,"Link copiado")})});
   var f=$("#f-links",APP);if(!f)return;
   f.addEventListener("submit",function(ev){ev.preventDefault();var er=$(".erro-msg",f),bt=$(".btn-azul",f);er.hidden=true;var d=Object.fromEntries(new FormData(f).entries());
-    if(!/^https:\/\/[^\s]*applyfy\.com\.br\/checkout\//i.test(d.mensal||"")||!/^https:\/\/[^\s]*applyfy\.com\.br\/checkout\//i.test(d.vital||"")){er.textContent="Cola os dois links de CHECKOUT da Applyfy (começam com https://checkout.applyfy.com.br/checkout/…).";er.hidden=false;return;}
+    var ck=function(u){return /^https:\/\/[^\s]*applyfy\.com\.br\/checkout\//i.test(u||"")};
+    if(/panel\/showcase/i.test((d.mensal||"")+(d.vital||""))){er.textContent="Esse é o link de PEDIR AFILIAÇÃO (vitrine). Aqui vai o link de CHECKOUT que a Applyfy te dá depois que aprovam: começa com https://checkout.applyfy.com.br/checkout/ e tem code= no final.";er.hidden=false;return;}
+    if(!ck(d.mensal)||!ck(d.vital)){er.textContent=(!ck(d.mensal)&&!ck(d.vital))?"Cola os 2 links de CHECKOUT da Applyfy (começam com https://checkout.applyfy.com.br/checkout/…).":!ck(d.vital)?"Falta o link do Anual. Sem ele o plano Anual some. Pede afiliação no produto Anual (passo 1) e cola o checkout dele.":"Falta o link da Assinatura. Sem ele somem Mensal, Trimestral e Semestral.";er.hidden=false;return;}
+    if(String(d.mensal).split("?")[0]===String(d.vital).split("?")[0]){er.textContent="Tu colou o mesmo produto nos 2 campos. Um é o checkout da Assinatura e o outro é o checkout do Anual.";er.hidden=false;return;}
     carregando(bt,true,"Salvando…");
     parc("pagina_salvar",{mensal:d.mensal.trim(),vital:d.vital.trim()}).then(function(){toast("Links salvos! Tua página já está no ar.");recarrega();}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});
 }
