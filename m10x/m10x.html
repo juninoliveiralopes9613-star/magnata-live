@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>M10X · Método 10X</title>
-<meta name="description" content="Mentoria M10X: venda o Lucro Já com método, acompanhe teu faturamento ao vivo e ganhe pulseira e placas a cada marco batido.">
+<meta name="description" content="M10X: a mentoria de quem revende o Lucro Já em live. Teu faturamento ao vivo, teus links, tua página e placas a cada marco batido.">
 <meta property="og:title" content="M10X · Método 10X">
-<meta property="og:description" content="Fatura, bate a meta, pendura a placa. A mentoria dos afiliados do Lucro Já.">
+<meta property="og:description" content="Fatura, bate a meta, pendura a placa. A mentoria de quem revende o Lucro Já em live.">
 <meta property="og:image" content="https://kkthewmnnglpnmqafmvw.supabase.co/storage/v1/object/public/imagens/m10x/site/placas_mockup.webp">
 <meta name="theme-color" content="#04092A">
 <link rel="icon" type="image/webp" href="https://kkthewmnnglpnmqafmvw.supabase.co/storage/v1/object/public/imagens/m10x/site/m10_logo_1x.webp">
@@ -185,7 +185,12 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 .nav-i.on{background:linear-gradient(90deg,rgba(31,91,255,.26),rgba(31,91,255,.06));color:#fff;box-shadow:0 0 0 1px rgba(61,123,255,.35) inset}
 .nav-i .q{margin-left:auto;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--cobalto);color:#fff}
 .lateral .sep{height:1px;background:var(--linha);margin:10px 6px}
-.lateral .quem{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--linha)}
+.cargo-card{margin-top:auto;padding:14px;border-radius:16px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha) inset;display:grid;gap:6px}
+.cargo-chip{display:inline-flex;align-items:center;gap:7px;justify-self:start;height:28px;padding:0 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--cg);background:color-mix(in srgb,var(--cg) 16%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--cg) 45%,transparent) inset}
+.cargo-chip i{width:8px;height:8px;border-radius:50%;background:var(--cg)}
+.cargo-deg{display:flex;gap:4px;margin:4px 0 2px}.cargo-deg b{flex:1;height:4px;border-radius:2px;background:rgba(141,178,255,.18)}.cargo-deg b.on{background:var(--cg)}
+.cargo-card small{font-size:12px;color:var(--mudo)}.cargo-card em{font-style:normal;color:#fff;font-weight:700}
+.lateral .quem{margin-top:12px;display:flex;align-items:center;gap:10px;padding:12px 8px 0;border-top:1px solid var(--linha)}
 .avatar{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 14px/1 var(--fd);background:var(--cromo);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .quem .t{min-width:0;flex:1}.quem .t b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quem .t small{display:block;font-size:12px;color:var(--mudo2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topo-app{display:none}
@@ -439,7 +444,7 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
         <a class="btn btn-fant" href="#premiacoes">Premiações</a>
         <a class="btn btn-fant" href="#dentro">Por dentro</a>
         <a class="btn btn-vidro" href="#entrar" data-ir="entrar">Entrar</a>
-        <a class="btn btn-azul" href="#mentoria">Quero ser mentorado</a>
+        <a class="btn btn-azul" href="#mentoria">Pedir acesso</a>
       </nav>
     </div>
   </header>
@@ -448,12 +453,12 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
     <section class="hero">
       <div class="wrap">
         <div>
-          <span class="selo"><i></i>Mentoria dos afiliados Lucro Já</span>
+          <span class="selo"><i></i>Mentoria dos revendedores Lucro Já</span>
           <h1><span>Fatura.</span><span>Bate a meta.</span><span class="cromo">Pendura a placa.</span></h1>
-          <p class="lead">O M10X é a mentoria de quem vende o Lucro Já todo dia. Teu faturamento aparece ao vivo no painel e cada marco batido vira prêmio físico na tua casa: a pulseira, a placa de 10K, 50K, 100K e por aí vai.</p>
+          <p class="lead">O M10X é a mentoria de quem revende o Lucro Já em live todo dia. Cada venda feita pelo teu link aparece ao vivo no painel e cada marco batido vira prêmio físico na tua casa: a pulseira, a placa de 10K, 50K, 100K e por aí vai.</p>
           <div class="acoes">
-            <a class="btn btn-azul" href="#mentoria">Quero ser mentorado</a>
-            <a class="btn btn-vidro" href="#entrar" data-ir="entrar">Já sou mentorado</a>
+            <a class="btn btn-azul" href="#mentoria">Pedir acesso</a>
+            <a class="btn btn-vidro" href="#entrar" data-ir="entrar">Já sou revendedor</a>
           </div>
           <div class="numeros" id="numeros-hero"></div>
         </div>
@@ -465,17 +470,17 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
       <div class="wrap">
         <figure class="foto-parede">
           <img data-img="placas_mockup.webp" alt="Pulseira M10X e as placas de 10K e 100K em molduras pretas" loading="lazy">
-          <figcaption><b>Isso aqui é de verdade</b><span>A pulseira e as placas chegam na tua casa, com teu nome, quando o painel mostra que tu bateu o marco.</span></figcaption>
+          <figcaption><b>Isso aqui é de verdade</b><span>A pulseira e as placas chegam na tua casa, com teu nome, quando o painel mostra que tuas vendas bateram o marco.</span></figcaption>
         </figure>
       </div>
     </section>
 
     <section class="secao" id="como">
       <div class="wrap">
-        <div class="cab"><h2>Como funciona</h2><p>Sem mistério: tu vende, o painel conta, a placa chega.</p></div>
+        <div class="cab"><h2>Como funciona</h2><p>Sem mistério: tu faz a live, o painel conta a venda, a placa chega.</p></div>
         <div class="passos">
-          <article class="passo"><div class="n cromo">01</div><h3>Entra na mentoria</h3><p>Manda teu pedido aqui embaixo. A gente conversa no WhatsApp e libera teu acesso à área M10X.</p></article>
-          <article class="passo"><div class="n cromo">02</div><h3>Vende com método</h3><p>Aulas, conteúdos, tua página de vendas e teus links de checkout num lugar só. Cada venda entra sozinha no teu faturamento.</p></article>
+          <article class="passo"><div class="n cromo">01</div><h3>Pede teu acesso</h3><p>Cria teu cadastro aqui embaixo. O time aprova e libera tua área M10X com aulas, materiais, teus links e tua página.</p></article>
+          <article class="passo"><div class="n cromo">02</div><h3>Revende em live</h3><p>Mostra a ferramenta na live e manda teu link ou tua página. Cada venda feita por eles entra sozinha no teu faturamento.</p></article>
           <article class="passo"><div class="n cromo">03</div><h3>Bate a meta, pede o prêmio</h3><p>Chegou no marco, o painel avisa e libera o botão. Tu coloca o endereço e acompanha a placa até a tua porta.</p></article>
         </div>
       </div>
@@ -490,18 +495,18 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 
     <section class="secao dentro" id="dentro">
       <div class="wrap">
-        <div class="cab"><h2>Por dentro da área M10X</h2><p>Tudo que tu precisa pra vender o Lucro Já, do primeiro link até a placa na parede.</p></div>
+        <div class="cab"><h2>Por dentro da área M10X</h2><p>Tudo que tu precisa pra revender o Lucro Já, do primeiro link até a placa na parede.</p></div>
         <div class="grade-dentro">
           <article class="item largo">
             <div><span class="ic" data-ico="barra"></span><h3>Faturamento ao vivo</h3><p>A barra mostra quanto falta pra próxima premiação. Bateu, aparece o aviso na hora.</p></div>
             <div class="tela"><p class="mudo" style="font-size:13px;font-weight:600">Faturamento total · exemplo</p><p style="font:900 clamp(30px,4vw,44px)/1 var(--fd);margin:10px 0 22px"><small style="font-size:.42em;color:var(--geada);vertical-align:.55em;margin-right:6px">R$</small>5.539,29</p><div class="barra-meta" id="barra-demo"></div></div>
           </article>
           <article class="item"><span class="ic" data-ico="trofeu"></span><h3>Premiações</h3><p>Pulseira e placas com foto real, pedido em 1 minuto e cada etapa da entrega na tela.</p></article>
-          <article class="item"><span class="ic" data-ico="play"></span><h3>Aulas</h3><p>As aulas do time, organizadas por módulo, pra assistir no celular ou no PC.</p></article>
+          <article class="item"><span class="ic" data-ico="play"></span><h3>Aulas</h3><p>Como fazer live que vende, organizadas por módulo, pra assistir no celular ou no PC.</p></article>
           <article class="item"><span class="ic" data-ico="pasta"></span><h3>Conteúdos</h3><p>Scripts, materiais e arquivos prontos pra copiar e usar na divulgação.</p></article>
           <article class="item"><span class="ic" data-ico="pagina"></span><h3>Tua página de vendas</h3><p>Com teu nome, tua foto, teu WhatsApp e títulos escritos pela IA. Publica com um toque.</p></article>
           <article class="item"><span class="ic" data-ico="link"></span><h3>Teus links de checkout</h3><p>Mensal, trimestral, semestral e anual com o teu código, prontos pra copiar e mandar.</p></article>
-          <article class="item"><span class="ic" data-ico="app"></span><h3>Lucro Já</h3><p>O SaaS que tu vende, a um toque: catálogo, anúncio pronto com IA e lucro na tela.</p></article>
+          <article class="item"><span class="ic" data-ico="app"></span><h3>A ferramenta</h3><p>Tudo do Lucro Já pra mostrar na live: o que ela faz, os planos e os argumentos que mais vendem.</p></article>
         </div>
       </div>
     </section>
@@ -509,30 +514,26 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
     <section class="secao inscricao" id="mentoria">
       <div class="wrap">
         <div class="cab">
-          <h2>Quero ser mentorado</h2>
-          <p>Preenche aqui. O time M10X te chama no WhatsApp pra explicar como funciona e ver se faz sentido pra ti agora.</p>
-          <p style="margin-top:22px;font-size:15px">Já é afiliado Lucro Já? Teu e-mail já está liberado. <a class="link" href="#entrar" data-ir="entrar">Entra na área M10X</a>.</p>
+          <h2>Pedir acesso</h2>
+          <p>Pra quem revende, ou quer revender, o Lucro Já em live. Cria teu cadastro: depois que o time aprovar, tu entra com esse e-mail e essa senha.</p>
+          <p style="margin-top:22px;font-size:15px">Já é afiliado? Teu acesso já tá liberado. <a class="link" href="#entrar" data-ir="entrar">Entra com o mesmo e-mail e senha da área de afiliados</a>.</p>
         </div>
         <div class="cartao">
           <form id="form-insc" novalidate>
             <div class="campos">
               <div class="campo todo"><label for="i-nome">Nome completo</label><input id="i-nome" name="nome" autocomplete="name" required></div>
               <div class="campo"><label for="i-whats">WhatsApp com DDD</label><input id="i-whats" name="whats" inputmode="tel" autocomplete="tel" placeholder="(67) 99999-9999" required></div>
-              <div class="campo"><label for="i-email">E-mail</label><input id="i-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
-              <div class="campo"><label for="i-insta">Instagram</label><input id="i-insta" name="instagram" placeholder="@teuperfil" autocapitalize="off"></div>
-              <div class="campo"><label for="i-fat">Quanto tu fatura por mês hoje?</label>
-                <select id="i-fat" name="faturamento_atual"><option value="">Escolhe</option><option>Ainda não vendo</option><option>Até R$ 1 mil</option><option>R$ 1 mil a R$ 5 mil</option><option>R$ 5 mil a R$ 20 mil</option><option>Mais de R$ 20 mil</option></select></div>
-              <div class="campo todo"><label for="i-obj">O que tu quer conquistar nos próximos 90 dias?</label><textarea id="i-obj" name="objetivo" maxlength="600"></textarea></div>
-              <input class="esc" tabindex="-1" autocomplete="off" name="site" aria-hidden="true">
+              <div class="campo"><label for="i-email">E-mail</label><input id="i-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required></div>
+              <div class="campo todo"><label for="i-senha">Crie uma senha</label><input id="i-senha" name="senha" type="password" autocomplete="new-password" placeholder="Pelo menos 8 caracteres" required><span class="dica">Se teu e-mail já tem login no Lucro Já, usa a senha que tu já tem.</span></div>
             </div>
-            <div id="insc-erro" class="erro-msg" hidden></div>
-            <button class="btn btn-azul" style="width:100%;height:56px;margin-top:18px;font-size:16px" type="submit" id="insc-btn">Mandar meu pedido</button>
+            <div id="insc-erro" class="erro-msg" hidden></div><div id="insc-info" class="ok-msg" hidden></div>
+            <button class="btn btn-azul" style="width:100%;height:56px;margin-top:18px;font-size:16px" type="submit" id="insc-btn">Pedir meu acesso</button>
             <p style="margin-top:12px;font-size:12px;color:var(--mudo2);text-align:center">Teus dados ficam só com o time M10X.</p>
           </form>
           <div class="feito" id="insc-ok" hidden>
             <img data-img="m10_logo_1x.webp" alt="" style="width:140px;margin:0 auto">
             <h3>Pedido enviado</h3>
-            <p class="mudo">Logo o time M10X te chama no WhatsApp. Fica de olho.</p>
+            <p class="mudo">Assim que o time aprovar, tu entra com esse e-mail e senha.</p>
           </div>
         </div>
       </div>
@@ -545,13 +546,14 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
           <details><summary>Como o meu faturamento é contado?</summary><p>Toda venda aprovada feita com o teu link de afiliado entra no painel automaticamente. Reembolso e chargeback saem da conta.</p></details>
           <details><summary>Quando posso pedir a placa?</summary><p>Assim que o teu faturamento passa do valor da placa, o botão "Solicitar" libera no painel. Tu preenche o endereço e acompanha cada etapa até a entrega.</p></details>
           <details><summary>A placa tem custo?</summary><p>Não. A placa é reconhecimento do M10X por ter batido a meta. Ela não é vendida.</p></details>
-          <details><summary>Já sou afiliado do Lucro Já. Como entro?</summary><p>Teu e-mail já está liberado. Toca em "Entrar" e usa a mesma senha do Lucro Já. Se nunca criou senha, escolhe "Primeiro acesso".</p></details>
+          <details><summary>Preciso usar a ferramenta pra entrar?</summary><p>Não. A M10X é pra quem REVENDE o Lucro Já, principalmente em live. Tu mostra a ferramenta, manda teu link e ganha comissão em cada venda.</p></details>
+          <details><summary>Já sou afiliado do Lucro Já. Como entro?</summary><p>Toca em "Entrar" e usa o mesmo e-mail e senha da área de afiliados. Tudo que tava lá (aulas, conteúdos, tua página e teus links) agora tá aqui.</p></details>
           <details><summary>Onde ficam meus links de checkout?</summary><p>Na aba "Meus links" da área M10X. Quando tua afiliação é aprovada, teus links de mensal, trimestral, semestral e anual aparecem lá, prontos pra copiar.</p></details>
         </div>
       </div>
     </section>
   </main>
-  <footer class="rodape-site"><div class="wrap"><img data-img="m10_logo_1x.webp" alt="M10X"><span>M10X · Método 10X · mentoria dos afiliados Lucro Já</span><a href="#entrar" data-ir="entrar" class="link">Área do mentorado</a></div></footer>
+  <footer class="rodape-site"><div class="wrap"><img data-img="m10_logo_1x.webp" alt="M10X"><span>M10X · Método 10X · mentoria dos revendedores Lucro Já</span><a href="#entrar" data-ir="entrar" class="link">Área do mentorado</a></div></footer>
 </div>
 
 <!-- ======================= ÁREA DO MENTORADO ======================= -->
@@ -594,7 +596,8 @@ var ICO={
  cadeado:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
  ok:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
  ia:'<path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="3"/>',
- alerta:'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>'
+ alerta:'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>',
+ chat:'<path d="M20.5 12a8.5 8.5 0 0 1-12.3 7.6L3.5 20.5l1-4.4A8.5 8.5 0 1 1 20.5 12Z"/>'
 };
 function ico(n,t){return '<svg width="'+(t||20)+'" height="'+(t||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[n]||"")+'</svg>';}
 var ZAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>';
@@ -642,12 +645,28 @@ function iniciaSite(){
   var f=$("#form-insc"),w=$("#i-whats");
   w.addEventListener("input",function(){var d=w.value.replace(/\D/g,"").slice(0,11);w.value=d.length>6?"("+d.slice(0,2)+") "+d.slice(2,d.length-4)+"-"+d.slice(-4):d.length>2?"("+d.slice(0,2)+") "+d.slice(2):d;});
   f.addEventListener("submit",function(ev){
-    ev.preventDefault();var er=$("#insc-erro"),bt=$("#insc-btn");er.hidden=true;
-    var d=Object.fromEntries(new FormData(f).entries());
-    if((d.nome||"").trim().length<3){er.textContent="Coloca teu nome completo.";er.hidden=false;$("#i-nome").focus();return;}
-    if(String(d.whats||"").replace(/\D/g,"").length<10){er.textContent="WhatsApp com DDD, tipo (67) 99999-9999.";er.hidden=false;w.focus();return;}
+    ev.preventDefault();var er=$("#insc-erro"),info=$("#insc-info"),bt=$("#insc-btn");er.hidden=info.hidden=true;
+    var d=Object.fromEntries(new FormData(f).entries());d.email=String(d.email||"").trim().toLowerCase();
+    var falha=validaPedido(d);if(falha){er.textContent=falha;er.hidden=false;return;}
     carregando(bt,true,"Enviando…");
-    api("inscrever",d).then(function(){f.hidden=true;$("#insc-ok").hidden=false;}).catch(function(e){er.textContent=e.message;er.hidden=false;}).then(function(){carregando(bt,false)});
+    pedirAcesso(d).then(function(r){if(r.entrou){location.hash="painel";return;}f.hidden=true;$("#insc-ok").hidden=false;if(r.msg){$("#insc-ok p").textContent=r.msg;}})
+     .catch(function(e){er.textContent=e.message;er.hidden=false;}).then(function(){carregando(bt,false)});
+  });
+}
+function validaPedido(d){
+  if((d.nome||"").trim().length<3)return "Coloca teu nome completo.";
+  if(String(d.whats||"").replace(/\D/g,"").length<10)return "WhatsApp com DDD, tipo (67) 99999-9999.";
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email||""))return "Confere o e-mail: tem que terminar certinho, tipo @gmail.com.";
+  if(String(d.senha||"").length<8)return "A senha precisa ter pelo menos 8 caracteres.";
+  return "";
+}
+/* pedido de acesso: cria o login (ou reaproveita o do Lucro Já) e o cadastro de afiliado, que o time aprova */
+function pedirAcesso(d){
+  return chama(PFN,"pedir",{nome:d.nome.trim(),email:d.email,whats:d.whats,senha:d.senha},false).then(function(r){
+    return sb.auth.signInWithPassword({email:d.email,password:d.senha}).then(function(l){
+      if(l.error)return {entrou:false,msg:r.existia?"Pedido enviado! Teu e-mail já tinha login no Lucro Já: entra com a senha que tu já usa.":"Pedido enviado! Agora é só entrar."};
+      return {entrou:true};
+    });
   });
 }
 function vitrine(lista){
@@ -665,7 +684,7 @@ function vitrine(lista){
 
 /* =================== ROTAS =================== */
 var APP=$("#app"),SITE=$("#site"),estado={eu:null,parc:null,adm:null,aba:"inicio",abaAdm:"mentorados"};
-var ABAS=[["inicio","Início","casa"],["premios","Premiações","trofeu"],["aulas","Aulas","play"],["conteudos","Conteúdos","pasta"],["links","Meus links","link"],["pagina","Minha página","pagina"],["lucroja","Lucro Já","app"]];
+var ABAS=[["inicio","Início","casa"],["premios","Premiações","trofeu"],["aulas","Aulas","play"],["conteudos","Conteúdos","pasta"],["links","Meus links","link"],["pagina","Minha página","pagina"],["lucroja","A ferramenta","app"],["suporte","Suporte","chat"]];
 function rota(){
   var h=location.hash.replace("#","");
   var naArea=/^(entrar|painel|admin)(\/|$)/.test(h)||/access_token|type=recovery/.test(location.hash);
@@ -675,8 +694,8 @@ function rota(){
   sb.auth.getSession().then(function(r){
     var s=r.data&&r.data.session;
     if(/type=recovery/.test(location.hash)) return telaNovaSenha();
-    if(!s) return telaEntrar();
-    if(h==="entrar"||!h){location.replace("#painel");return;}
+    if(!s) return telaEntrar(/^entrar\//.test(h)?h.split("/")[1]:"");
+    if(/^entrar/.test(h)||!h){location.replace("#painel");return;}
     var aba=h==="admin"?"admin":(h.split("/")[1]||"inicio");
     if(aba!=="admin"&&!ABAS.some(function(a){return a[0]===aba}))aba="inicio";
     abre(aba);
@@ -690,32 +709,39 @@ sb.auth.onAuthStateChange(function(ev){if(ev==="PASSWORD_RECOVERY")telaNovaSenha
 function ladoVideo(){return '<div class="lado" data-video></div>';}
 function telaEntrar(modo){
   modo=modo||"entrar";document.title="Entrar · M10X";
+  var tit={entrar:"Entrar na área M10X",pedir:"Pedir acesso",primeiro:"Criar minha senha",esqueci:"Recuperar senha"}[modo];
+  var sub={entrar:"Mesmo e-mail e senha da área de afiliados do Lucro Já.",pedir:"Pra quem revende o Lucro Já. Depois que o time aprovar, tu entra com esse e-mail e senha.",primeiro:"Pra quem foi liberado pelo time e ainda não tem senha.",esqueci:"A gente manda um link pro teu e-mail."}[modo];
+  var campo=function(id,rot,tipo,auto,ph,extra){return '<div class="campo"><label for="'+id+'">'+rot+'</label><input id="'+id+'" type="'+tipo+'" autocomplete="'+auto+'"'+(ph?' placeholder="'+ph+'"':'')+' required>'+(extra||'')+'</div>';};
   APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa">'+
    '<a href="#" class="link" style="font-size:14px" data-voltar>← Voltar pro site</a>'+
-   '<h1>'+(modo==="primeiro"?"Criar minha senha":modo==="esqueci"?"Recuperar senha":"Entrar na área M10X")+'</h1>'+
-   '<p class="mudo">'+(modo==="primeiro"?"Pra quem é afiliado e ainda não tem senha no Lucro Já.":modo==="esqueci"?"A gente manda um link pro teu e-mail.":"Usa o mesmo e-mail e senha do Lucro Já.")+'</p>'+
-   (modo!=="esqueci"?'<div class="abas" role="tablist"><button type="button" data-modo="entrar" class="'+(modo==="entrar"?"on":"")+'">Já tenho senha</button><button type="button" data-modo="primeiro" class="'+(modo==="primeiro"?"on":"")+'">Primeiro acesso</button></div>':'<div style="height:22px"></div>')+
+   '<h1>'+tit+'</h1><p class="mudo">'+sub+'</p>'+
+   (modo==="entrar"||modo==="pedir"?'<div class="abas" role="tablist"><button type="button" data-modo="entrar" class="'+(modo==="entrar"?"on":"")+'">Entrar</button><button type="button" data-modo="pedir" class="'+(modo==="pedir"?"on":"")+'">Pedir acesso</button></div>':'<div style="height:22px"></div>')+
    '<form id="f-login" novalidate><div class="campos" style="grid-template-columns:1fr">'+
-   '<div class="campo"><label for="l-email">E-mail</label><input id="l-email" type="email" autocomplete="email" required></div>'+
-   (modo!=="esqueci"?'<div class="campo"><label for="l-senha">'+(modo==="primeiro"?"Crie uma senha (mín. 8)":"Senha")+'</label><input id="l-senha" type="password" autocomplete="'+(modo==="primeiro"?"new-password":"current-password")+'" required></div>':'')+
+   (modo==="pedir"?campo("l-nome","Nome completo","text","name","")+campo("l-whats","WhatsApp com DDD","tel","tel","(67) 99999-9999"):'')+
+   campo("l-email","E-mail","email","email","voce@email.com")+
+   (modo!=="esqueci"?campo("l-senha",modo==="entrar"?"Senha":"Crie uma senha (mín. 8)","password",modo==="entrar"?"current-password":"new-password","",modo==="pedir"?'<span class="dica">Se teu e-mail já tem login no Lucro Já, usa a senha que tu já tem.</span>':''):'')+
    '</div><div id="l-erro" class="erro-msg" hidden></div><div id="l-ok" class="ok-msg" hidden></div>'+
-   '<button class="btn btn-azul" type="submit" id="l-btn" style="width:100%;height:56px;margin-top:18px;font-size:16px">'+(modo==="primeiro"?"Criar senha e entrar":modo==="esqueci"?"Mandar link":"Entrar")+'</button></form>'+
-   '<p style="margin-top:18px;font-size:14px;text-align:center">'+(modo==="esqueci"?'<a href="#" class="link" data-modo="entrar">Voltar pro login</a>':'<a href="#" class="link" data-modo="esqueci">Esqueci a senha</a>')+'</p>'+
+   '<button class="btn btn-azul" type="submit" id="l-btn" style="width:100%;height:56px;margin-top:18px;font-size:16px">'+{entrar:"Entrar",pedir:"Pedir meu acesso",primeiro:"Criar senha e entrar",esqueci:"Mandar link"}[modo]+'</button></form>'+
+   '<p style="margin-top:18px;font-size:14px;text-align:center;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">'+(modo==="entrar"?'<a href="#" class="link" data-modo="esqueci">Esqueci a senha</a><a href="#" class="link" data-modo="primeiro">Fui liberado e não tenho senha</a>':(modo==="pedir"?'':'<a href="#" class="link" data-modo="entrar">Voltar pro login</a>'))+'</p>'+
    '</div></div></div>';
   video($(".lado",APP));
   $$("[data-modo]",APP).forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();var em=$("#l-email").value;telaEntrar(b.dataset.modo);$("#l-email").value=em;})});
   $("[data-voltar]",APP).addEventListener("click",function(e){e.preventDefault();history.pushState(null,"",location.pathname);rota();});
+  var zp=$("#l-whats");if(zp)zp.addEventListener("input",function(){var d=zp.value.replace(/\D/g,"").slice(0,11);zp.value=d.length>6?"("+d.slice(0,2)+") "+d.slice(2,d.length-4)+"-"+d.slice(-4):d.length>2?"("+d.slice(0,2)+") "+d.slice(2):d;});
   $("#f-login").addEventListener("submit",function(ev){
     ev.preventDefault();var er=$("#l-erro"),ok=$("#l-ok"),bt=$("#l-btn");er.hidden=ok.hidden=true;
     var email=$("#l-email").value.trim().toLowerCase(),senha=$("#l-senha")?$("#l-senha").value:"";
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){er.textContent="Confere o e-mail.";er.hidden=false;return;}
-    carregando(bt,true);var p;
-    if(modo==="esqueci") p=sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(r){if(r.error)throw r.error;ok.textContent="Se esse e-mail tiver conta, o link chega em instantes. Olha também o spam.";ok.hidden=false;});
-    else if(modo==="primeiro") p=api("primeiro_acesso",{email:email,senha:senha}).then(function(){return sb.auth.signInWithPassword({email:email,password:senha})}).then(function(r){if(r.error)throw r.error;location.hash="painel";});
-    else p=sb.auth.signInWithPassword({email:email,password:senha}).then(function(r){if(r.error){var m=/invalid/i.test(r.error.message)?"E-mail ou senha errados. Se nunca entrou, usa \"Primeiro acesso\".":r.error.message;throw new Error(m);}location.hash="painel";});
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){er.textContent="Confere o e-mail.";er.hidden=false;return;}
+    var p;
+    if(modo==="pedir"){var d={nome:$("#l-nome").value,whats:$("#l-whats").value,email:email,senha:senha},f=validaPedido(d);if(f){er.textContent=f;er.hidden=false;return;}
+      carregando(bt,true,"Enviando…");p=pedirAcesso(d).then(function(r){if(r.entrou){location.hash="painel";return;}ok.textContent=r.msg;ok.hidden=false;});}
+    else{carregando(bt,true);
+      if(modo==="esqueci") p=sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(r){if(r.error)throw r.error;ok.textContent="Se esse e-mail tiver conta, o link chega em instantes. Olha também o spam.";ok.hidden=false;});
+      else if(modo==="primeiro") p=api("primeiro_acesso",{email:email,senha:senha}).then(function(){return sb.auth.signInWithPassword({email:email,password:senha})}).then(function(r){if(r.error)throw r.error;location.hash="painel";});
+      else p=sb.auth.signInWithPassword({email:email,password:senha}).then(function(r){if(r.error){var m=/invalid/i.test(r.error.message)?"E-mail ou senha errados. Esqueceu? Toca em \"Esqueci a senha\".":r.error.message;throw new Error(m);}location.hash="painel";});}
     p.catch(function(e){er.textContent=e.message||"Não deu. Tenta de novo.";er.hidden=false;}).then(function(){carregando(bt,false)});
   });
-  setTimeout(function(){var i=$("#l-email");if(i&&matchMedia("(min-width:900px)").matches)i.focus();},50);
+  setTimeout(function(){var i=$(modo==="pedir"?"#l-nome":"#l-email");if(i&&matchMedia("(min-width:900px)").matches)i.focus();},50);
 }
 function telaNovaSenha(){
   APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Nova senha</h1><p class="mudo">Escolhe uma senha nova com pelo menos 8 caracteres.</p>'+
@@ -737,30 +763,64 @@ function navHTML(){
 function casca(html){
   var eu=estado.eu||{},nome=(eu.nome||eu.email||"?").trim(),ini=nome.charAt(0).toUpperCase();
   return '<div class="casca"><aside class="lateral"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:20px">M10<i>X</i></span></a>'+navHTML()+
-   '<div class="quem"><span class="avatar">'+esc(ini)+'</span><div class="t"><b>'+esc(nome)+'</b><small>'+esc(eu.email||"")+'</small></div><button class="btn btn-fant" style="padding:0 8px" data-sair aria-label="Sair">'+ico("sair")+'</button></div></aside>'+
-   '<div><header class="topo-app"><div class="l1"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:18px">M10<i>X</i></span></a><button class="btn btn-fant" data-sair>'+ico("sair",18)+' Sair</button></div><nav>'+navHTML()+'</nav></header>'+
+   cargoHTML()+'<div class="quem"><span class="avatar">'+esc(ini)+'</span><div class="t"><b>'+esc(nome)+'</b><small>'+esc(eu.email||"")+'</small></div><button class="btn btn-fant" style="padding:0 8px" data-sair aria-label="Sair">'+ico("sair")+'</button></div></aside>'+
+   '<div><header class="topo-app"><div class="l1"><a class="marca" href="#painel"><img src="'+LOGO1+'" alt=""><span class="wm" style="font-size:18px">M10<i>X</i></span></a>'+chipMob()+'<button class="btn btn-fant" data-sair>'+ico("sair",18)+' Sair</button></div><nav>'+navHTML()+'</nav></header>'+
    '<main class="conteudo">'+html+'</main></div></div>';
+}
+function chipMob(){var p=estado.parc;if(!p||p.erro||!p.cargo)return "";var c=p.cargo;return '<span class="cargo-chip" style="--cg:'+esc(c.cor||"#8C96C8")+';margin-left:auto;margin-right:4px"><i></i>'+esc(c.nome)+(c.pct?' · '+c.pct+'%':'')+'</span>';}
+function cargoHTML(){
+  var p=estado.parc;if(!p||p.erro||!p.cargo)return "";
+  var c=p.cargo,L=p.cargos||[],prox=L[c.nivel];
+  return '<div class="cargo-card" style="--cg:'+esc(c.cor||"#8C96C8")+'"><span class="cargo-chip"><i></i>'+esc(c.nome)+'</span><div class="cargo-deg">'+L.map(function(x){return '<b'+(x.nivel<=c.nivel?' class="on"':'')+'></b>'}).join("")+'</div>'+
+   (c.pct?'<small>Tua comissão: <em>'+c.pct+'%</em></small>':'')+'<small>'+(prox?'Próximo cargo: <em>'+esc(prox.nome)+'</em>':'Tu tá no cargo mais alto')+'</small></div>';
 }
 function pinta(html){APP.innerHTML=casca(html);$$("[data-sair]",APP).forEach(function(b){b.addEventListener("click",sair)});var on=$(".topo-app .nav-i.on",APP);if(on&&on.scrollIntoView)on.scrollIntoView({inline:"center",block:"nearest"});}
 
 function abre(aba){
   estado.aba=aba;
-  var titulos={inicio:"Início",premios:"Premiações",aulas:"Aulas",conteudos:"Conteúdos",links:"Meus links",pagina:"Minha página",lucroja:"Lucro Já",admin:"Admin"};
+  var titulos={inicio:"Início",premios:"Premiações",aulas:"Aulas",conteudos:"Conteúdos",links:"Meus links",pagina:"Minha página",lucroja:"A ferramenta",suporte:"Suporte",admin:"Admin"};
   document.title=(titulos[aba]||"Painel")+" · M10X";
   if(!estado.eu){APP.innerHTML='<div class="carrega"><img src="'+LOGO+'" alt="Carregando"></div>';return carregaTudo().then(function(){if(estado.eu)abre(aba);});}
   if(aba==="admin"){ if(!estado.eu.admin){location.replace("#painel");return;} return carregaAdmin(); }
-  ({inicio:vInicio,premios:vPremios,aulas:vAulas,conteudos:vConteudos,links:vLinks,pagina:vPagina,lucroja:vLucroja})[aba]();
+  ({inicio:vInicio,premios:vPremios,aulas:vAulas,conteudos:vConteudos,links:vLinks,pagina:vPagina,lucroja:vLucroja,suporte:vSuporte})[aba]();
 }
 function carregaTudo(){
   var a=api("eu",{},true).then(function(eu){estado.eu=eu;});
   var b=parc("eu").then(function(p){estado.parc=p;}).catch(function(e){estado.parc={erro:e.message,status:e.status};});
-  return Promise.all([a,b]).catch(function(e){
+  return Promise.all([a.catch(function(e){return e;}),b]).then(function(r){
+    var e=r[0];if(!(e instanceof Error))return;
     if(e.status===401){sb.auth.signOut();telaEntrar();return;}
-    APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Acesso ainda não liberado</h1><p class="mudo">'+esc(e.message)+'</p><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-azul" href="#mentoria" data-site>Quero ser mentorado</a><button class="btn btn-vidro" id="sair2">Trocar de conta</button></div></div></div></div>';
+    var p=estado.parc||{};
+    if(p.status&&!p.erro&&p.status!=="aprovado")return telaStatus(p);
+    APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><h1>Acesso ainda não liberado</h1><p class="mudo">'+esc(e.message)+'</p><p class="mudo" style="margin-top:10px">Se tu revende o Lucro Já, pede teu acesso: o time aprova e tudo libera aqui.</p><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-azul" id="pedir2">Pedir acesso com este e-mail</button><button class="btn btn-vidro" id="sair2">Trocar de conta</button></div></div></div></div>';
     video($(".lado",APP));
     $("#sair2").addEventListener("click",sair);
-    $("[data-site]",APP).addEventListener("click",function(ev){ev.preventDefault();location.hash="mentoria";});
+    $("#pedir2").addEventListener("click",function(){modalPedirLogado();});
   });
+}
+/* pedido de cadastro de afiliado pra quem já tem login */
+function modalPedirLogado(){
+  var f=modal('<h2>Pedir acesso</h2><p class="mudo" style="margin-top:6px">Teu login atual é reaproveitado. O time aprova e tudo libera aqui.</p><form novalidate style="margin-top:16px"><div class="campos" style="grid-template-columns:1fr"><div class="campo"><label>Nome completo</label><input name="nome" autocomplete="name"></div><div class="campo"><label>WhatsApp com DDD</label><input name="whats" inputmode="tel" autocomplete="tel"></div></div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">Enviar pedido</button></div></form>');
+  var fm=$("form",f);
+  fm.addEventListener("submit",function(ev){ev.preventDefault();var er=$(".erro-msg",fm),bt=$(".btn-azul",fm);er.hidden=true;
+    sb.auth.getSession().then(function(r){var em=r.data&&r.data.session&&r.data.session.user&&r.data.session.user.email;
+      var d={nome:fm.nome.value.trim(),whats:fm.whats.value,email:String(em||"").toLowerCase()};
+      if(d.nome.length<3||String(d.whats).replace(/\D/g,"").length<10){er.textContent="Coloca o nome completo e o WhatsApp com DDD.";er.hidden=false;return;}
+      carregando(bt,true);chama(PFN,"pedir",d,false).then(function(){f.remove();toast("Pedido enviado!");recarrega("inicio");}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});});
+}
+function zapSup(){var s=(estado.parc&&estado.parc.suporte)||{},w=String(s.whats||"").replace(/\D/g,"");if(w.length===10||w.length===11)w="55"+w;return w.length>=12?w:"";}
+function telaStatus(p){
+  var T={pendente:["Aguardando aprovação","Pedido recebido, "+esc(String(p.nome||"").split(" ")[0])+"!","O time confere teu cadastro e libera teu acesso. Assim que aprovar, tudo abre aqui sozinho."],
+         recusado:["Pedido não aprovado","Teu pedido não foi aprovado","Se acha que foi engano, fala com o suporte."],
+         bloqueado:["Acesso pausado","Teu acesso está pausado","Fala com o suporte pra entender o que aconteceu."]}[p.status]||["Sem acesso","Sem acesso","Fala com o suporte."];
+  var w=zapSup();
+  APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa"><span class="chip'+(p.status==="pendente"?" amarelo":" vermelho")+'">'+T[0]+'</span><h1>'+T[1]+'</h1><p class="mudo">'+T[2]+'</p>'+
+   '<div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">'+(p.status==="pendente"?'<button class="btn btn-azul" id="st-at">Já fui aprovado? Atualizar</button>':'')+
+   (w?'<a class="btn btn-zap" target="_blank" rel="noopener" href="https://wa.me/'+w+'?text='+encodeURIComponent("Oi! Sou "+(p.nome||"")+" ("+(p.email||"")+") e pedi acesso à M10X.")+'">'+ZAP+' Falar com o suporte</a>':'')+
+   '<button class="btn btn-vidro" id="sair2">Sair</button></div></div></div></div>';
+  video($(".lado",APP));
+  $("#sair2").addEventListener("click",sair);
+  var at=$("#st-at");if(at)at.addEventListener("click",function(){recarrega("inicio");});
 }
 function recarrega(aba){estado.eu=null;estado.parc=null;return abre(aba||estado.aba);}
 
@@ -770,12 +830,13 @@ function vInicio(){
   var alvo=prox?prox.meta:(placas.length?placas[placas.length-1].meta:1);
   var nome=(eu.nome||"").split(" ")[0]||"mentorado";
   var h='<div class="ola"><div><h1>Fala, '+esc(nome)+'</h1><p>'+(prox?'Próxima premiação: <b style="color:#fff">'+esc(prox.nome)+'</b>':'Tu bateu todos os marcos do M10X.')+'</p></div>'+(eu.admin&&!eu.membro?'<span class="chip amarelo">Tu está vendo como dono (sem vendas próprias)</span>':'')+'</div>';
+  var sup=(estado.parc&&estado.parc.suporte)||{};if(sup.aviso)h+='<div class="aviso">'+ico("alerta")+'<span>'+esc(sup.aviso)+'</span></div>';
   if(eu.sem_codigo&&eu.membro)h+='<div class="aviso">'+ico("alerta")+'<span>Teu link de afiliado ainda não está ligado no M10X, então as vendas não estão contando. Gera tua página em <a class="link" href="#painel/pagina">Minha página</a> ou chama o suporte.</span></div>';
   h+='<div class="grade-2"><section class="bloco grande"><img class="agua" src="'+LOGO1+'" alt=""><p class="rotulo">Faturamento total</p><p class="valor"><small>R$</small><span id="contador">0,00</span></p><div class="barra-meta" id="barra-eu"></div></section>'+
    '<div class="pilha"><div class="grade-2" style="grid-template-columns:1fr 1fr"><section class="bloco mini"><span>Este mês</span><b>R$ '+brl(eu.mes)+'</b></section><section class="bloco mini"><span>Vendas contadas</span><b>'+eu.vendas_qtd+'</b></section></div>'+
    (prox?'<a class="bloco prox" href="#painel/premios" style="text-decoration:none">'+arte(prox)+'<div><span class="mudo" style="font-size:13px;font-weight:600">Próxima premiação</span><h3>'+esc(prox.nome)+'</h3><span class="mudo" style="font-size:14px">Faltam R$ '+brl(prox.meta-eu.total)+'</span></div></a>':'<section class="bloco"><h2>Parede completa</h2><p class="mudo">Todas as premiações batidas. Lenda.</p></section>')+'</div></div>';
   h+='<div class="atalhos" style="margin-top:16px">'+
-   atalho("pagina","pagina","Minha página","Tua página com nome, foto e IA")+atalho("links","link","Meus links","Checkout de cada plano")+atalho("aulas","play","Aulas","Continua de onde parou")+atalho("lucroja","app","Lucro Já","Abrir o SaaS")+'</div>';
+   atalho("pagina","pagina","Minha página","Tua página com nome, foto e IA")+atalho("links","link","Meus links","Checkout de cada plano")+atalho("aulas","play","Aulas","Continua de onde parou")+atalho("lucroja","app","A ferramenta","Roteiro pra live")+'</div>';
   h+='<section class="bloco" style="margin-top:16px"><h2>Últimas vendas</h2>'+(eu.ultimas&&eu.ultimas.length?'<ul class="vendas">'+eu.ultimas.map(function(v){return '<li><span>'+esc(nomeProduto(v.produto))+' <span class="mudo">· '+data(v.em)+'</span></span><b>R$ '+brl(v.valor)+'</b></li>'}).join("")+'</ul>':'<p class="vazio">Tua primeira venda aparece aqui assim que for aprovada.</p>')+'</section>';
   pinta(h);
   var bar=$("#barra-eu");bar.innerHTML=barraHTML(eu.total,alvo,prox?prox.nome:"a última placa");animaBarra(bar,eu.total,alvo);
@@ -863,10 +924,11 @@ function modalPedido(p){
 function semParc(titulo){
   var p=estado.parc||{};
   var pend=p.status&&p.status!=="aprovado"&&!p.erro;
-  return '<div class="ola"><div><h1>'+titulo+'</h1></div></div><section class="bloco" style="max-width:640px"><h2>'+(pend?"Teu cadastro de afiliado está em análise":"Liga teu cadastro de afiliado")+'</h2><p class="mudo">'+
-   (pend?"Assim que o time aprovar, essa aba libera sozinha.":"As aulas, os conteúdos e tua página vêm do teu cadastro de afiliado do Lucro Já. Ele precisa estar aprovado com este mesmo e-mail.")+'</p>'+
-   (pend?'':'<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-azul" href="https://afiliados.lucroja.online" target="_blank" rel="noopener">Pedir cadastro de afiliado</a></div>')+'</section>';
+  return '<div class="ola"><div><h1>'+titulo+'</h1></div></div><section class="bloco" style="max-width:640px"><h2>'+(pend?"Teu cadastro de revendedor está em análise":"Falta teu cadastro de revendedor")+'</h2><p class="mudo">'+
+   (pend?"Assim que o time aprovar, essa aba libera sozinha.":"As aulas, os conteúdos, teus links e tua página saem do teu cadastro de revendedor. Pede aqui com este mesmo e-mail.")+'</p>'+
+   (pend?'':'<div style="margin-top:18px"><button class="btn btn-azul" data-pedir-cad>Pedir meu cadastro</button></div>')+'</section>';
 }
+document.addEventListener("click",function(e){if(e.target.closest("[data-pedir-cad]"))modalPedirLogado();});
 function parcOk(){var p=estado.parc;return p&&!p.erro&&p.status==="aprovado";}
 function vistas(){try{return JSON.parse(localStorage.getItem("m10x-vistas")||"[]")}catch(e){return []}}
 function marcaVista(id){try{var v=vistas();if(v.indexOf(id)<0){v.push(id);localStorage.setItem("m10x-vistas",JSON.stringify(v.slice(-500)));}}catch(e){}}
@@ -935,13 +997,18 @@ function vLinks(){
        '<div class="acoes"><button class="btn btn-azul btn-p" data-copiar="'+esc(p.link)+'">'+ico("copiar",16)+' Copiar</button><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Garante o Lucro Já no plano "+p.nome+" por R$ "+p.preco+": "+p.link)+'">'+ZAP+' Mandar</a></div></article>';
     }).join("")+'</div>';
     if(eu.pagina)h+='<section class="bloco" style="margin-top:16px"><h2>Tua página de vendas</h2><div class="url-box"><span>'+esc(eu.pagina.url)+'</span><button class="btn btn-azul btn-p" data-copiar="'+esc(eu.pagina.url)+'">'+ico("copiar",16)+' Copiar</button><a class="btn btn-vidro btn-p" href="'+esc(eu.pagina.url)+'" target="_blank" rel="noopener">'+ico("abrir",16)+'</a></div><p class="mudo" style="font-size:13px;margin-top:10px">'+eu.pagina.visitas+' visitas · os 4 planos já estão ligados nela.</p></section>';
-    h+=blocoTrocaLinks(true);
+    h+=blocoAfiliacao()+blocoTrocaLinks(true);
   } else h+=passosLinks();
   pinta(h);ligaLinks();
 }
+function blocoAfiliacao(){
+  var p=estado.parc;if(!parcOk()||!p.links)return "";
+  var lk=p.links;
+  return '<section class="bloco" style="margin-top:16px"><h2>Links de afiliação do teu cargo</h2><p class="mudo" style="font-size:14px">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b> ('+lk.pct+'% de comissão). Subiu de cargo? Pede a afiliação nova por aqui e depois troca teus links de checkout.</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Anual</a></div></section>';
+}
 function passosLinks(){
   var p=estado.parc||{},lk=p.links;
-  if(!parcOk())return '<section class="bloco" style="max-width:720px"><h2>Falta ligar teu cadastro de afiliado</h2><p class="mudo">Os links aparecem aqui depois que tua afiliação é aprovada. Primeiro pede teu cadastro na área de afiliados do Lucro Já com este mesmo e-mail.</p><div style="margin-top:18px"><a class="btn btn-azul" href="https://afiliados.lucroja.online" target="_blank" rel="noopener">Pedir cadastro de afiliado</a></div></section>';
+  if(!parcOk())return semParc("").replace('<div class="ola"><div><h1></h1></div></div>','');
   return '<section class="bloco" style="max-width:780px"><h2>Libera teus links em 2 passos</h2>'+
    '<div class="passo-n"><span class="num">1</span><div><h3>Pede a afiliação na Applyfy</h3><p class="mudo">Teu cargo é <b style="color:#fff">'+esc(p.cargo&&p.cargo.nome||"")+'</b>'+(lk?' ('+lk.pct+'% de comissão)':'')+'. Toca nos dois botões e pede a afiliação. O time aprova rapidinho.</p>'+
    (lk?'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-vidro btn-p" href="'+esc(lk.mensal)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Assinatura</a><a class="btn btn-vidro btn-p" href="'+esc(lk.vital)+'" target="_blank" rel="noopener">'+ico("abrir",16)+' Afiliação Anual</a></div>':'<p class="mudo" style="margin-top:8px">Os links de afiliação do teu cargo ainda não foram cadastrados. Chama o suporte.</p>')+'</div></div>'+
@@ -969,7 +1036,7 @@ function vPagina(){
   if(!pg){h+=passosLinks();pinta(h);ligaLinks();return;}
   var c=rascunho||Object.assign({nome:(eu.nome||"").split(" ")[0]||"",whats:"",foto:"",selo:"",titulo:"",destaque:"",sub:"",msg:""},pg.config||{});
   rascunho=c;
-  h+='<div class="stats-pg"><section class="bloco mini"><span>Visitas</span><b>'+pg.visitas+'</b></section><section class="bloco mini"><span>Status</span><b style="font-size:20px">'+(pg.ativo?'<span style="color:var(--ok)">No ar</span>':'Pausada')+'</b></section><section class="bloco" style="padding:16px"><div class="url-box" style="padding:6px 6px 6px 12px"><span style="font-size:13px">'+esc(pg.url.replace("https://",""))+'</span><button class="btn btn-azul btn-p" data-copiar="'+esc(pg.url)+'">'+ico("copiar",16)+'</button></div><a class="btn btn-zap btn-p" style="width:100%;margin-top:8px" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Dá uma olhada: "+pg.url)+'">'+ZAP+' Mandar no WhatsApp</a></section></div>';
+  h+='<div class="stats-pg"><section class="bloco mini"><span>Visitas</span><b>'+pg.visitas+'</b></section><section class="bloco mini"><span>Status</span><b style="font-size:20px">'+(pg.ativo?'<span style="color:var(--ok)">No ar</span>':'Pausada')+'</b></section><section class="bloco" style="padding:16px"><div class="url-box" style="padding:6px 6px 6px 12px"><span style="font-size:13px">'+esc(pg.url.replace("https://",""))+'</span><button class="btn btn-azul btn-p" data-copiar="'+esc(pg.url)+'">'+ico("copiar",16)+'</button></div><div style="display:flex;gap:8px;margin-top:8px"><a class="btn btn-zap btn-p" style="flex:1" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent("Dá uma olhada: "+pg.url)+'">'+ZAP+' Mandar</a><button class="btn btn-vidro btn-p" id="pg-final" title="Troca o final do endereço">Outro final</button></div></section></div>';
   h+='<div class="editor"><div class="pilha">'+
    '<section class="bloco"><h2>Quem indica</h2><div class="foto-v">'+(c.foto?'<img src="'+esc(c.foto)+'" alt="">':'<span class="ini">'+esc((c.nome||"?").charAt(0).toUpperCase())+'</span>')+'<div style="display:flex;gap:8px;flex-wrap:wrap"><label class="btn btn-vidro btn-p">Trocar foto<input type="file" accept="image/png,image/jpeg,image/webp" hidden id="pg-foto"></label>'+(c.foto?'<button class="btn btn-fant btn-p" id="pg-tira">Tirar</button>':'')+'</div></div>'+
     '<div class="campos" style="margin-top:16px"><div class="campo"><label>Teu nome na página</label><input data-c="nome" maxlength="40" value="'+esc(c.nome)+'"></div><div class="campo"><label>WhatsApp com DDD</label><input data-c="whats" inputmode="tel" maxlength="16" placeholder="(67) 99999-9999" value="'+esc(c.whats)+'"></div>'+
@@ -992,6 +1059,8 @@ function vPagina(){
   var zp=$('[data-c="whats"]',APP);zp.addEventListener("input",function(){var d=zp.value.replace(/\D/g,"").slice(0,11);zp.value=d.length>6?"("+d.slice(0,2)+") "+d.slice(2,d.length-4)+"-"+d.slice(-4):d.length>2?"("+d.slice(0,2)+") "+d.slice(2):d;c.whats=zp.value;prev();});
   $("#pg-foto").addEventListener("change",function(){var f=this.files[0];if(!f)return;if(f.size>3e6){toast("Foto até 3 MB");return;}reduzFoto(f).then(function(d){toast("Subindo foto…");return api("pagina_foto",{imagem:d},true);}).then(function(r){c.foto=r.url;vPagina();toast("Foto pronta. Agora salva.");}).catch(function(e){toast(e.message||"Não deu pra subir a foto.")});});
   var tira=$("#pg-tira");if(tira)tira.addEventListener("click",function(){c.foto="";vPagina();});
+  $("#pg-final").addEventListener("click",function(){var f=modal('<h2>Gerar outro final</h2><p class="mudo" style="margin-top:8px">A página ganha um endereço novo e o atual (<b style="color:#fff">'+esc(pg.url.replace("https://",""))+'</b>) para de funcionar. Quem já tem o link antigo não acha mais.</p><div class="acoes"><button class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul" data-ok>Gerar outro final</button></div>');
+    $("[data-ok]",f).addEventListener("click",function(){var b=this;carregando(b,true);parc("pagina_novo_final").then(function(r){f.remove();toast("Endereço novo: "+r.pagina.url.replace("https://",""));recarrega("pagina");}).catch(function(e){toast(e.message);carregando(b,false);});});});
   $("#pg-oficial").addEventListener("click",function(){c.selo=c.titulo=c.destaque=c.sub="";vPagina();toast("Topo oficial de volta. Salva pra publicar.");});
   $("#pg-salvar").addEventListener("click",function(){var b=this;carregando(b,true,"Publicando…");api("pagina_config",{config:c},true).then(function(r){rascunho=null;estado.eu.pagina.config=r.config;toast("Publicado! Tua página já mudou.");carregando(b,false);}).catch(function(e){toast(e.message);carregando(b,false);});});
   $("#ia-btn").addEventListener("click",function(){var b=this;carregando(b,true,"Escrevendo…");
@@ -1004,29 +1073,42 @@ function reduzFoto(file){return new Promise(function(ok,ruim){var r=new FileRead
 
 /* =================== LUCRO JÁ (SaaS) =================== */
 function vLucroja(){
-  var eu=estado.eu,lj=eu.lucroja;
-  var ate=lj&&lj.ate?new Date(lj.ate):null,ativo=lj&&lj.plano&&lj.plano!=="nenhum"&&(!ate||ate>new Date()||/vital/i.test(lj.plano));
-  var h='<div class="ola"><div><h1>Lucro Já</h1><p>O SaaS que tu vende e usa.</p></div></div>';
-  h+='<section class="lj-card"><div><span class="chip'+(ativo?" verde":"")+'">'+(lj?(ativo?"Teu acesso: "+esc(lj.plano):"Acesso sem plano ativo"):"Sem acesso com este e-mail")+(ate&&ativo&&!/vital/i.test(lj.plano)?" · até "+ate.toLocaleDateString("pt-BR"):"")+'</span><h2 style="margin-top:16px">Lucro <span>Já</span></h2><p class="mudo" style="margin-top:10px;max-width:46ch">Catálogo nacional, anúncio pronto com IA, lucro na tela antes de publicar e o fornecedor posta. Vende no Mercado Livre e na Shopee sem estoque.</p>'+
-   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-azul" href="https://lucroja.online/app" target="_blank" rel="noopener">'+ico("abrir",18)+' Abrir o Lucro Já</a><a class="btn btn-vidro" href="https://lucroja.online" target="_blank" rel="noopener">Página oficial</a>'+(eu.pagina?'<a class="btn btn-vidro" href="'+esc(eu.pagina.url)+'" target="_blank" rel="noopener">Minha página</a>':'')+'</div></div>'+
+  var eu=estado.eu;
+  var h='<div class="ola"><div><h1>A ferramenta</h1><p>O que tu revende. Tudo pra mostrar na live sem enrolar.</p></div></div>';
+  h+='<section class="lj-card"><div><span class="chip">O que tu revende</span><h2 style="margin-top:16px">Lucro <span>Já</span></h2><p class="mudo" style="margin-top:10px;max-width:46ch">A ferramenta pra vender no Mercado Livre e na Shopee sem estoque: catálogo nacional, anúncio pronto com IA, lucro na tela antes de publicar e o fornecedor posta.</p>'+
+   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">'+(eu.pagina?'<a class="btn btn-azul" href="'+esc(eu.pagina.url)+'" target="_blank" rel="noopener">'+ico("abrir",18)+' Minha página</a>':'<a class="btn btn-azul" href="#painel/pagina">Gerar minha página</a>')+'<a class="btn btn-vidro" href="https://lucroja.online" target="_blank" rel="noopener">Página oficial</a></div></div>'+
    '<ul class="lista-check">'+["Catálogo nacional com custo e lucro na tela","IA monta título, descrição e ficha técnica","Publica no Mercado Livre e na Shopee","Vendeu, o fornecedor separa, embala e posta","Estúdio IA pra foto e vídeo do produto"].map(function(t){return '<li><svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#1F5BFF"/><path d="M6 10.4l2.6 2.6L14.2 7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'+t+'</li>'}).join("")+'</ul></section>';
-  h+='<div class="grade-3" style="margin-top:16px">'+atalho("links","link","Meus links","Checkout com teu código")+atalho("pagina","pagina","Minha página","Personaliza e publica")+atalho("aulas","play","Aulas","Como vender o Lucro Já")+'</div>';
+  var planos=[["Mensal","165","por mês"],["Trimestral","197","a cada 3 meses"],["Semestral","247","a cada 6 meses"],["Anual","295","por ano · até 12x"]];
+  h+='<section class="bloco" style="margin-top:16px"><h2>Os planos que tu vende</h2><div class="planos">'+planos.map(function(p){return '<article class="plano'+(p[0]==="Anual"?" dest":"")+'"><span class="nome">'+p[0]+'</span><div class="preco">R$ '+p[1]+'<small>'+p[2]+'</small></div></article>'}).join("")+'</div><p class="mudo" style="font-size:13px;margin-top:12px">Teus links com teu código ficam em <a class="link" href="#painel/links">Meus links</a>.</p></section>';
+  h+='<section class="bloco" style="margin-top:16px"><h2>Roteiro rápido pra live</h2><ol style="display:grid;gap:12px;padding-left:20px;color:#C1CBE6">'+
+   ["Abre mostrando a dor: vender na internet sem ter estoque nem dinheiro parado.","Mostra o catálogo e o lucro aparecendo antes de anunciar.","Gera um anúncio com IA ao vivo. É o momento que mais converte.","Explica que o fornecedor separa, embala e posta. A pessoa só vende.","Fecha com os planos e manda teu link na hora, fixado no chat."].map(function(t){return '<li>'+t+'</li>'}).join("")+'</ol></section>';
+  pinta(h);
+}
+
+/* =================== SUPORTE =================== */
+function vSuporte(){
+  var s0=(estado.parc&&estado.parc.suporte)||{},w=zapSup();
+  var h='<div class="ola"><div><h1>Suporte</h1><p>Travou em alguma coisa? Chama o time.</p></div></div>';
+  h+='<section class="bloco" style="max-width:640px">'+(s0.aviso?'<div class="aviso">'+ico("alerta")+'<span>'+esc(s0.aviso)+'</span></div>':'')+
+   '<h2>Fala com o time M10X</h2><p class="mudo">'+(s0.horario?'Atendimento: '+esc(s0.horario)+'.':'Responde o mais rápido possível.')+'</p>'+
+   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">'+(w?'<a class="btn btn-zap" target="_blank" rel="noopener" href="https://wa.me/'+w+'?text='+encodeURIComponent(s0.msg||("Oi! Sou "+(estado.eu.nome||"")+" da M10X e preciso de ajuda."))+'">'+ZAP+' Chamar no WhatsApp</a>':'')+
+   (s0.email?'<a class="btn btn-vidro" href="mailto:'+esc(s0.email)+'">'+esc(s0.email)+'</a>':'')+(!w&&!s0.email?'<p class="mudo">O contato do suporte ainda não foi cadastrado.</p>':'')+'</div></section>';
   pinta(h);
 }
 
 /* =================== ADMIN =================== */
-function carregaAdmin(){api("adm_resumo",{},true).then(function(d){estado.adm=d;desenhaAdmin();}).catch(function(e){toast(e.message)});}
+function carregaAdmin(){Promise.all([api("adm_resumo",{},true),parc("adm_tudo").catch(function(){return null;})]).then(function(r){estado.adm=r[0];estado.adm.afil=r[1];desenhaAdmin();}).catch(function(e){toast(e.message)});}
 function desenhaAdmin(){
   var d=estado.adm,a=estado.abaAdm;
-  var pend=d.pedidos.filter(function(p){return p.status==="pendente"}).length,novos=d.inscricoes.filter(function(i){return i.status==="novo"}).length;
+  var pend=d.pedidos.filter(function(p){return p.status==="pendente"}).length,novos=d.afil?d.afil.parceiros.filter(function(i){return i.status==="pendente"}).length:0;
   var totalFat=d.membros.reduce(function(s,m){return s+m.total},0);
   var h='<div class="ola"><div><h1>Admin M10X</h1><p>Mentorados, premiações e pedidos num lugar só.</p></div><button class="btn btn-vidro" id="recarrega">Atualizar</button></div>'+
-   '<div class="kpis"><div class="bloco"><span class="mudo" style="font-size:13px">Mentorados ativos</span><b>'+d.membros.filter(function(m){return m.ativo}).length+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Faturamento somado</span><b>R$ '+curto(totalFat)+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Pedidos de placa</span><b>'+pend+(pend===1?' novo':' novos')+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Querem entrar</span><b>'+novos+(novos===1?' novo':' novos')+'</b></div></div>'+
-   '<div class="tabs-adm">'+[["mentorados","Mentorados"],["pedidos","Pedidos de placa",pend],["inscricoes","Querem entrar",novos],["placas","Premiações"],["config","Avisos"]].map(function(t){return '<button data-aba="'+t[0]+'" class="'+(a===t[0]?"on":"")+'">'+t[1]+(t[2]?'<span class="q">'+t[2]+'</span>':'')+'</button>'}).join("")+'</div><section class="bloco" id="adm-corpo"></section>';
+   '<div class="kpis"><div class="bloco"><span class="mudo" style="font-size:13px">Mentorados ativos</span><b>'+d.membros.filter(function(m){return m.ativo}).length+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Faturamento somado</span><b>R$ '+curto(totalFat)+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Pedidos de placa</span><b>'+pend+(pend===1?' novo':' novos')+'</b></div><div class="bloco"><span class="mudo" style="font-size:13px">Pedidos de acesso</span><b>'+novos+(novos===1?' novo':' novos')+'</b></div></div>'+
+   '<div class="tabs-adm">'+[["mentorados","Mentorados"],["pedidos","Pedidos de placa",pend],["acessos","Pedidos de acesso",novos],["placas","Premiações"],["config","Avisos"]].map(function(t){return '<button data-aba="'+t[0]+'" class="'+(a===t[0]?"on":"")+'">'+t[1]+(t[2]?'<span class="q">'+t[2]+'</span>':'')+'</button>'}).join("")+'</div><section class="bloco" id="adm-corpo"></section>';
   pinta(h);
   $("#recarrega").addEventListener("click",carregaAdmin);
   $$("[data-aba]",APP).forEach(function(b){b.addEventListener("click",function(){estado.abaAdm=b.dataset.aba;desenhaAdmin();})});
-  ({mentorados:admMentorados,pedidos:admPedidos,inscricoes:admInscricoes,placas:admPlacas,config:admConfig})[a]($("#adm-corpo"));
+  ({mentorados:admMentorados,pedidos:admPedidos,acessos:admAcessos,placas:admPlacas,config:admConfig})[a]($("#adm-corpo"));
 }
 function admMentorados(el){
   var d=estado.adm;
@@ -1057,11 +1139,34 @@ function admPedidos(el){
   $$("[data-st]",el).forEach(function(s){s.addEventListener("change",function(){api("adm_pedido_status",{id:s.dataset.st,status:s.value},true).then(function(){toast("Status salvo");var p=estado.adm.pedidos.find(function(x){return String(x.id)===s.dataset.st});if(p)p.status=s.value;}).catch(function(e){toast(e.message)});})});
   $$("[data-rs]",el).forEach(function(s){s.addEventListener("change",function(){var p=estado.adm.pedidos.find(function(x){return String(x.id)===s.dataset.rs});api("adm_pedido_status",{id:s.dataset.rs,status:p.status,rastreio:s.value},true).then(function(){toast("Rastreio salvo")}).catch(function(e){toast(e.message)});})});
 }
+function admAcessos(el){
+  var A=estado.adm.afil;
+  if(!A){el.innerHTML='<p class="vazio">Não consegui carregar os cadastros agora. Toca em Atualizar.</p>';return;}
+  var cg=A.cargos||[],L=A.parceiros||[];
+  var sel=function(p){return '<select class="mini-sel" data-cg="'+esc(p.id)+'">'+cg.map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===p.cargo?" selected":"")+'>'+esc(c.nome)+' · '+c.pct+'%</option>'}).join("")+'</select>';};
+  var pend=L.filter(function(p){return p.status==="pendente"});
+  var st={aprovado:["Aprovado","verde"],pendente:["Pendente","amarelo"],recusado:["Recusado","vermelho"],bloqueado:["Bloqueado","vermelho"]};
+  el.innerHTML='<h2 class="titulo-b">Esperando aprovação'+(pend.length?' · '+pend.length:'')+'</h2>'+(pend.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Pessoa</th><th>WhatsApp</th><th>Cargo</th><th></th></tr></thead><tbody>'+pend.map(function(p){
+     return '<tr><td>'+data(p.criado_em)+'</td><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td><a class="link" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(p.whats||"").replace(/^55/,""))+'">'+esc(p.whats||"")+'</a></td><td>'+sel(p)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-ap="'+esc(p.id)+'">Aprovar</button> <button class="btn btn-fant btn-p" data-rc="'+esc(p.id)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Ninguém esperando. Quem pede acesso na página aparece aqui.</p>')+
+   '<div class="linha-ferr" style="margin-top:22px"><h2 class="titulo-b" style="margin:0">Todos os revendedores · '+L.length+'</h2><input class="busca" id="busca-af" placeholder="Buscar nome ou e-mail"></div><div class="rolagem"><table class="tabela"><thead><tr><th>Revendedor</th><th>Página</th><th>Cargo</th><th>Status</th></tr></thead><tbody id="tb-af"></tbody></table></div>';
+  var desenha=function(q){q=(q||"").toLowerCase();$("#tb-af").innerHTML=L.filter(function(p){return !q||(p.email+" "+(p.nome||"")).toLowerCase().indexOf(q)>=0}).map(function(p){var s1=st[p.status]||[p.status,""];
+    return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td>'+(p.slug?'<a class="link" target="_blank" rel="noopener" href="https://lucroja.online/'+esc(p.slug)+'">'+esc(p.slug)+'</a><div class="mudo" style="font-size:12px">'+(p.visitas||0)+' visitas</div>':'<span class="mudo">—</span>')+'</td><td>'+sel(p)+'</td><td><select class="mini-sel" data-st-af="'+esc(p.id)+'">'+Object.keys(st).map(function(k){return '<option value="'+k+'"'+(k===p.status?" selected":"")+'>'+st[k][0]+'</option>'}).join("")+'</select></td></tr>';}).join("")||'<tr><td colspan="4" class="vazio">Ninguém aqui.</td></tr>';liga();};
+  var liga=function(){
+    $$("[data-cg]",el).forEach(function(s2){s2.onchange=function(){var p=L.find(function(x){return String(x.id)===s2.dataset.cg});if(p.status==="pendente"){p.cargo=s2.value;return;}parc("adm_cargo",{id:p.id,cargo:s2.value}).then(function(){p.cargo=s2.value;toast("Cargo salvo")}).catch(function(e){toast(e.message)});};});
+    $$("[data-st-af]",el).forEach(function(s2){s2.onchange=function(){var p=L.find(function(x){return String(x.id)===s2.dataset.stAf});parc("adm_status",{id:p.id,status:s2.value,cargo:p.cargo}).then(function(){p.status=s2.value;toast("Status salvo")}).catch(function(e){toast(e.message)});};});
+  };
+  desenha();$("#busca-af").addEventListener("input",function(e){desenha(e.target.value)});
+  var decide=function(id,st2,b){var p=L.find(function(x){return String(x.id)===id});carregando(b,true);parc("adm_status",{id:p.id,status:st2,cargo:p.cargo||(cg[0]&&cg[0].id)}).then(function(){toast(st2==="aprovado"?"Aprovado! A área dele já liberou.":"Recusado");carregaAdmin();}).catch(function(e){toast(e.message);carregando(b,false);});};
+  $$("[data-ap]",el).forEach(function(b){b.addEventListener("click",function(){decide(b.dataset.ap,"aprovado",b)})});
+  $$("[data-rc]",el).forEach(function(b){b.addEventListener("click",function(){decide(b.dataset.rc,"recusado",b)})});
+  var ins=estado.adm.inscricoes||[];
+  if(ins.length){var box=document.createElement("div");box.style.marginTop="26px";el.appendChild(box);admInscricoes(box);box.insertAdjacentHTML("afterbegin",'<h2 class="titulo-b">Formulário antigo (só contato)</h2>');}
+}
 function admInscricoes(el){
   var d=estado.adm,ops=[["novo","Novo"],["contato","Em conversa"],["aprovado","Aprovado"],["recusado","Recusado"]];
   el.innerHTML=d.inscricoes.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Pessoa</th><th>Fatura hoje</th><th>Objetivo</th><th>Status</th><th></th></tr></thead><tbody>'+d.inscricoes.map(function(i){
     return '<tr><td>'+data(i.criado_em)+'</td><td><b>'+esc(i.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(i.email||"sem e-mail")+(i.instagram?' · @'+esc(i.instagram):'')+'</div></td><td>'+esc(i.faturamento_atual||"—")+'</td><td style="max-width:280px;font-size:13px">'+esc(i.objetivo||"—")+'</td>'+
-    '<td><select class="mini-sel" data-ins="'+i.id+'">'+ops.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===i.status?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></td><td><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(i.whats).replace(/^55/,""))+'?text='+encodeURIComponent("Fala, "+String(i.nome).split(" ")[0]+"! Aqui é do M10X, recebi teu pedido pra mentoria.")+'">'+ZAP+' WhatsApp</a></td></tr>';}).join("")+'</tbody></table></div><p class="mudo" style="font-size:13px;margin-top:12px">Marcou "Aprovado" e a pessoa deixou e-mail: a área dela é liberada na hora.</p>':'<p class="vazio">Ninguém pediu pra entrar ainda. O formulário fica no fim da página de vendas.</p>';
+    '<td><select class="mini-sel" data-ins="'+i.id+'">'+ops.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===i.status?" selected":"")+'>'+o[1]+'</option>'}).join("")+'</select></td><td><a class="btn btn-zap btn-p" target="_blank" rel="noopener" href="https://wa.me/55'+esc(String(i.whats).replace(/^55/,""))+'?text='+encodeURIComponent("Fala, "+String(i.nome).split(" ")[0]+"! Aqui é do M10X, recebi teu pedido pra mentoria.")+'">'+ZAP+' WhatsApp</a></td></tr>';}).join("")+'</tbody></table></div>':'';
   $$("[data-ins]",el).forEach(function(s){s.addEventListener("change",function(){api("adm_inscricao_status",{id:s.dataset.ins,status:s.value},true).then(function(){toast(s.value==="aprovado"?"Aprovado e liberado":"Status salvo")}).catch(function(e){toast(e.message)});})});
 }
 function admPlacas(el){
