@@ -407,6 +407,26 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 .mat-ac{display:flex;gap:6px}
 @media (max-width:640px){.af-item{grid-template-columns:auto minmax(0,1fr)}.af-acoes{grid-column:1/-1;justify-content:stretch}.af-acoes .btn{flex:1}.af-meta{grid-column:1/-1}.mat-item{grid-template-columns:auto minmax(0,1fr)}.mat-ac{grid-column:1/-1}.mat-ac .btn{flex:1}}
 
+/* ===== viagens (20/10) ===== */
+.viagens{margin-top:22px;padding-top:22px;border-top:1px solid var(--linha)}
+.viagens-topo{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.viagens-topo p{font-size:14px}
+.viagens-l{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.viagem{position:relative;overflow:hidden;border-radius:22px;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 0 0 1px var(--linha2) inset}
+.viagem.v-mar{background:linear-gradient(160deg,#0E3A7A 0%,#0A1C55 55%,#061036 100%)}
+.viagem.v-montanha{background:linear-gradient(160deg,#2A2370 0%,#121A57 55%,#070D33 100%)}
+.viagem.ok{box-shadow:0 0 0 1.5px rgba(43,212,138,.6) inset,0 20px 50px -24px rgba(43,212,138,.5)}
+.viagem .arte{position:absolute;inset:0 0 auto 0;height:62%;pointer-events:none}
+.viagem .arte svg{width:100%;height:100%}
+.viagem .txt{position:relative;padding:20px 22px 22px;display:grid;gap:8px;background:linear-gradient(180deg,transparent,rgba(4,9,42,.75) 30%)}
+.viagem h3{font:900 clamp(26px,3vw,36px)/1 var(--fd);text-transform:uppercase;margin-top:6px}
+.viagem small{color:var(--geada);font-size:13px;font-weight:600;margin-top:-4px}
+.viagem p{font-size:14px;color:#C1CBE6;max-width:46ch}
+.trilho-v{height:8px;border-radius:999px;background:rgba(141,178,255,.16);overflow:hidden;margin-top:4px}
+.trilho-v i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#1F5BFF,#8DB2FF)}
+.viagem.ok .trilho-v i{background:var(--ok)}
+@media (max-width:760px){.viagens-l{grid-template-columns:minmax(0,1fr)}.viagem{min-height:290px}}
+
 /* ===== aba Sobre (20/10) ===== */
 .moldura-sup{max-width:980px;margin:0;padding:26px 26px 24px;border:1.5px solid rgba(61,123,255,.55);border-radius:22px;background:linear-gradient(180deg,rgba(31,91,255,.08),rgba(31,91,255,.02));box-shadow:0 0 0 6px rgba(31,91,255,.05),0 24px 60px -30px rgba(31,91,255,.6);min-width:0}
 .moldura-sup legend{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;margin-left:-4px;border-radius:999px;background:#0B1749;box-shadow:0 0 0 1.5px rgba(61,123,255,.55) inset;font:800 13px/1 var(--fd);text-transform:uppercase;letter-spacing:.06em;color:#CFE0FF}
@@ -1034,6 +1054,19 @@ function nomeProduto(p){return {mensal:"Lucro Já · Mensal",trimestral:"Lucro J
 function conta(el,alvo){if(!el)return;if(REDUZ){el.textContent=brl(alvo);return;}var t0=null,d=1400;function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);el.textContent=brl(alvo*e);if(k<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
 
 /* =================== PREMIAÇÕES =================== */
+/* viagens pagas por faturamento (20/10) */
+var VIAGENS=[
+ {id:"bc",meta:20000,lugar:"Balneário Camboriú",uf:"Santa Catarina",premio:"Viagem paga",txt:"Bateu R$ 20 mil, tu vai pra Balneário Camboriú com a viagem paga pela M10X.",tema:"mar"},
+ {id:"chile",meta:100000,lugar:"Chile",uf:"Santiago e região",premio:"Passagem paga",txt:"Bateu R$ 100 mil, tu viaja pro Chile com a passagem paga pela M10X.",tema:"montanha"}];
+var ARTE_VIAGEM={
+ mar:'<svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g fill="rgba(141,178,255,.22)"><rect x="40" y="38" width="16" height="72"/><rect x="60" y="20" width="20" height="90"/><rect x="84" y="50" width="14" height="60"/><rect x="104" y="8" width="22" height="102"/><rect x="130" y="44" width="16" height="66"/><rect x="152" y="28" width="18" height="82"/><rect x="176" y="58" width="14" height="52"/><rect x="196" y="16" width="20" height="94"/><rect x="222" y="40" width="16" height="70"/><rect x="244" y="4" width="24" height="106"/><rect x="274" y="48" width="14" height="62"/><rect x="294" y="30" width="18" height="80"/><rect x="318" y="56" width="14" height="54"/></g><path d="M0 112c40-10 80 10 120 0s80-10 120 0 80 10 120 0 40-6 40-6v34H0Z" fill="rgba(61,123,255,.35)"/><path d="M0 124c40-8 80 8 120 0s80-8 120 0 80 8 120 0 40-4 40-4v20H0Z" fill="rgba(31,91,255,.45)"/></svg>',
+ montanha:'<svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><path d="M0 140 70 62l34 30 58-78 46 52 30-26 66 70 40-34 56 64Z" fill="rgba(141,178,255,.2)"/><path d="m162 14-20 27 12-6 8 10 10-12 12 7Z" fill="rgba(234,240,255,.55)"/><path d="m238 40-14 13 9-3 6 6 7-7 8 4Z" fill="rgba(234,240,255,.4)"/><path d="M0 140 90 92l40 22 70-44 60 40 50-24 90 54Z" fill="rgba(61,123,255,.35)"/></svg>'};
+function blocoViagens(total){
+  return '<section class="viagens"><div class="viagens-topo"><h2 class="titulo-b" style="margin:0">Viagens M10X</h2><p class="mudo">Além das placas: bateu o marco, a M10X paga a viagem.</p></div><div class="viagens-l">'+VIAGENS.map(function(v){
+    var ok=total>=v.meta,pct=Math.max(0,Math.min(100,total/v.meta*100));
+    return '<article class="viagem v-'+v.tema+(ok?' ok':'')+'"><div class="arte">'+ARTE_VIAGEM[v.tema]+'</div><div class="txt"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip'+(ok?' verde':'')+'">'+(ok?'Conquistada':esc(v.premio))+'</span><span class="chip">Meta R$ '+curto(v.meta)+'</span></div>'+
+      '<h3>'+esc(v.lugar)+'</h3><small>'+esc(v.uf)+'</small><p>'+esc(v.txt)+'</p><div class="trilho-v"><i style="width:'+pct.toFixed(1)+'%"></i></div><span class="mudo" style="font-size:13px">'+(ok?'Tu bateu esse marco. Chama o suporte na aba Sobre pra marcar a viagem.':'Faltam <b style="color:#fff">R$ '+brl(v.meta-total)+'</b> · '+Math.floor(pct)+'%')+'</span></div></article>';}).join("")+'</div></section>';
+}
 var ETAPAS=[["pendente","Pedido recebido"],["aprovado","Aprovado"],["producao","Em produção"],["enviado","A caminho"],["entregue","Na tua parede"]];
 function vPremios(){
   var eu=estado.eu,prox=eu.proxima,placas=eu.placas||[];
@@ -1059,6 +1092,7 @@ function vPremios(){
   }).join("")+'</div></section>';
   var gal=["placas_mockup.webp","pulseira.webp","pulseira2.webp","placa100k_det.webp","placa10k.webp","placa100k.webp","placa500k.webp","placa1m.webp"];
   h+='<section class="bloco" style="margin-top:16px"><h2>Galeria</h2><div class="galeria">'+gal.map(function(g){return '<button data-zoom="'+g+'" aria-label="Ampliar foto"><img src="'+IMG+g+'" alt="" loading="lazy"></button>'}).join("")+'</div></section>';
+  h+=blocoViagens(eu.total||0);
   pinta(h);
   $$("[data-pedir]",APP).forEach(function(b){b.addEventListener("click",function(){modalPedido(placas.find(function(p){return String(p.id)===b.dataset.pedir}))})});
   $$("[data-copiar]",APP).forEach(function(b){b.addEventListener("click",function(){copia(b.dataset.copiar,"Código copiado")})});
@@ -1283,8 +1317,8 @@ function vLucroja(){
 /* quem faz a M10X: a foto entra quando subir em imagens/m10x/site/dono_<id>.webp (sem foto, mostra as iniciais) */
 var DONOS=[
  {id:"guedes",v:2,nome:"Luiz Fernando Guedes",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X."},
- {id:"caio",nome:"Caio Braga",papel:["Sócio e criador"],txt:"Sócio e um dos produtores da M10X e das plataformas dele."},
- {id:"olavo",nome:"Olavo Ferracioli",papel:["Sócio e criador"],txt:"Sócio e um dos criadores da M10X."},
+ {id:"caio",nome:"Caio Braga",papel:["Sócio e produtor"],txt:"Sócio e um dos produtores da M10X e das plataformas dele."},
+ {id:"olavo",nome:"Olavo Ferracioli",papel:["Sócio e produtor"],txt:"Sócio e um dos criadores da M10X."},
  {id:"junior",nome:"Junior Oliveira",papel:["Sócio e criador","Dev sênior","Boss"],txt:"Criador dos aplicativos da M10X e dev sênior."}];
 function iniciais(n){var p=String(n||"").trim().split(/\s+/);return ((p[0]||"").charAt(0)+(p.length>1?p[p.length-1].charAt(0):"")).toUpperCase();}
 function vSobre(){
