@@ -972,7 +972,7 @@ function telaStatus(p){
 function recarrega(aba){if(estado.preview){estado.preview=false;}estado.eu=null;estado.parc=null;return abre(aba||estado.aba);}
 
 /* =================== INÍCIO =================== */
-var PERIODOS=[[7,"Últimos 7 dias"],[30,"Últimos 30 dias"],[90,"Últimos 90 dias"]];
+var PERIODOS=[[0,"Desde o começo"],[7,"Últimos 7 dias"],[30,"Últimos 30 dias"],[90,"Últimos 90 dias"]];
 var BANNER=IMG+"banner_2x.webp?v=1";
 function diaBR(t){return new Date(t-3*3600e3).toISOString().slice(0,10);}
 function serieDias(n){
@@ -982,10 +982,14 @@ function serieDias(n){
   return out;
 }
 function vInicio(){
-  var eu=estado.eu,prox=eu.proxima,placas=eu.placas||[],per=estado.periodo||7;
+  var eu=estado.eu,prox=eu.proxima,placas=eu.placas||[],per=estado.periodo==null?0:estado.periodo;
   var alvo=prox?prox.meta:(placas.length?placas[placas.length-1].meta:1);
   var nome=(eu.nome||"").split(" ")[0]||"revendedor";
-  var pts=serieDias(per),fat=0,qtd=0;pts.forEach(function(p){fat+=p.v;qtd+=p.q;});
+  // "desde o começo" usa o total oficial (igual ao volume vendido da Applyfy); o gráfico mostra os últimos 90 dias
+  var dias0=(eu.dias||[])[0],nGraf=per||Math.max(14,Math.min(90,dias0?Math.ceil((Date.now()-new Date(dias0.d+"T03:00:00Z").getTime())/864e5)+1:30));
+  var pts=serieDias(nGraf),fat=0,qtd=0;pts.forEach(function(p){fat+=p.v;qtd+=p.q;});
+  if(!per){fat=Number(eu.total)||0;qtd=Number(eu.vendas_qtd)||0;}
+  var rotPer=per?"últimos "+per+" dias":"desde o começo";
   var mapa={};(eu.dias||[]).forEach(function(x){mapa[x.d]=x;});var ont=mapa[diaBR(Date.now()-864e5)];
   var h='<a class="banner-m10" href="#painel/premios" aria-label="Método M10X: ver premiações"><img src="'+BANNER+'" alt="Método M10X. A elite do mercado tem um novo ponto de encontro." width="1024" height="159"></a>';
   h+='<div class="dash-topo"><div><h1>Olá, '+esc(nome)+'</h1><p>Acompanha o histórico da tua conta.</p></div>'+
@@ -994,8 +998,8 @@ function vInicio(){
   if(eu.admin&&!eu.membro)h+='<div class="aviso">'+ico("alerta")+'<span>Tu tá vendo como dono, sem vendas próprias. Os números aparecem zerados.</span></div>';
   if(eu.sem_codigo&&eu.membro)h+='<div class="aviso">'+ico("alerta")+'<span>Teu link de afiliado ainda não está ligado no M10X, então as vendas não estão contando. Gera tua página em <a class="link" href="#painel/pagina">Minha página</a> ou chama o suporte.</span></div>';
   h+='<div class="kpi4">'+
-     '<section class="kpi dest">'+ico("cifrao",30).replace('<svg','<svg class="ic"')+'<span>Faturamento</span><b>R$ '+brl(fat)+'</b></section>'+
-     '<section class="kpi">'+ico("carrinho",30).replace('<svg','<svg class="ic"')+'<span>Vendas</span><b>'+qtd+'</b></section>'+
+     '<section class="kpi dest">'+ico("cifrao",30).replace('<svg','<svg class="ic"')+'<span>Volume vendido · '+rotPer+'</span><b>R$ '+brl(fat)+'</b></section>'+
+     '<section class="kpi">'+ico("carrinho",30).replace('<svg','<svg class="ic"')+'<span>Vendas · '+rotPer+'</span><b>'+qtd+'</b></section>'+
      '<section class="kpi">'+ico("moedas",30).replace('<svg','<svg class="ic"')+'<span>Ticket médio</span><b>R$ '+brl(qtd?fat/qtd:0)+'</b></section>'+
      '<section class="kpi">'+ico("calendario",30).replace('<svg','<svg class="ic"')+'<span>Vendas ontem</span><b>R$ '+brl(ont?ont.v:0)+'</b></section></div>';
   var sd=eu.saude||{},tq=(sd.aprov_q||0)+(sd.reemb_q||0)+(sd.cb_q||0),tv=(sd.aprov_v||0)+(sd.reemb_v||0)+(sd.cb_v||0);
@@ -1006,14 +1010,14 @@ function vInicio(){
        '<div class="lin"><div><span>Reembolsos</span><small>'+pc(sd.reemb_q||0).toFixed(2).replace(".",",")+'%</small></div><div class="trilho-s r"><i data-w="'+pc(sd.reemb_q||0)+'" style="width:0"></i></div></div>'+
        '<div class="lin"><div><span>Chargeback</span><small>'+pc(sd.cb_q||0).toFixed(2).replace(".",",")+'%</small></div><div class="trilho-s c"><i data-w="'+pc(sd.cb_q||0)+'" style="width:0"></i></div></div>'+
      '</div><p class="saude-nota">Conta tudo que entrou pelo teu link desde o começo: '+(sd.aprov_q||0)+' aprovada'+((sd.aprov_q||0)===1?'':'s')+', '+(sd.reemb_q||0)+' reembolso'+((sd.reemb_q||0)===1?'':'s')+'.</p></section></div>';
-  h+='<div class="grade-2"><section class="bloco grande"><img class="agua" src="'+LOGO1+'" alt=""><p class="rotulo">Faturamento total</p><p class="valor"><small>R$</small><span id="contador">0,00</span></p><div class="barra-meta" id="barra-eu"></div></section>'+
+  h+='<div class="grade-2"><section class="bloco grande"><img class="agua" src="'+LOGO1+'" alt=""><p class="rotulo">Volume vendido total</p><p class="valor"><small>R$</small><span id="contador">0,00</span></p><div class="barra-meta" id="barra-eu"></div></section>'+
    '<div class="pilha"><div class="grade-2" style="grid-template-columns:1fr 1fr"><section class="bloco mini"><span>Este mês</span><b>R$ '+brl(eu.mes)+'</b></section><section class="bloco mini"><span>Vendas no total</span><b>'+eu.vendas_qtd+'</b></section></div>'+
    (prox?'<a class="bloco prox" href="#painel/premios" style="text-decoration:none">'+arte(prox)+'<div><span class="mudo" style="font-size:13px;font-weight:600">Próxima premiação</span><h3>'+esc(prox.nome)+'</h3><span class="mudo" style="font-size:14px">Faltam R$ '+brl(prox.meta-eu.total)+'</span></div></a>':'<section class="bloco"><h2>Parede completa</h2><p class="mudo">Todas as premiações batidas. Lenda.</p></section>')+'</div></div>';
   h+='<div class="atalhos" style="margin-top:16px">'+
    atalho("pagina","pagina","Minha página","Tua página com nome, foto e IA")+atalho("links","link","Meus links","Checkout de cada plano")+atalho("aulas","play","Aulas","Continua de onde parou")+atalho("lucroja","app","A ferramenta","Roteiro pra live")+'</div>';
   h+='<section class="bloco" style="margin-top:16px"><h2>Últimas vendas</h2>'+(eu.ultimas&&eu.ultimas.length?'<ul class="vendas">'+eu.ultimas.map(function(v){return '<li><span>'+esc(nomeProduto(v.produto))+' <span class="mudo">· '+data(v.em)+'</span></span><b>R$ '+brl(v.valor)+'</b></li>'}).join("")+'</ul>':'<p class="vazio">Tua primeira venda aparece aqui assim que for aprovada.</p>')+'</section>';
   pinta(h);
-  $("#periodo").addEventListener("change",function(){estado.periodo=Number(this.value)||7;estado.semAnim=true;vInicio();});
+  $("#periodo").addEventListener("change",function(){estado.periodo=Number(this.value)||0;estado.semAnim=true;vInicio();});
   grafico($("#grafico"),pts);
   requestAnimationFrame(function(){requestAnimationFrame(function(){$$(".trilho-s i",APP).forEach(function(i){i.style.width=Math.max(0,Math.min(100,Number(i.dataset.w)||0))+"%";});});});
   var bar=$("#barra-eu");bar.innerHTML=barraHTML(eu.total,alvo,prox?prox.nome:"a última placa");animaBarra(bar,eu.total,alvo);
