@@ -384,6 +384,27 @@ details p{padding:0 0 22px;color:var(--mudo);max-width:60ch}
 .esqueleto{height:120px;border-radius:18px;background:linear-gradient(90deg,rgba(141,178,255,.05),rgba(141,178,255,.12),rgba(141,178,255,.05));background-size:200% 100%;animation:brilha 1.4s linear infinite}
 @keyframes brilha{to{background-position:-200% 0}}
 
+/* ===== painel dos sócios (20/10) ===== */
+.ponte{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;margin-bottom:20px;border-radius:16px;background:rgba(141,178,255,.05);box-shadow:0 0 0 1px var(--linha2) inset}
+.ponte .luz{flex:none;width:12px;height:12px;margin-top:5px;border-radius:50%;background:var(--mudo2);box-shadow:0 0 0 4px rgba(108,121,163,.18)}
+.ponte.verde .luz{background:var(--ok);box-shadow:0 0 0 4px rgba(43,212,138,.18),0 0 14px rgba(43,212,138,.7)}
+.ponte.amarelo .luz{background:var(--alerta);box-shadow:0 0 0 4px rgba(255,198,61,.18)}
+.ponte b{font:800 15px/1.2 var(--fd)}.ponte p{font-size:14px;color:#C1CBE6;margin-top:4px}.ponte small{display:block;margin-top:6px;font-size:12px;color:var(--mudo)}
+.af-lista{display:grid;gap:10px}
+.af-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:14px 16px;border-radius:16px;background:rgba(2,6,25,.45);box-shadow:0 0 0 1px var(--linha) inset}
+.af-pct{grid-row:span 2;display:grid;place-items:center;width:56px;height:56px;border-radius:14px;font:900 18px/1 var(--fd);background:rgba(31,91,255,.16);color:#CFE0FF;box-shadow:0 0 0 1px rgba(61,123,255,.4) inset}
+.af-q b{display:block;font:700 15px/1.25 var(--fd)}.af-q small{display:block;font-size:13px;color:var(--mudo);margin-top:2px;overflow-wrap:anywhere}
+.af-acoes{display:flex;gap:8px;justify-content:flex-end}
+.af-meta{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px}
+.af-lista.hist .af-item{opacity:.8}
+.mat-lista{display:grid;gap:8px}
+.mat-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:rgba(2,6,25,.45);box-shadow:0 0 0 1px var(--linha) inset}
+.mat-item.off{opacity:.55}
+.mat-ord{display:flex;flex-direction:column}.mat-ord .btn{height:26px;padding:0 10px;font-size:14px}
+.mat-q b{display:block;font:700 15px/1.25 var(--fd)}.mat-q small{display:block;font-size:12px;color:var(--mudo);margin-top:3px}
+.mat-ac{display:flex;gap:6px}
+@media (max-width:640px){.af-item{grid-template-columns:auto minmax(0,1fr)}.af-acoes{grid-column:1/-1;justify-content:stretch}.af-acoes .btn{flex:1}.af-meta{grid-column:1/-1}.mat-item{grid-template-columns:auto minmax(0,1fr)}.mat-ac{grid-column:1/-1}.mat-ac .btn{flex:1}}
+
 /* ===== aba Sobre (20/10) ===== */
 .moldura-sup{max-width:980px;margin:0;padding:26px 26px 24px;border:1.5px solid rgba(61,123,255,.55);border-radius:22px;background:linear-gradient(180deg,rgba(31,91,255,.08),rgba(31,91,255,.02));box-shadow:0 0 0 6px rgba(31,91,255,.05),0 24px 60px -30px rgba(31,91,255,.6);min-width:0}
 .moldura-sup legend{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;margin-left:-4px;border-radius:999px;background:#0B1749;box-shadow:0 0 0 1.5px rgba(61,123,255,.55) inset;font:800 13px/1 var(--fd);text-transform:uppercase;letter-spacing:.06em;color:#CFE0FF}
@@ -677,7 +698,8 @@ var ICO={
  calendario:'<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/>',
  filtro:'<path d="M4 5h16l-6.2 7.4V18l-3.6 2v-7.6Z"/>',
  subir:'<path d="M12 19V5M6 11l6-6 6 6"/>',
- info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>'
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>',
+ equipe:'<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="16.8" cy="9.5" r="2.5"/><path d="M15.6 14.6c2.6-.3 4.4 1.3 4.9 4.4"/>'
 };
 function ico(n,t){return '<svg width="'+(t||20)+'" height="'+(t||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[n]||"")+'</svg>';}
 var ZAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>';
@@ -777,7 +799,7 @@ function rota(){
     if(!s) return telaEntrar(/^entrar\//.test(h)?h.split("/")[1]:"");
     if(/^entrar/.test(h)||!h){location.replace("#painel");return;}
     var aba=h==="admin"?"admin":(h.split("/")[1]||"inicio");if(aba==="suporte")aba="sobre";
-    if(aba!=="admin"&&!ABAS.some(function(a){return a[0]===aba}))aba="inicio";
+    if(aba!=="admin"&&aba!=="socios"&&!ABAS.some(function(a){return a[0]===aba}))aba="inicio";
     abre(aba);
   });
 }
@@ -789,8 +811,8 @@ sb.auth.onAuthStateChange(function(ev){if(ev==="PASSWORD_RECOVERY")telaNovaSenha
 function ladoVideo(){return '<div class="lado" data-video></div>';}
 function telaEntrar(modo){
   modo=modo||"entrar";document.title="Entrar · M10X";
-  var tit={entrar:"Entrar na área M10X",pedir:"Pedir acesso",primeiro:"Criar minha senha",esqueci:"Recuperar senha"}[modo];
-  var sub={entrar:"Mesmo e-mail e senha da área de afiliados do Lucro Já.",pedir:"Pra quem revende o Lucro Já. Teu acesso libera na hora, no cargo Iniciante (50%).",primeiro:"Pra quem se afiliou ao Lucro Já na Applyfy ou foi liberado pelo time e ainda não tem senha.",esqueci:"A gente manda um link pro teu e-mail."}[modo];
+  var tit={entrar:"Entrar na área M10X",pedir:"Pedir acesso",primeiro:"Criar minha senha",esqueci:"Recuperar senha",socio:"Acesso dos sócios"}[modo];
+  var sub={entrar:"Mesmo e-mail e senha da área de afiliados do Lucro Já.",pedir:"Pra quem revende o Lucro Já. Teu acesso libera na hora, no cargo Iniciante (50%).",primeiro:"Pra quem se afiliou ao Lucro Já na Applyfy ou foi liberado pelo time e ainda não tem senha.",esqueci:"A gente manda um link pro teu e-mail.",socio:"Primeira vez do sócio: usa o teu e-mail de sócio e cria tua senha aqui. Depois é só entrar normal."}[modo];
   var campo=function(id,rot,tipo,auto,ph,extra){return '<div class="campo"><label for="'+id+'">'+rot+'</label><input id="'+id+'" type="'+tipo+'" autocomplete="'+auto+'"'+(ph?' placeholder="'+ph+'"':'')+' required>'+(extra||'')+'</div>';};
   APP.innerHTML='<div class="entrada">'+ladoVideo()+'<div class="form"><div class="caixa">'+
    '<a href="#" class="link" style="font-size:14px" data-voltar>← Voltar pro site</a>'+
@@ -801,8 +823,8 @@ function telaEntrar(modo){
    campo("l-email","E-mail","email","email","voce@email.com")+
    (modo!=="esqueci"?campo("l-senha",modo==="entrar"?"Senha":"Crie uma senha (mín. 8)","password",modo==="entrar"?"current-password":"new-password","",modo==="pedir"?'<span class="dica">Se teu e-mail já tem login no Lucro Já, usa a senha que tu já tem.</span>':''):'')+
    '</div><div id="l-erro" class="erro-msg" hidden></div><div id="l-ok" class="ok-msg" hidden></div>'+
-   '<button class="btn btn-azul" type="submit" id="l-btn" style="width:100%;height:56px;margin-top:18px;font-size:16px">'+{entrar:"Entrar",pedir:"Pedir meu acesso",primeiro:"Criar senha e entrar",esqueci:"Mandar link"}[modo]+'</button></form>'+
-   '<p style="margin-top:18px;font-size:14px;text-align:center;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">'+(modo==="entrar"?'<a href="#" class="link" data-modo="esqueci">Esqueci a senha</a><a href="#" class="link" data-modo="primeiro">Fui liberado e não tenho senha</a>':(modo==="pedir"?'':'<a href="#" class="link" data-modo="entrar">Voltar pro login</a>'))+'</p>'+
+   '<button class="btn btn-azul" type="submit" id="l-btn" style="width:100%;height:56px;margin-top:18px;font-size:16px">'+{entrar:"Entrar",pedir:"Pedir meu acesso",primeiro:"Criar senha e entrar",esqueci:"Mandar link",socio:"Criar senha e entrar"}[modo]+'</button></form>'+
+   '<p style="margin-top:18px;font-size:14px;text-align:center;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">'+(modo==="entrar"?'<a href="#" class="link" data-modo="esqueci">Esqueci a senha</a><a href="#" class="link" data-modo="primeiro">Fui liberado e não tenho senha</a><a href="#" class="link" data-modo="socio">Sou sócio</a>':(modo==="pedir"?'':'<a href="#" class="link" data-modo="entrar">Voltar pro login</a>'))+'</p>'+
    '</div></div></div>';
   video($(".lado",APP));
   $$("[data-modo]",APP).forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();var em=$("#l-email").value;telaEntrar(b.dataset.modo);$("#l-email").value=em;})});
@@ -817,6 +839,7 @@ function telaEntrar(modo){
       carregando(bt,true,"Enviando…");p=pedirAcesso(d).then(function(r){if(r.entrou){location.hash="painel";return;}ok.textContent=r.msg;ok.hidden=false;});}
     else{carregando(bt,true);
       if(modo==="esqueci") p=sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}).then(function(r){if(r.error)throw r.error;ok.textContent="Se esse e-mail tiver conta, o link chega em instantes. Olha também o spam.";ok.hidden=false;});
+      else if(modo==="socio") p=chama(PFN,"soc_primeiro",{email:email,senha:senha},false).then(function(){return sb.auth.signInWithPassword({email:email,password:senha})}).then(function(r){if(r.error)throw r.error;location.hash="painel/socios";});
       else if(modo==="primeiro") p=api("primeiro_acesso",{email:email,senha:senha}).then(function(){return sb.auth.signInWithPassword({email:email,password:senha})}).then(function(r){if(r.error)throw r.error;location.hash="painel";});
       else p=sb.auth.signInWithPassword({email:email,password:senha}).then(function(r){if(r.error){var m=/invalid/i.test(r.error.message)?"E-mail ou senha errados. Esqueceu? Toca em \"Esqueci a senha\".":r.error.message;throw new Error(m);}location.hash="painel";});}
     p.catch(function(e){er.textContent=e.message||"Não deu. Tenta de novo.";er.hidden=false;}).then(function(){carregando(bt,false)});
@@ -834,9 +857,12 @@ function telaNovaSenha(){
 function sair(){sb.auth.signOut().then(function(){estado.eu=null;estado.parc=null;estado.adm=null;location.hash="entrar";});}
 
 /* =================== CASCA DA ÁREA =================== */
+function soSocio(){var e=estado.eu||{};return !!(e.socio&&!e.membro&&!e.admin);}
 function navHTML(){
   var eu=estado.eu||{},pend=estado.adm?estado.adm.pedidos.filter(function(p){return p.status==="pendente"}).length+(estado.adm.cargo_pedidos||[]).length:0;
-  var itens=ABAS.map(function(a){return '<a class="nav-i'+(estado.aba===a[0]?" on":"")+'" href="#painel/'+a[0]+'">'+ico(a[2])+'<span>'+a[1]+'</span></a>';}).join("");
+  var L=soSocio()?ABAS.filter(function(a){return a[0]==="sobre"}):ABAS;
+  var itens=L.map(function(a){return '<a class="nav-i'+(estado.aba===a[0]?" on":"")+'" href="#painel/'+a[0]+'">'+ico(a[2])+'<span>'+a[1]+'</span></a>';}).join("");
+  if(eu.socio||eu.admin){var ns=SOC.af&&SOC.af.pedidos?SOC.af.pedidos.filter(function(p){return p.status==="pendente"}).length:0;itens+='<a class="nav-i'+(estado.aba==="socios"?" on":"")+'" href="#painel/socios">'+ico("equipe")+'<span>Sócios</span>'+(ns?'<span class="q">'+ns+'</span>':'')+'</a>';}
   if(eu.admin)itens+='<a class="nav-i'+(estado.aba==="admin"?" on":"")+'" href="#admin">'+ico("admin")+'<span>Admin</span>'+(pend?'<span class="q">'+pend+'</span>':'')+'</a>';
   return itens;
 }
@@ -867,10 +893,12 @@ function pinta(html){APP.innerHTML=casca(html);$$("[data-sair]",APP).forEach(fun
 
 function abre(aba){
   estado.aba=aba;
-  var titulos={inicio:"Início",premios:"Premiações",aulas:"Aulas",conteudos:"Conteúdos",links:"Meus links",pagina:"Minha página",lucroja:"A ferramenta",sobre:"Sobre",admin:"Admin"};
+  var titulos={inicio:"Início",premios:"Premiações",aulas:"Aulas",conteudos:"Conteúdos",links:"Meus links",pagina:"Minha página",lucroja:"A ferramenta",sobre:"Sobre",socios:"Sócios",admin:"Admin"};
   document.title=(titulos[aba]||"Painel")+" · M10X";
   if(!estado.eu){APP.innerHTML='<div class="carrega"><img src="'+LOGO+'" alt="Carregando"></div>';return carregaTudo().then(function(){if(estado.eu)abre(aba);});}
   if(aba==="admin"){ if(!estado.eu.admin){location.replace("#painel");return;} return carregaAdmin(); }
+  if(soSocio()&&aba!=="sobre")aba=estado.aba="socios";
+  if(aba==="socios"){ if(!socPode()){location.replace("#painel");return;} document.title="Sócios · M10X"; return carregaSocios(); }
   ({inicio:vInicio,premios:vPremios,aulas:vAulas,conteudos:vConteudos,links:vLinks,pagina:vPagina,lucroja:vLucroja,sobre:vSobre})[aba]();
 }
 function carregaTudo(){
@@ -1264,6 +1292,195 @@ function vSobre(){
     return '<article class="dono"><div class="foto"><span class="ini">'+esc(iniciais(d.nome))+'</span><img src="'+IMG+'dono_'+d.id+'.webp?v=1" alt="'+esc(d.nome)+'" decoding="async" hidden></div><div class="txt"><span class="chip">'+esc(d.papel)+'</span><h3>'+esc(d.nome)+'</h3><p>'+esc(d.txt)+'</p></div></article>';}).join("")+'</div></section>';
   pinta(h);
   $$(".dono img",APP).forEach(function(im){var mostra=function(){im.hidden=false;im.previousElementSibling.hidden=true;};if(im.complete&&im.naturalWidth)mostra();else im.addEventListener("load",mostra);im.addEventListener("error",function(){im.remove();});});
+}
+
+/* =================== PAINEL DOS SÓCIOS (20/10) ===================
+   Mesmo backend do painel antigo (sfy-parceiros soc_*): a ponte da Applyfy continua mandando os pedidos de afiliação pra cá.
+   Faturamento, pedidos de cargo e vendas sem dono vêm da função m10x (soc_resumo). */
+var SOC={aba:"afiliacoes",af:null,d:null,r:null,t:null,arq:null,busca:""};
+function soc(acao,corpo){return chama(PFN,"soc_"+acao,corpo,true);}
+function socPode(){var e=estado.eu||{};return !!(e.socio||e.admin);}
+function carregaSocios(quieto){
+  if(!quieto)pinta('<div class="ola"><div><h1>Sócios</h1><p>Carregando…</p></div></div><div class="esqueleto"></div>');
+  return Promise.all([
+    soc("afil_lista").catch(function(e){return {erro:e.message};}),
+    soc("tudo").catch(function(e){return {erro:e.message};}),
+    api("soc_resumo",{},true).catch(function(e){return {erro:e.message};})
+  ]).then(function(r){
+    SOC.af=r[0];if(SOC.af&&SOC.af.agora)SOC.af.dif=Date.now()-new Date(SOC.af.agora).getTime();
+    SOC.d=r[1];SOC.r=r[2];
+    if(estado.aba==="socios")desenhaSocios();vigiaSocios();
+  });
+}
+function vigiaSocios(){clearInterval(SOC.t);SOC.t=setInterval(function(){
+  if(estado.aba!=="socios"){clearInterval(SOC.t);return;}
+  if(document.hidden||$(".fundo")||(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))return;
+  soc("afil_lista").then(function(a){var sig=function(x){return ((x&&x.pedidos)||[]).map(function(p){return p.id+p.status}).join()};
+    var mudou=sig(a)!==sig(SOC.af);a.dif=Date.now()-new Date(a.agora).getTime();SOC.af=a;if(mudou&&SOC.aba==="afiliacoes")desenhaSocios();}).catch(function(){});
+},25000);}
+function socCargos(){return (SOC.d&&SOC.d.cargos)||(SOC.r&&SOC.r.cargos)||(estado.eu&&estado.eu.cargos)||[];}
+function socCg(id){var L=socCargos();return L.filter(function(c){return c.id===id})[0]||L[0]||null;}
+function cgChip(c,pre){return c?'<span class="cargo-chip" style="--cg:'+esc(c.cor||"#8C96C8")+'"><i></i>'+(pre||"")+esc(c.nome)+(c.pct?' · '+c.pct+'%':'')+'</span>':'';}
+function haQuanto(iso){if(!iso)return "nunca";var s=Math.max(0,Math.round((Date.now()-((SOC.af&&SOC.af.dif)||0)-new Date(iso).getTime())/1000));
+  if(s<90)return "agora há pouco";if(s<3600)return "há "+Math.round(s/60)+" min";if(s<86400)return "há "+Math.round(s/3600)+" h";return "em "+data(iso);}
+function desenhaSocios(){
+  var A=SOC.af||{},D=SOC.d||{},R=SOC.r||{};
+  var pendAf=(A.pedidos||[]).filter(function(p){return p.status==="pendente"}).length;
+  var pendRev=(D.parceiros||[]).filter(function(p){return p.status==="pendente"}).length;
+  var nCg=(R.cargo_pedidos||[]).length,nSem=(R.sem_dono||[]).length;
+  var abas=[["afiliacoes","Afiliações Applyfy",pendAf],["revendedores","Revendedores",pendRev],["cargos","Subir de cargo",nCg],["vendas","Vendas sem dono",nSem],["aulas","Aulas"],["conteudos","Conteúdos"]];
+  var h='<div class="ola"><div><h1>Sócios</h1><p>Afiliações da Applyfy, revendedores, cargos, aulas e conteúdos da M10X.</p></div><button class="btn btn-vidro" id="soc-at">Atualizar</button></div>'+
+   '<div class="tabs-adm">'+abas.map(function(t){return '<button data-soc="'+t[0]+'" class="'+(SOC.aba===t[0]?"on":"")+'">'+t[1]+(t[2]?'<span class="q">'+t[2]+'</span>':'')+'</button>'}).join("")+'</div><section class="bloco" id="soc-corpo"></section>';
+  pinta(h);
+  $("#soc-at").addEventListener("click",function(){carregaSocios();});
+  $$("[data-soc]",APP).forEach(function(b){b.addEventListener("click",function(){SOC.aba=b.dataset.soc;desenhaSocios();})});
+  var el=$("#soc-corpo");
+  ({afiliacoes:socAfil,revendedores:socRev,cargos:socCargosAba,vendas:socVendas,aulas:function(e){socMaterial(e,"aulas")},conteudos:function(e){socMaterial(e,"conteudo")}})[SOC.aba](el);
+}
+function socErro(el,x){el.innerHTML='<p class="vazio">'+esc(x&&x.erro?x.erro:"Não consegui carregar agora.")+' Toca em Atualizar.</p>';}
+
+/* ---------- afiliações (ponte da Applyfy) ---------- */
+function ponteHTML(){
+  var pt=(SOC.af&&SOC.af.ponte)||{},vivo=pt.visto&&(Date.now()-((SOC.af&&SOC.af.dif)||0)-new Date(pt.visto).getTime())<4*60000;
+  var cls=vivo?(pt.logado?"verde":"amarelo"):"",tit,txt;
+  if(vivo&&pt.logado){tit="Ponte da Applyfy ligada";txt="Pedido novo chega aqui em até 1 minuto. O que vocês aceitarem ou recusarem é aplicado na Applyfy sozinho.";}
+  else if(vivo){tit="Ponte ligada, mas a Applyfy saiu da conta";txt="Os pedidos não estão chegando. Avisa o Juninho pra entrar na Applyfy de novo no computador dele.";}
+  else{tit="Ponte descansando agora";txt="Pode aceitar ou recusar mesmo assim: a decisão fica guardada e vai pra Applyfy assim que a ponte ligar.";}
+  return '<div class="ponte '+cls+'" role="status"><span class="luz" aria-hidden="true"></span><div><b>'+tit+'</b><p>'+txt+'</p><small>'+(vivo?"Última leitura: ":"Ligada pela última vez: ")+haQuanto(pt.visto)+'</small></div></div>';
+}
+function mentChip(p){
+  var m=p.mentorado;
+  if(!m)return '<span class="chip vermelho">Não é revendedor M10X</span>';
+  if(m.status==="pendente")return '<span class="chip amarelo">Pediu acesso na M10X, ainda não liberado</span>';
+  if(m.status!=="aprovado")return '<span class="chip vermelho">Revendedor '+(m.status==="bloqueado"?"bloqueado":"recusado")+'</span>';
+  return cgChip({nome:m.cargo,cor:m.cor,pct:m.pct})+(Number(m.pct)===Number(p.comissao)?'<span class="chip verde">Comissão bate com o cargo</span>':'<span class="chip amarelo">Cargo é '+(+m.pct||0)+'%, pediu '+p.comissao+'%</span>');
+}
+function socAfil(el){
+  var A=SOC.af;if(!A||A.erro)return socErro(el,A);
+  var P=A.pedidos||[],pend=P.filter(function(p){return p.status==="pendente"}),fila=P.filter(function(p){return p.status==="aprovar"||p.status==="recusar"}),feitos=P.filter(function(p){return ["aprovado","recusado","sumiu"].indexOf(p.status)>-1});
+  var card=function(p,acoes,meta){return '<article class="af-item"><div class="af-pct">'+(+p.comissao||0)+'%</div><div class="af-q"><b>'+esc(p.nome||p.email)+'</b><small>'+esc(p.email)+' · '+esc(p.produto||"")+'</small></div><div class="af-acoes">'+acoes+'</div><div class="af-meta">'+meta+'</div></article>';};
+  var h=ponteHTML()+'<h2 class="titulo-b">Esperando vocês · '+pend.length+'</h2>';
+  h+=pend.length?'<div class="af-lista">'+pend.map(function(p){return card(p,'<button class="btn btn-azul btn-p" data-afok="'+p.id+'">Aceitar</button><button class="btn btn-fant btn-p" data-afno="'+p.id+'">Recusar</button>',mentChip(p)+'<span class="mudo">Pediu em '+esc(p.data||data(p.criado_em))+'</span>');}).join("")+'</div>':'<p class="vazio">Nenhum pedido de afiliação esperando'+(A.ponte&&A.ponte.visto?'.':'. Eles aparecem aqui quando a ponte ligar.')+'</p>';
+  if(fila.length)h+='<h2 class="titulo-b" style="margin-top:24px">Na fila da ponte · '+fila.length+'</h2><div class="af-lista">'+fila.map(function(p){var ap=p.status==="aprovar";
+    return card(p,'<button class="btn btn-vidro btn-p" data-afdesfaz="'+p.id+'">Desfazer</button>','<span class="chip '+(ap?"verde":"vermelho")+'">'+(ap?"Vai aprovar":"Vai recusar")+'</span><span class="mudo">por '+esc(String(p.decidido_por||"").split("@")[0])+' '+haQuanto(p.decidido_em)+'</span>'+(p.erro?'<span class="chip vermelho">Última tentativa: '+esc(p.erro)+'</span>':''));}).join("")+'</div>';
+  if(feitos.length)h+='<details style="margin-top:24px"><summary class="titulo-b" style="cursor:pointer">Já resolvidos · últimos '+feitos.length+'</summary><div class="af-lista hist">'+feitos.map(function(p){var st={aprovado:["verde","Aprovado"],recusado:["vermelho","Recusado"],sumiu:["","Resolvido direto na Applyfy"]}[p.status];
+    return card(p,'','<span class="chip '+st[0]+'">'+st[1]+'</span>'+(p.decidido_por&&p.status!=="sumiu"?'<span class="mudo">por '+esc(p.decidido_por.split("@")[0])+'</span>':'')+'<span class="mudo">'+haQuanto(p.feito_em||p.decidido_em)+'</span>');}).join("")+'</div></details>';
+  el.innerHTML=h;
+  var decide=function(id,dec,motivo,b,ok){carregando(b,true);soc("afil_decidir",{id:id,decisao:dec,motivo:motivo}).then(function(){toast(ok);}).catch(function(e){toast(e.message);}).then(function(){return soc("afil_lista")}).then(function(a){a.dif=Date.now()-new Date(a.agora).getTime();SOC.af=a;desenhaSocios();}).catch(function(){desenhaSocios();});};
+  $$("[data-afok]",el).forEach(function(b){b.addEventListener("click",function(){decide(+b.dataset.afok,"aprovar","",b,"Aceito! A ponte aplica na Applyfy.")})});
+  $$("[data-afdesfaz]",el).forEach(function(b){b.addEventListener("click",function(){decide(+b.dataset.afdesfaz,"pendente","",b,"Voltou pra lista")})});
+  $$("[data-afno]",el).forEach(function(b){b.addEventListener("click",function(){var id=+b.dataset.afno;
+    modalForm("Recusar afiliação","A pessoa vê esse motivo na Applyfy.",'<div class="campo todo"><label>Motivo</label><input name="motivo" maxlength="200" value="Afiliação não liberada para este produto."></div>',
+      function(v){return soc("afil_decidir",{id:id,decisao:"recusar",motivo:v.motivo}).then(function(){toast("Recusado. A ponte aplica na Applyfy.");return soc("afil_lista")}).then(function(a){a.dif=Date.now()-new Date(a.agora).getTime();SOC.af=a;desenhaSocios();});});});});
+}
+
+/* ---------- revendedores (liberar na mão, cargo, bloquear) ---------- */
+function socRev(el){
+  var D=SOC.d;if(!D||D.erro)return socErro(el,D);
+  var L=D.parceiros||[],F=(SOC.r&&SOC.r.faturamento)||{},pend=L.filter(function(p){return p.status==="pendente"});
+  var sel=function(p){return '<select class="mini-sel" data-rcg="'+esc(p.id)+'" aria-label="Cargo">'+socCargos().map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===p.cargo?" selected":"")+'>'+esc(c.nome)+' · '+c.pct+'%</option>'}).join("")+'</select>';};
+  var ST={aprovado:"Liberado",pendente:"Pendente",recusado:"Recusado",bloqueado:"Bloqueado"};
+  var h='<p class="mudo" style="font-size:14px;margin-bottom:16px;max-width:70ch">Quem pede acesso ou se afilia na Applyfy entra liberado sozinho no cargo inicial. Aqui vocês liberam na mão quem ficou de fora, trocam o cargo e bloqueiam quem precisar.</p>';
+  if(pend.length)h+='<h2 class="titulo-b">Esperando liberação · '+pend.length+'</h2><div class="rolagem"><table class="tabela"><thead><tr><th>Pessoa</th><th>WhatsApp</th><th>Cargo</th><th></th></tr></thead><tbody>'+pend.map(function(p){
+    return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+' · '+data(p.criado_em)+'</div></td><td>'+(p.whats?'<a class="link" target="_blank" rel="noopener" href="https://wa.me/'+esc(zapNum(p.whats))+'">'+esc(foneBR(p.whats))+'</a>':'—')+'</td><td>'+sel(p)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-rlib="'+esc(p.id)+'">Liberar</button> <button class="btn btn-fant btn-p" data-rrec="'+esc(p.id)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>';
+  h+='<div class="linha-ferr" style="margin-top:'+(pend.length?22:0)+'px"><h2 class="titulo-b" style="margin:0">Todos os revendedores · '+L.length+'</h2><input class="busca" id="rbusca" placeholder="Buscar nome ou e-mail" value="'+esc(SOC.busca)+'"></div><div class="rolagem"><table class="tabela"><thead><tr><th>Revendedor</th><th>Faturamento</th><th>Página</th><th>Cargo</th><th>Acesso</th></tr></thead><tbody id="rtb"></tbody></table></div>';
+  el.innerHTML=h;
+  var linhas=function(q){q=(q||"").toLowerCase();$("#rtb",el).innerHTML=L.filter(function(p){return !q||(p.email+" "+(p.nome||"")).toLowerCase().indexOf(q)>=0}).sort(function(a,b){return ((F[b.email]||{}).total||0)-((F[a.email]||{}).total||0)}).map(function(p){var f=F[p.email];
+    return '<tr><td><b>'+esc(p.nome)+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+(p.whats?' · <a class="link" target="_blank" rel="noopener" href="https://wa.me/'+esc(zapNum(p.whats))+'">'+esc(foneBR(p.whats))+'</a>':'')+'</div></td>'+
+    '<td>'+(f?'<b>R$ '+brl(f.total)+'</b><div class="mudo" style="font-size:12px">'+f.qtd+' venda'+(f.qtd===1?'':'s')+'</div>':'<span class="mudo">—</span>')+'</td>'+
+    '<td>'+(p.slug?'<a class="link" target="_blank" rel="noopener" href="https://lucroja.online/'+esc(p.slug)+'">'+esc(p.slug)+'</a><div class="mudo" style="font-size:12px">'+(p.visitas||0)+' visitas</div>':'<span class="mudo">—</span>')+'</td>'+
+    '<td>'+sel(p)+'</td><td><select class="mini-sel" data-rst="'+esc(p.id)+'" aria-label="Acesso">'+Object.keys(ST).map(function(k){return '<option value="'+k+'"'+(k===p.status?" selected":"")+'>'+ST[k]+'</option>'}).join("")+'</select></td></tr>';}).join("")||'<tr><td colspan="5" class="vazio">Ninguém aqui.</td></tr>';liga();};
+  var muda=function(acao,corpo,ok,s){if(s)s.disabled=true;return soc(acao,corpo).then(function(){toast(ok);return soc("tudo")}).then(function(d){SOC.d=d;}).catch(function(e){toast(e.message);}).then(function(){if(s)s.disabled=false;});};
+  var liga=function(){
+    $$("[data-rcg]",el).forEach(function(s){s.onchange=function(){var p=L.find(function(x){return String(x.id)===s.dataset.rcg});if(p.status==="pendente"){p.cargo=s.value;return;}var c=socCg(s.value);muda("cargo",{id:p.id,cargo:s.value},"Cargo agora: "+(c?c.nome:""),s);};});
+    $$("[data-rst]",el).forEach(function(s){s.onchange=function(){var p=L.find(function(x){return String(x.id)===s.dataset.rst});muda("status",{id:p.id,status:s.value,cargo:p.cargo},s.value==="aprovado"?"Liberado":s.value==="bloqueado"?"Acesso bloqueado":"Salvo",s).then(function(){p.status=s.value;});};});
+  };
+  linhas(SOC.busca);
+  $("#rbusca",el).addEventListener("input",function(e){SOC.busca=e.target.value;linhas(SOC.busca);});
+  $$("[data-rlib]",el).forEach(function(b){b.addEventListener("click",function(){var p=L.find(function(x){return String(x.id)===b.dataset.rlib});carregando(b,true);muda("status",{id:p.id,status:"aprovado",cargo:p.cargo||(socCargos()[0]||{}).id},"Liberado! A área dele já abriu.").then(desenhaSocios);})});
+  $$("[data-rrec]",el).forEach(function(b){b.addEventListener("click",function(){var p=L.find(function(x){return String(x.id)===b.dataset.rrec});carregando(b,true);muda("status",{id:p.id,status:"recusado"},"Pedido recusado").then(desenhaSocios);})});
+}
+function zapNum(w){w=String(w||"").replace(/\D/g,"");return (w.length===10||w.length===11)?"55"+w:w;}
+
+/* ---------- pedidos pra subir de cargo ---------- */
+function socCargosAba(el){
+  var R=SOC.r;if(!R||R.erro)return socErro(el,R);
+  var L=R.cargo_pedidos||[];
+  el.innerHTML='<p class="mudo" style="font-size:14px;margin-bottom:16px;max-width:70ch">O revendedor pede pelo painel dele. Aceitou, o cargo muda na hora e os links de afiliação da % nova aparecem em Meus links dele.</p>'+
+   (L.length?'<div class="rolagem"><table class="tabela"><thead><tr><th>Quando</th><th>Revendedor</th><th>Faturamento</th><th>Cargo</th><th></th></tr></thead><tbody>'+L.map(function(p){
+    return '<tr><td>'+data(p.em)+'</td><td><b>'+esc(p.nome||"—")+'</b><div class="mudo" style="font-size:12px">'+esc(p.email)+'</div></td><td><b>R$ '+brl(p.total)+'</b></td>'+
+    '<td style="white-space:nowrap">'+cgChip(p.atual)+' → '+cgChip(p.quer)+'</td><td style="white-space:nowrap"><button class="btn btn-azul btn-p" data-cgok="'+esc(p.email)+'">Aceitar</button> <button class="btn btn-fant btn-p" data-cgno="'+esc(p.email)+'">Recusar</button></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Nenhum pedido agora.</p>');
+  var decide=function(email,sim,b){carregando(b,true);api("adm_cargo_decidir",{email:email,aceitar:sim},true).then(function(){toast(sim?"Cargo trocado!":"Pedido recusado");return Promise.all([api("soc_resumo",{},true),soc("tudo")]);}).then(function(r){SOC.r=r[0];SOC.d=r[1];desenhaSocios();}).catch(function(e){toast(e.message);carregando(b,false);});};
+  $$("[data-cgok]",el).forEach(function(b){b.addEventListener("click",function(){decide(b.dataset.cgok,true,b)})});
+  $$("[data-cgno]",el).forEach(function(b){b.addEventListener("click",function(){decide(b.dataset.cgno,false,b)})});
+}
+
+/* ---------- vendas que ainda não sabem de quem são ---------- */
+function socVendas(el){
+  var R=SOC.r,D=SOC.d;if(!R||R.erro)return socErro(el,R);
+  var L=R.sem_dono||[],revs=((D&&D.parceiros)||[]).filter(function(p){return p.status!=="recusado"}).sort(function(a,b){return String(a.nome).localeCompare(String(b.nome))});
+  var tot=L.reduce(function(s,x){return s+x.total},0);
+  el.innerHTML='<p class="mudo" style="font-size:14px;margin-bottom:16px;max-width:72ch">Toda venda do Lucro Já chega com o código de afiliado de quem vendeu (o <b style="color:#fff">code=</b> do link de checkout). Esses códigos ainda não estão ligados a nenhum revendedor, então as vendas não contam no faturamento nem nas premiações de ninguém. Liga cada código ao dono e o faturamento dele soma na hora.</p>'+
+   (L.length?'<div class="aviso">'+ico("alerta")+'<span><b>R$ '+brl(tot)+'</b> em '+L.reduce(function(s,x){return s+x.qtd},0)+' vendas sem dono. Dá pra ver de quem é cada código no painel de afiliados da Applyfy.</span></div><datalist id="dl-rev">'+revs.map(function(p){return '<option value="'+esc(p.email)+'">'+esc(p.nome)+'</option>'}).join("")+'</datalist>'+
+   '<div class="rolagem"><table class="tabela"><thead><tr><th>Código</th><th>Vendas</th><th>Total</th><th>Última</th><th>De quem é</th></tr></thead><tbody>'+L.map(function(x){
+    return '<tr><td><span class="chip" style="font-family:ui-monospace,monospace">'+esc(x.codigo)+'</span></td><td>'+x.qtd+'</td><td><b>R$ '+brl(x.total)+'</b></td><td>'+data(x.ultima)+'</td><td><div style="display:flex;gap:8px;min-width:280px"><input class="mini-sel" style="flex:1;min-width:0" list="dl-rev" placeholder="E-mail do revendedor" data-cod-in="'+esc(x.codigo)+'"><button class="btn btn-azul btn-p" data-cod="'+esc(x.codigo)+'">Ligar</button></div></td></tr>';}).join("")+'</tbody></table></div>':'<p class="vazio">Todas as vendas com código já estão ligadas a um revendedor. Tudo somando certinho.</p>');
+  $$("[data-cod]",el).forEach(function(b){b.addEventListener("click",function(){var c=b.dataset.cod,i=$('[data-cod-in="'+c+'"]',el),e=String(i.value||"").trim().toLowerCase();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)){toast("Escolhe o e-mail do revendedor na lista.");i.focus();return;}
+    carregando(b,true);api("soc_codigo_dono",{codigo:c,email:e},true).then(function(){toast("Ligado! O faturamento dele já somou.");return api("soc_resumo",{},true)}).then(function(r){SOC.r=r;desenhaSocios();}).catch(function(er){toast(er.message);carregando(b,false);});});});
+}
+
+/* ---------- aulas e conteúdos ---------- */
+function socMaterial(el,q){
+  var D=SOC.d;if(!D||D.erro)return socErro(el,D);
+  var L=(q==="aulas"?D.aulas:D.conteudo)||[],nome=q==="aulas"?"aula":"conteúdo";
+  var quem=function(n){n=+n||0;var c=socCargos()[n-1];return n>0&&c?"A partir de "+c.nome:"Todos";};
+  var tipoTxt={link:"Link",arquivo:"Arquivo",texto:"Texto"};
+  el.innerHTML='<div class="linha-ferr"><p class="mudo" style="font-size:14px;max-width:62ch">'+(q==="aulas"?"As aulas aparecem na aba Aulas dos revendedores, na ordem daqui.":"Materiais pra copiar e baixar na aba Conteúdos dos revendedores.")+'</p><button class="btn btn-azul" id="mat-novo">'+(q==="aulas"?"Nova aula":"Novo conteúdo")+'</button></div>'+
+   (L.length?'<div class="mat-lista">'+L.map(function(a,i){
+    return '<article class="mat-item'+(a.ativo?'':' off')+'"><div class="mat-ord"><button class="btn btn-fant" data-mv="cima" data-id="'+esc(a.id)+'" aria-label="Subir"'+(i===0?' disabled':'')+'>↑</button><button class="btn btn-fant" data-mv="baixo" data-id="'+esc(a.id)+'" aria-label="Descer"'+(i===L.length-1?' disabled':'')+'>↓</button></div>'+
+     '<div class="mat-q"><b>'+esc(a.titulo)+'</b><small>'+(q==="aulas"?esc(a.modulo||"Começando")+' · ':'')+tipoTxt[a.tipo]+(a.arquivo_nome?' · '+esc(a.arquivo_nome):'')+' · '+quem(a.cargo_min)+(a.ativo?'':' · escondido')+'</small></div>'+
+     '<div class="mat-ac"><button class="btn btn-vidro btn-p" data-ed="'+esc(a.id)+'">Editar</button><button class="btn btn-fant btn-p" data-rm="'+esc(a.id)+'">Tirar</button></div></article>';}).join("")+'</div>':'<p class="vazio">Nenhum '+nome+' ainda.</p>');
+  $("#mat-novo",el).addEventListener("click",function(){socMatForm(q,null);});
+  $$("[data-ed]",el).forEach(function(b){b.addEventListener("click",function(){socMatForm(q,L.find(function(x){return String(x.id)===b.dataset.ed}));})});
+  $$("[data-rm]",el).forEach(function(b){b.addEventListener("click",function(){var a=L.find(function(x){return String(x.id)===b.dataset.rm});
+    var f=modal('<h2>Tirar '+nome+'?</h2><p class="mudo" style="margin-top:8px">"'+esc(a.titulo)+'" sai da área dos revendedores.</p><div class="acoes"><button class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul" data-ok>Tirar</button></div>');
+    $("[data-ok]",f).addEventListener("click",function(){var x=this;carregando(x,true);soc("remover",{tabela:q,id:a.id}).then(function(){f.remove();toast("Tirado");return soc("tudo")}).then(function(d){SOC.d=d;desenhaSocios();}).catch(function(e){toast(e.message);carregando(x,false);});});});});
+  $$("[data-mv]",el).forEach(function(b){b.addEventListener("click",function(){b.disabled=true;soc("mover",{tabela:q,id:b.dataset.id,dir:b.dataset.mv}).then(function(){return soc("tudo")}).then(function(d){SOC.d=d;desenhaSocios();}).catch(function(e){toast(e.message);b.disabled=false;});})});
+}
+function socMatForm(q,a){
+  var aula=q==="aulas",a0=a||{tipo:aula?"link":"texto",ativo:true,cargo_min:0};SOC.arq=null;
+  var tipos=aula?[["link","Link (YouTube, Drive…)"],["arquivo","Arquivo (vídeo até 50 MB)"]]:[["texto","Texto pra copiar"],["link","Link"],["arquivo","Arquivo"]];
+  var quem='<option value="0">Todos os revendedores</option>'+socCargos().map(function(c,i){return i===0?'':'<option value="'+(i+1)+'"'+(+a0.cargo_min===i+1?" selected":"")+'>A partir de '+esc(c.nome)+'</option>'}).join("");
+  var f=modal('<h2>'+(a?"Editar":aula?"Nova aula":"Novo conteúdo")+'</h2><form novalidate style="margin-top:18px"><div class="campos">'+
+    '<div class="campo todo"><label>Título</label><input name="titulo" maxlength="140" value="'+esc(a0.titulo||"")+'"></div>'+
+    (aula?'<div class="campo"><label>Módulo</label><input name="modulo" maxlength="80" placeholder="Começando" value="'+esc(a0.modulo||"")+'"></div>':'')+
+    '<div class="campo"><label>Tipo</label><select name="tipo">'+tipos.map(function(t){return '<option value="'+t[0]+'"'+(t[0]===a0.tipo?" selected":"")+'>'+t[1]+'</option>'}).join("")+'</select></div>'+
+    '<div class="campo todo" data-so="link"><label>Link</label><input name="url" inputmode="url" placeholder="https://" value="'+esc(a0.url||"")+'"></div>'+
+    '<div class="campo todo" data-so="arquivo"><label>Arquivo</label><input type="file" name="arq"><span class="dica" id="arq-st">'+(a0.arquivo_nome?'Atual: '+esc(a0.arquivo_nome)+'. Escolhe outro só se quiser trocar.':'Até 50 MB. Vídeo maior: sobe no YouTube como Não listado e usa Link.')+'</span><div class="mini-barra"><i id="arq-bar" style="width:0"></i></div></div>'+
+    (aula?'':'<div class="campo todo" data-so="texto"><label>Texto</label><textarea name="texto" style="height:150px">'+esc(a0.texto||"")+'</textarea></div>')+
+    '<div class="campo todo"><label>Descrição (opcional)</label><textarea name="descricao" maxlength="2000">'+esc(a0.descricao||"")+'</textarea></div>'+
+    '<div class="campo"><label>Quem vê</label><select name="cargo_min">'+quem+'</select></div>'+
+    '<div class="campo"><label>Mostrar</label><select name="ativo"><option value="1"'+(a0.ativo!==false?" selected":"")+'>Sim</option><option value="0"'+(a0.ativo===false?" selected":"")+'>Esconder</option></select></div>'+
+    (aula?'<label class="campo todo" style="flex-direction:row;align-items:center;gap:10px;display:flex"><input type="checkbox" name="vertical"'+(a0.vertical?" checked":"")+' style="width:18px;height:18px"> Vídeo em pé (formato celular)</label>':'')+
+    '</div><div class="erro-msg" hidden></div><div class="acoes"><button type="button" class="btn btn-vidro" data-fecha>Cancelar</button><button class="btn btn-azul">'+(a?"Salvar":"Publicar")+'</button></div></form>');
+  var fm=$("form",f),tipoUI=function(){var t=fm.tipo.value;$$("[data-so]",fm).forEach(function(x){x.hidden=x.dataset.so!==t;});};tipoUI();fm.tipo.addEventListener("change",tipoUI);
+  fm.arq.addEventListener("change",function(){var file=fm.arq.files[0],st=$("#arq-st",fm),bar=$("#arq-bar",fm);SOC.arq=null;bar.style.width="0";if(!file)return;
+    if(file.size>50*1048576){fm.arq.value="";st.textContent="Passa de 50 MB. Sobe no YouTube como Não listado (ou no Drive) e cadastra como Link.";return;}
+    st.textContent="Enviando "+file.name+"…";
+    soc("upload",{tabela:q,nome:file.name}).then(function(u){return new Promise(function(ok,ruim){var x=new XMLHttpRequest(),fd=new FormData();fd.append("cacheControl","3600");fd.append("",file);
+      x.open("PUT",u.url);x.setRequestHeader("apikey",SB_KEY);x.setRequestHeader("Authorization","Bearer "+SB_KEY);x.setRequestHeader("x-upsert","false");
+      x.upload.onprogress=function(e){if(e.lengthComputable){var pc=Math.round(e.loaded/e.total*100);bar.style.width=pc+"%";st.textContent="Enviando "+file.name+"… "+pc+"%";}};
+      x.onload=function(){x.status>=200&&x.status<300?ok(u):ruim(new Error("O envio falhou ("+x.status+")."));};x.onerror=function(){ruim(new Error("Sem conexão durante o envio."));};x.send(fd);});})
+     .then(function(u){SOC.arq={path:u.path,nome:file.name,tamanho:file.size,mime:file.type||""};bar.style.width="100%";st.textContent="Enviado: "+file.name+". Agora é só salvar.";})
+     .catch(function(e){st.textContent=e.message;bar.style.width="0";fm.arq.value="";});});
+  fm.addEventListener("submit",function(ev){ev.preventDefault();var er=$(".erro-msg",fm),bt=$(".btn-azul",fm);er.hidden=true;
+    var t=fm.tipo.value,c={tabela:q,id:a?a.id:undefined,titulo:fm.titulo.value,descricao:fm.descricao.value,tipo:t,cargo_min:+fm.cargo_min.value||0,ativo:fm.ativo.value==="1"};
+    if(aula){c.modulo=fm.modulo.value;c.vertical=fm.vertical.checked;}
+    if(t==="link")c.url=fm.url.value.trim();
+    if(t==="texto")c.texto=fm.texto.value;
+    if(t==="arquivo"){var arq=SOC.arq||(a&&a.tipo==="arquivo"&&a.arquivo?{path:a.arquivo,nome:a.arquivo_nome,tamanho:a.tamanho,mime:a.mime}:null);
+      if(!arq){er.textContent="Escolhe o arquivo e espera terminar de enviar.";er.hidden=false;return;}c.arquivo=arq.path;c.arquivo_nome=arq.nome;c.tamanho=arq.tamanho;c.mime=arq.mime;}
+    carregando(bt,true);soc("salvar",c).then(function(){f.remove();toast(a?"Salvo":"Publicado pros revendedores");return soc("tudo")}).then(function(d){SOC.d=d;desenhaSocios();}).catch(function(e){er.textContent=e.message;er.hidden=false;carregando(bt,false);});});
 }
 
 /* =================== ADMIN =================== */
